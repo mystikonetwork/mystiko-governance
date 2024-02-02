@@ -3,26 +3,28 @@ pragma solidity 0.8.9;
 
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {Pausable} from "@openzeppelin/contracts/security/Pausable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IStakingAction} from "../interface/iStakingAction.sol";
 import {IStakingToken} from "../interface/iStakingToken.sol";
 
-contract StakingAction is IStakingAction {
+contract StakingAction is IStakingAction, Pausable, Ownable {
   using SafeMath for uint256;
 
   address private mstko;
   address private stMstko;
 
-  constructor(address _mstko, address _stMstko) {
+  constructor(address _mstko, address _stMstko) Ownable() {
     mstko = _mstko;
     stMstko = _stMstko;
   }
 
-  function stake(uint256 _mstkoAmount) external {
+  function stake(uint256 _mstkoAmount) external whenNotPaused {
     uint256 mintAmount = _swapStMstko(_mstkoAmount);
     IStakingToken(stMstko).mint(msg.sender, mintAmount, _mstkoAmount);
   }
 
-  function withdraw(uint256 _stMstkoAmount) external {
+  function withdraw(uint256 _stMstkoAmount) external whenNotPaused {
     uint256 recvMstko = _swapMstko(_stMstkoAmount);
     IStakingToken(stMstko).burn(msg.sender, _stMstkoAmount, recvMstko);
   }
@@ -33,6 +35,14 @@ contract StakingAction is IStakingAction {
 
   function swapMstko(uint256 _stMstkoAmount) external view returns (uint256) {
     return _swapMstko(_stMstkoAmount);
+  }
+
+  function pause() external onlyOwner {
+    _pause();
+  }
+
+  function unpause() external onlyOwner {
+    _unpause();
   }
 
   function _swapStMstko(uint256 _mstkoAmount) internal view returns (uint256) {

@@ -7,11 +7,11 @@ import "../../../contracts/staking/impl/StakingToken.sol";
 import "../../../contracts/staking/libs/common/CustomErrors.sol";
 import "../../../contracts/token/MstkoToken.sol";
 
-contract StakingTokenTest is Test {
+contract StakingTokenOwnerTest is Test {
   MstkoToken public mstko;
   StMstkoToken public stMstko;
 
-  event OperatorChanged(address indexed operator);
+  event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
   event MinterChanged(address indexed minter);
 
   function setUp() public {
@@ -19,31 +19,22 @@ contract StakingTokenTest is Test {
     stMstko = new StMstkoToken(address(mstko));
   }
 
-  function test_change_operator() public {
-    vm.expectRevert(CustomErrors.NotChanged.selector);
-    stMstko.changeOperator(address(this));
+  function test_change_owner() public {
+    vm.expectRevert("Ownable: new owner is the zero address");
+    stMstko.transferOwnership(address(0));
 
     vm.prank(address(0));
-    vm.expectRevert(CustomErrors.OnlyOperator.selector);
-    stMstko.changeOperator(address(this));
-
-    stMstko.changeOperator(address(0));
-    vm.expectRevert(CustomErrors.OnlyOperator.selector);
-    stMstko.changeOperator(address(this));
-
-    vm.prank(address(0));
-    stMstko.changeOperator(address(this));
-    vm.expectRevert(CustomErrors.NotChanged.selector);
-    stMstko.changeOperator(address(this));
+    vm.expectRevert("Ownable: caller is not the owner");
+    stMstko.transferOwnership(address(this));
 
     vm.expectEmit(address(stMstko));
-    emit OperatorChanged(address(0x0));
-    stMstko.changeOperator(address(0x0));
+    emit OwnershipTransferred(address(this), address(0xf));
+    stMstko.transferOwnership(address(0xf));
   }
 
   function test_change_minter() public {
     vm.prank(address(0));
-    vm.expectRevert(CustomErrors.OnlyOperator.selector);
+    vm.expectRevert("Ownable: caller is not the owner");
     stMstko.changeMinter(address(this));
 
     vm.expectRevert(CustomErrors.NotChanged.selector);

@@ -13,34 +13,92 @@ import type {
   Signer,
   utils,
 } from 'ethers';
-import type { FunctionFragment, Result } from '@ethersproject/abi';
+import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../common';
 
 export interface StakingActionInterface extends utils.Interface {
   functions: {
+    'owner()': FunctionFragment;
+    'pause()': FunctionFragment;
+    'paused()': FunctionFragment;
+    'renounceOwnership()': FunctionFragment;
+    'stake(uint256)': FunctionFragment;
     'swapMstko(uint256)': FunctionFragment;
     'swapStMstko(uint256)': FunctionFragment;
-    'stake(uint256)': FunctionFragment;
+    'transferOwnership(address)': FunctionFragment;
+    'unpause()': FunctionFragment;
     'withdraw(uint256)': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: 'swapMstko' | 'swapStMstko' | 'stake' | 'withdraw',
+    nameOrSignatureOrTopic:
+      | 'owner'
+      | 'pause'
+      | 'paused'
+      | 'renounceOwnership'
+      | 'stake'
+      | 'swapMstko'
+      | 'swapStMstko'
+      | 'transferOwnership'
+      | 'unpause'
+      | 'withdraw',
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'stake', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'swapMstko', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'swapStMstko', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'stake', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferOwnership', values: [string]): string;
+  encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
   encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish]): string;
 
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'stake', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'swapMstko', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'swapStMstko', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'stake', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
 
-  events: {};
+  events: {
+    'OwnershipTransferred(address,address)': EventFragment;
+    'Paused(address)': EventFragment;
+    'Unpaused(address)': EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Paused'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Unpaused'): EventFragment;
 }
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<[string, string], OwnershipTransferredEventObject>;
+
+export type OwnershipTransferredEventFilter = TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface PausedEventObject {
+  account: string;
+}
+export type PausedEvent = TypedEvent<[string], PausedEventObject>;
+
+export type PausedEventFilter = TypedEventFilter<PausedEvent>;
+
+export interface UnpausedEventObject {
+  account: string;
+}
+export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
+
+export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
 export interface StakingAction extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -65,14 +123,29 @@ export interface StakingAction extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+    paused(overrides?: CallOverrides): Promise<[boolean]>;
+
+    renounceOwnership(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     stake(
       _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
+
+    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
+
+    unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     withdraw(
       _stMstkoAmount: BigNumberish,
@@ -80,11 +153,26 @@ export interface StakingAction extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+  paused(overrides?: CallOverrides): Promise<boolean>;
+
+  renounceOwnership(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+  stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
   swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-  stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
+
+  unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   withdraw(
     _stMstkoAmount: BigNumberish,
@@ -92,36 +180,90 @@ export interface StakingAction extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    pause(overrides?: CallOverrides): Promise<void>;
+
+    paused(overrides?: CallOverrides): Promise<boolean>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    stake(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
     swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    stake(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
+
+    unpause(overrides?: CallOverrides): Promise<void>;
 
     withdraw(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    'OwnershipTransferred(address,address)'(
+      previousOwner?: string | null,
+      newOwner?: string | null,
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null,
+    ): OwnershipTransferredEventFilter;
+
+    'Paused(address)'(account?: null): PausedEventFilter;
+    Paused(account?: null): PausedEventFilter;
+
+    'Unpaused(address)'(account?: null): UnpausedEventFilter;
+    Unpaused(account?: null): UnpausedEventFilter;
+  };
 
   estimateGas: {
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    pause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
     swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    transferOwnership(newOwner: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    unpause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     withdraw(_stMstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    pause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+
+    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     stake(
       _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
+
+    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    unpause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     withdraw(
       _stMstkoAmount: BigNumberish,

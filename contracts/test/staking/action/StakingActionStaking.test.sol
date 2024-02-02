@@ -9,7 +9,7 @@ import "../../../contracts/staking/libs/common/CustomErrors.sol";
 import "../../../contracts/token/MstkoToken.sol";
 import "../../../contracts/staking/impl/StakingToken.sol";
 
-contract StakingActionTest is Test {
+contract StakingActionStakingTest is Test {
   StakingAction public action;
   MstkoToken public mstko;
   StMstkoToken public stMstko;
@@ -34,6 +34,15 @@ contract StakingActionTest is Test {
     vm.prank(account);
     vm.expectRevert("ERC20: transfer amount exceeds balance");
     action.stake(1 ether);
+
+    mstko.transfer(account, 1 ether);
+    mstko.approve(address(stMstko), 1 ether);
+    action.pause();
+    vm.expectRevert("Pausable: paused");
+    action.stake(1 ether);
+
+    action.unpause();
+    action.stake(1 ether);
   }
 
   function test_withdraw_revert() public {
@@ -41,6 +50,16 @@ contract StakingActionTest is Test {
 
     vm.prank(account);
     vm.expectRevert("ERC20: burn amount exceeds balance");
+    action.withdraw(1 ether);
+
+    mstko.transfer(account, 1 ether);
+    mstko.approve(address(stMstko), 1 ether);
+    action.stake(1 ether);
+    action.pause();
+    vm.expectRevert("Pausable: paused");
+    action.withdraw(1 ether);
+
+    action.unpause();
     action.withdraw(1 ether);
   }
 

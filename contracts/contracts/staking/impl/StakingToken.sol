@@ -3,34 +3,26 @@ pragma solidity 0.8.9;
 
 import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IStakingToken} from "../interface/iStakingToken.sol";
 import {CustomErrors} from "../libs/common/CustomErrors.sol";
 
-contract StMstkoToken is ERC20, IStakingToken {
+contract StMstkoToken is ERC20, IStakingToken, Ownable {
   using SafeERC20 for IERC20;
 
   address private mstko;
-
-  address private operator;
   address private minter;
-
-  modifier onlyOperator() {
-    if (msg.sender != operator) revert CustomErrors.OnlyOperator();
-    _;
-  }
 
   modifier onlyMinter() {
     if (msg.sender != minter) revert CustomErrors.OnlyMinter();
     _;
   }
 
-  event OperatorChanged(address indexed operator);
   event MinterChanged(address indexed minter);
   event StMstkoMinted(uint256 amount);
   event StMstkoBurned(uint256 amount);
 
-  constructor(address _mstko) ERC20("Mystiko Staking Token", "stMSTKO") {
-    operator = msg.sender;
+  constructor(address _mstko) ERC20("Mystiko Staking Token", "stMSTKO") Ownable() {
     mstko = _mstko;
   }
 
@@ -46,13 +38,7 @@ contract StMstkoToken is ERC20, IStakingToken {
     emit StMstkoBurned(_burnAmount);
   }
 
-  function changeOperator(address _newOperator) external onlyOperator {
-    if (operator == _newOperator) revert CustomErrors.NotChanged();
-    operator = _newOperator;
-    emit OperatorChanged(operator);
-  }
-
-  function changeMinter(address _newMinter) external onlyOperator {
+  function changeMinter(address _newMinter) external onlyOwner {
     if (minter == _newMinter) revert CustomErrors.NotChanged();
     minter = _newMinter;
     emit MinterChanged(minter);

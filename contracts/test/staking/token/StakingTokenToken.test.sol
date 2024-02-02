@@ -7,7 +7,7 @@ import "../../../contracts/staking/impl/StakingToken.sol";
 import "../../../contracts/staking/libs/common/CustomErrors.sol";
 import "../../../contracts/token/MstkoToken.sol";
 
-contract StakingTokenTest is Test {
+contract StakingTokenTokenTest is Test {
   MstkoToken public mstko;
   StMstkoToken public stMstko;
 

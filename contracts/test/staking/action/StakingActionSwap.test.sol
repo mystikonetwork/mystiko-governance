@@ -8,7 +8,7 @@ import "../../../contracts/staking/libs/common/CustomErrors.sol";
 import "../../../contracts/token/MstkoToken.sol";
 import "../../../contracts/staking/impl/StakingToken.sol";
 
-contract StakingActionTest is Test {
+contract StakingActionSwapTest is Test {
   StakingAction public action;
   MstkoToken public mstko;
   StMstkoToken public stMstko;

@@ -19,24 +19,30 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../..
 
 export interface IStakingActionInterface extends utils.Interface {
   functions: {
+    'pause()': FunctionFragment;
+    'stake(uint256)': FunctionFragment;
     'swapMstko(uint256)': FunctionFragment;
     'swapStMstko(uint256)': FunctionFragment;
-    'stake(uint256)': FunctionFragment;
+    'unpause()': FunctionFragment;
     'withdraw(uint256)': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: 'swapMstko' | 'swapStMstko' | 'stake' | 'withdraw',
+    nameOrSignatureOrTopic: 'pause' | 'stake' | 'swapMstko' | 'swapStMstko' | 'unpause' | 'withdraw',
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'stake', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'swapMstko', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'swapStMstko', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'stake', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
   encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish]): string;
 
+  decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'stake', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'swapMstko', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'swapStMstko', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'stake', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
 
   events: {};
@@ -65,20 +71,24 @@ export interface IStakingAction extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+    stake(
+      _mstkoAmount: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
+
     swapMstko(
       _stMstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     swapStMstko(
-      _MstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    stake(
       _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
+
+    unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     withdraw(
       _stMstkoAmount: BigNumberish,
@@ -86,17 +96,21 @@ export interface IStakingAction extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+  stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
   swapMstko(
     _stMstkoAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   swapStMstko(
-    _MstkoAmount: BigNumberish,
+    _mstkoAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   withdraw(
     _stMstkoAmount: BigNumberish,
@@ -104,11 +118,15 @@ export interface IStakingAction extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    swapStMstko(_MstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    pause(overrides?: CallOverrides): Promise<void>;
 
     stake(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    unpause(overrides?: CallOverrides): Promise<void>;
 
     withdraw(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
@@ -116,36 +134,38 @@ export interface IStakingAction extends BaseContract {
   filters: {};
 
   estimateGas: {
-    swapMstko(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
-
-    swapStMstko(
-      _MstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
+    pause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    swapMstko(_stMstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    swapStMstko(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    unpause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     withdraw(_stMstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    pause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+
+    stake(
+      _mstkoAmount: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
     swapMstko(
       _stMstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     swapStMstko(
-      _MstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    stake(
       _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
+
+    unpause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     withdraw(
       _stMstkoAmount: BigNumberish,

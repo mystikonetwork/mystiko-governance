@@ -22,18 +22,20 @@ export interface StMstkoTokenInterface extends utils.Interface {
     'allowance(address,address)': FunctionFragment;
     'approve(address,uint256)': FunctionFragment;
     'balanceOf(address)': FunctionFragment;
-    'burn(address,uint256)': FunctionFragment;
+    'burn(address,uint256,uint256)': FunctionFragment;
     'changeMinter(address)': FunctionFragment;
-    'changeOperator(address)': FunctionFragment;
     'decimals()': FunctionFragment;
     'decreaseAllowance(address,uint256)': FunctionFragment;
     'increaseAllowance(address,uint256)': FunctionFragment;
-    'mint(address,uint256)': FunctionFragment;
+    'mint(address,uint256,uint256)': FunctionFragment;
     'name()': FunctionFragment;
+    'owner()': FunctionFragment;
+    'renounceOwnership()': FunctionFragment;
     'symbol()': FunctionFragment;
     'totalSupply()': FunctionFragment;
     'transfer(address,uint256)': FunctionFragment;
     'transferFrom(address,address,uint256)': FunctionFragment;
+    'transferOwnership(address)': FunctionFragment;
   };
 
   getFunction(
@@ -43,60 +45,70 @@ export interface StMstkoTokenInterface extends utils.Interface {
       | 'balanceOf'
       | 'burn'
       | 'changeMinter'
-      | 'changeOperator'
       | 'decimals'
       | 'decreaseAllowance'
       | 'increaseAllowance'
       | 'mint'
       | 'name'
+      | 'owner'
+      | 'renounceOwnership'
       | 'symbol'
       | 'totalSupply'
       | 'transfer'
-      | 'transferFrom',
+      | 'transferFrom'
+      | 'transferOwnership',
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'allowance', values: [string, string]): string;
   encodeFunctionData(functionFragment: 'approve', values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'balanceOf', values: [string]): string;
-  encodeFunctionData(functionFragment: 'burn', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'burn', values: [string, BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'changeMinter', values: [string]): string;
-  encodeFunctionData(functionFragment: 'changeOperator', values: [string]): string;
   encodeFunctionData(functionFragment: 'decimals', values?: undefined): string;
   encodeFunctionData(functionFragment: 'decreaseAllowance', values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'increaseAllowance', values: [string, BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'mint', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'mint', values: [string, BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'name', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
   encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
   encodeFunctionData(functionFragment: 'totalSupply', values?: undefined): string;
   encodeFunctionData(functionFragment: 'transfer', values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'transferFrom', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferOwnership', values: [string]): string;
 
   decodeFunctionResult(functionFragment: 'allowance', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'burn', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinter', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'changeOperator', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'decimals', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'decreaseAllowance', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'increaseAllowance', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'mint', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'symbol', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'totalSupply', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'transfer', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'transferFrom', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
 
   events: {
     'Approval(address,address,uint256)': EventFragment;
     'MinterChanged(address)': EventFragment;
-    'OperatorChanged(address)': EventFragment;
+    'OwnershipTransferred(address,address)': EventFragment;
+    'StMstkoBurned(uint256)': EventFragment;
+    'StMstkoMinted(uint256)': EventFragment;
     'Transfer(address,address,uint256)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'Approval'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'MinterChanged'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OperatorChanged'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'StMstkoBurned'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'StMstkoMinted'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'Transfer'): EventFragment;
 }
 
@@ -116,12 +128,27 @@ export type MinterChangedEvent = TypedEvent<[string], MinterChangedEventObject>;
 
 export type MinterChangedEventFilter = TypedEventFilter<MinterChangedEvent>;
 
-export interface OperatorChangedEventObject {
-  operator: string;
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
 }
-export type OperatorChangedEvent = TypedEvent<[string], OperatorChangedEventObject>;
+export type OwnershipTransferredEvent = TypedEvent<[string, string], OwnershipTransferredEventObject>;
 
-export type OperatorChangedEventFilter = TypedEventFilter<OperatorChangedEvent>;
+export type OwnershipTransferredEventFilter = TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface StMstkoBurnedEventObject {
+  amount: BigNumber;
+}
+export type StMstkoBurnedEvent = TypedEvent<[BigNumber], StMstkoBurnedEventObject>;
+
+export type StMstkoBurnedEventFilter = TypedEventFilter<StMstkoBurnedEvent>;
+
+export interface StMstkoMintedEventObject {
+  amount: BigNumber;
+}
+export type StMstkoMintedEvent = TypedEvent<[BigNumber], StMstkoMintedEventObject>;
+
+export type StMstkoMintedEventFilter = TypedEventFilter<StMstkoMintedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -167,16 +194,12 @@ export interface StMstkoToken extends BaseContract {
 
     burn(
       _account: string,
-      _stMstkoAmount: BigNumberish,
+      _burnAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     changeMinter(_newMinter: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
-
-    changeOperator(
-      _newOperator: string,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -194,11 +217,16 @@ export interface StMstkoToken extends BaseContract {
 
     mint(
       _account: string,
-      _stMstkoAmount: BigNumberish,
+      _mintAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -216,6 +244,11 @@ export interface StMstkoToken extends BaseContract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
   };
 
   allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -230,16 +263,12 @@ export interface StMstkoToken extends BaseContract {
 
   burn(
     _account: string,
-    _stMstkoAmount: BigNumberish,
+    _burnAmount: BigNumberish,
+    _mstkoAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   changeMinter(_newMinter: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
-
-  changeOperator(
-    _newOperator: string,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -257,11 +286,16 @@ export interface StMstkoToken extends BaseContract {
 
   mint(
     _account: string,
-    _stMstkoAmount: BigNumberish,
+    _mintAmount: BigNumberish,
+    _mstkoAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -280,6 +314,11 @@ export interface StMstkoToken extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -287,11 +326,14 @@ export interface StMstkoToken extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    burn(_account: string, _stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    burn(
+      _account: string,
+      _burnAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
+      overrides?: CallOverrides,
+    ): Promise<void>;
 
     changeMinter(_newMinter: string, overrides?: CallOverrides): Promise<void>;
-
-    changeOperator(_newOperator: string, overrides?: CallOverrides): Promise<void>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -303,9 +345,18 @@ export interface StMstkoToken extends BaseContract {
 
     increaseAllowance(spender: string, addedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    mint(_account: string, _stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    mint(
+      _account: string,
+      _mintAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
+      overrides?: CallOverrides,
+    ): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -314,6 +365,8 @@ export interface StMstkoToken extends BaseContract {
     transfer(to: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     transferFrom(from: string, to: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+
+    transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -327,8 +380,20 @@ export interface StMstkoToken extends BaseContract {
     'MinterChanged(address)'(minter?: string | null): MinterChangedEventFilter;
     MinterChanged(minter?: string | null): MinterChangedEventFilter;
 
-    'OperatorChanged(address)'(operator?: string | null): OperatorChangedEventFilter;
-    OperatorChanged(operator?: string | null): OperatorChangedEventFilter;
+    'OwnershipTransferred(address,address)'(
+      previousOwner?: string | null,
+      newOwner?: string | null,
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null,
+    ): OwnershipTransferredEventFilter;
+
+    'StMstkoBurned(uint256)'(amount?: null): StMstkoBurnedEventFilter;
+    StMstkoBurned(amount?: null): StMstkoBurnedEventFilter;
+
+    'StMstkoMinted(uint256)'(amount?: null): StMstkoMintedEventFilter;
+    StMstkoMinted(amount?: null): StMstkoMintedEventFilter;
 
     'Transfer(address,address,uint256)'(
       from?: string | null,
@@ -351,13 +416,12 @@ export interface StMstkoToken extends BaseContract {
 
     burn(
       _account: string,
-      _stMstkoAmount: BigNumberish,
+      _burnAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     changeMinter(_newMinter: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
-
-    changeOperator(_newOperator: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -375,11 +439,16 @@ export interface StMstkoToken extends BaseContract {
 
     mint(
       _account: string,
-      _stMstkoAmount: BigNumberish,
+      _mintAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -393,6 +462,8 @@ export interface StMstkoToken extends BaseContract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
+
+    transferOwnership(newOwner: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -408,17 +479,13 @@ export interface StMstkoToken extends BaseContract {
 
     burn(
       _account: string,
-      _stMstkoAmount: BigNumberish,
+      _burnAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     changeMinter(
       _newMinter: string,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    changeOperator(
-      _newOperator: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
@@ -438,11 +505,16 @@ export interface StMstkoToken extends BaseContract {
 
     mint(
       _account: string,
-      _stMstkoAmount: BigNumberish,
+      _mintAmount: BigNumberish,
+      _mstkoAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -458,6 +530,11 @@ export interface StMstkoToken extends BaseContract {
       from: string,
       to: string,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };

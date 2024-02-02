@@ -11,6 +11,26 @@ import type {
 
 const _abi = [
   {
+    inputs: [],
+    name: 'pause',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_mstkoAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -33,7 +53,7 @@ const _abi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_MstkoAmount',
+        name: '_mstkoAmount',
         type: 'uint256',
       },
     ],
@@ -49,14 +69,8 @@ const _abi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_mstkoAmount',
-        type: 'uint256',
-      },
-    ],
-    name: 'stake',
+    inputs: [],
+    name: 'unpause',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
