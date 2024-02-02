@@ -1,0 +1,23 @@
+{
+  "name": "abi",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mystikonetwork/mystiko-staking.git",
+    "directory": "abi"
+  },
+  "author": "Mystiko Network",
+  "license": "MIT",
+  "scripts": {
+    "prettier:check": "prettier --check \"./**/*.{js,ts}\" --config .prettierrc",
+    "prettier:fix": "prettier --write \"./**/*.{js,ts}\" --config .prettierrc",
+    "prettier": "yarn prettier:check",
+    "generate:staking": "rm -rf src/typechain/staking && typechain --target ethers-v5 --out-dir src/typechain/staking '../contracts/artifacts/!(build-info)/**/+([a-zA-Z0-9_]).json' && yarn prettier:fix",
+    "build": "yarn generate:staking"
+  },
+  "devDependencies": {
+    "@typechain/ethers-v5": "^11.1.2",
+    "prettier": "3.2.4",
+    "typechain": "^8.3.2"
+  }
+}
