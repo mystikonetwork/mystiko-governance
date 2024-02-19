@@ -22,13 +22,13 @@ jobs:
           node-version: 18
       - run: echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
       - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+      - name: Enable Corepack
+        run: corepack enable
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: yarn
-      - name: Enable Corepack
-        run: corepack enable
       - run: yarn install
       - run: yarn build
       - run: yarn lint
