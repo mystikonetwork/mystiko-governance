@@ -27,24 +27,26 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+      - name: Enable Corepack
+        run: corepack enable
       - run: yarn install
       - run: yarn build
       - run: yarn lint
       - run: yarn test
       - run: git diff --quiet || (echo "some generated files are not included in repo" && exit 1)
-      - name: Telegram Failure Notification
-        uses: appleboy/telegram-action@master
-        if: failure()
-        with:
-          message: ❗ Build failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions) because of ${{ github.actor }}
-          format: markdown
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      - name: Telegram Success Notification
-        uses: appleboy/telegram-action@master
-        if: success()
-        with:
-          message: Build succeeded for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
-          format: markdown
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+#      - name: Telegram Failure Notification
+#        uses: appleboy/telegram-action@master
+#        if: failure()
+#        with:
+#          message: ❗ Build failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions) because of ${{ github.actor }}
+#          format: markdown
+#          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+#          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+#      - name: Telegram Success Notification
+#        uses: appleboy/telegram-action@master
+#        if: success()
+#        with:
+#          message: Build succeeded for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
+#          format: markdown
+#          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+#          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
