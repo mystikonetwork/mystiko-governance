@@ -11,7 +11,7 @@
   "scripts": {
     "build": "yarn build:contract && yarn build:abi",
     "build:contract": "hardhat compile",
-    "build:abi": "cd ../abi && yarn build",
+    "build:abi": "cd ../abi && yarn generate",
     "clean": "hardhat clean",
     "test": "yarn test:forge && yarn test:unit",
     "test:forge": "forge test -vv",

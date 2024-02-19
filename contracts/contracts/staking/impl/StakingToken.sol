@@ -4,7 +4,7 @@ pragma solidity 0.8.9;
 import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {IStakingToken} from "../interface/iStakingToken.sol";
+import {IStakingToken} from "../interfaces/iStakingToken.sol";
 import {CustomErrors} from "../libs/common/CustomErrors.sol";
 
 contract StMstkoToken is ERC20, IStakingToken, Ownable {

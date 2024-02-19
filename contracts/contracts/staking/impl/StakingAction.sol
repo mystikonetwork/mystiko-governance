@@ -5,8 +5,8 @@ import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Pausable} from "@openzeppelin/contracts/security/Pausable.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {IStakingAction} from "../interface/iStakingAction.sol";
-import {IStakingToken} from "../interface/iStakingToken.sol";
+import {IStakingAction} from "../interfaces/iStakingAction.sol";
+import {IStakingToken} from "../interfaces/iStakingToken.sol";
 
 contract StakingAction is IStakingAction, Pausable, Ownable {
   using SafeMath for uint256;

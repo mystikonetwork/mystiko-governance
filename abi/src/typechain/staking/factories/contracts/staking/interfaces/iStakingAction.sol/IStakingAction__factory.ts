@@ -7,7 +7,7 @@ import type { Provider } from '@ethersproject/providers';
 import type {
   IStakingAction,
   IStakingActionInterface,
-} from '../../../../../contracts/staking/interface/iStakingAction.sol/IStakingAction';
+} from '../../../../../contracts/staking/interfaces/iStakingAction.sol/IStakingAction';
 
 const _abi = [
   {

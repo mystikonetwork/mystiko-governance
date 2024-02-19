@@ -2,5 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as impl from './impl';
-export * as interface from './interface';
+export * as interfaces from './interfaces';
 export * as libs from './libs';
