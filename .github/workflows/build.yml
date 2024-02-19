@@ -24,6 +24,8 @@ jobs:
       - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
       - name: Enable Corepack
         run: corepack enable
+      - name: Make env
+        run: echo "" >> .env
       - name: Setup node
         uses: actions/setup-node@v4
         with:
