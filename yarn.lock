@@ -1574,6 +1574,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tsconfig/recommended@npm:^1.0.1":
+  version: 1.0.3
+  resolution: "@tsconfig/recommended@npm:1.0.3"
+  checksum: 2744d2798d52d337a7b0b78f6efa070ecda4e42262e93589d4bed615a55639a84035a8e3b2b020f2396f1f7832294b8c00d7acc78e644418566447ca53df9078
+  languageName: node
+  linkType: hard
+
 "@typechain/ethers-v5@npm:^11.1.2":
   version: 11.1.2
   resolution: "@typechain/ethers-v5@npm:11.1.2"
@@ -2031,9 +2038,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "abi@workspace:abi"
   dependencies:
+    "@tsconfig/recommended": "npm:^1.0.1"
     "@typechain/ethers-v5": "npm:^11.1.2"
     prettier: "npm:3.2.4"
     typechain: "npm:^8.3.2"
+    typescript: "npm:5.1.6"
   languageName: unknown
   linkType: soft
 
