@@ -19,13 +19,15 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../..
 
 export interface StakingActionInterface extends utils.Interface {
   functions: {
+    'ST_XZK()': FunctionFragment;
+    'XZK()': FunctionFragment;
     'owner()': FunctionFragment;
     'pause()': FunctionFragment;
     'paused()': FunctionFragment;
     'renounceOwnership()': FunctionFragment;
     'stake(uint256)': FunctionFragment;
-    'swapMstko(uint256)': FunctionFragment;
-    'swapStMstko(uint256)': FunctionFragment;
+    'swapToStXZK(uint256)': FunctionFragment;
+    'swapToXZK(uint256)': FunctionFragment;
     'transferOwnership(address)': FunctionFragment;
     'unpause()': FunctionFragment;
     'withdraw(uint256)': FunctionFragment;
@@ -33,36 +35,42 @@ export interface StakingActionInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | 'ST_XZK'
+      | 'XZK'
       | 'owner'
       | 'pause'
       | 'paused'
       | 'renounceOwnership'
       | 'stake'
-      | 'swapMstko'
-      | 'swapStMstko'
+      | 'swapToStXZK'
+      | 'swapToXZK'
       | 'transferOwnership'
       | 'unpause'
       | 'withdraw',
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: 'ST_XZK', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'XZK', values?: undefined): string;
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
   encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
   encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
   encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
   encodeFunctionData(functionFragment: 'stake', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'swapMstko', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'swapStMstko', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'swapToStXZK', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'swapToXZK', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'transferOwnership', values: [string]): string;
   encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
   encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish]): string;
 
+  decodeFunctionResult(functionFragment: 'ST_XZK', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'XZK', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'stake', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'swapMstko', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'swapStMstko', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'swapToStXZK', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'swapToXZK', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
@@ -123,6 +131,10 @@ export interface StakingAction extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    ST_XZK(overrides?: CallOverrides): Promise<[string]>;
+
+    XZK(overrides?: CallOverrides): Promise<[string]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
@@ -131,14 +143,11 @@ export interface StakingAction extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    stake(
-      _mstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferOwnership(
       newOwner: string,
@@ -147,11 +156,12 @@ export interface StakingAction extends BaseContract {
 
     unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    withdraw(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
   };
+
+  ST_XZK(overrides?: CallOverrides): Promise<string>;
+
+  XZK(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -161,11 +171,11 @@ export interface StakingAction extends BaseContract {
 
   renounceOwnership(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-  swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   transferOwnership(
     newOwner: string,
@@ -174,12 +184,13 @@ export interface StakingAction extends BaseContract {
 
   unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  withdraw(
-    _stMstkoAmount: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+  withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   callStatic: {
+    ST_XZK(overrides?: CallOverrides): Promise<string>;
+
+    XZK(overrides?: CallOverrides): Promise<string>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     pause(overrides?: CallOverrides): Promise<void>;
@@ -188,17 +199,17 @@ export interface StakingAction extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    stake(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    stake(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
 
     unpause(overrides?: CallOverrides): Promise<void>;
 
-    withdraw(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    withdraw(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -219,6 +230,10 @@ export interface StakingAction extends BaseContract {
   };
 
   estimateGas: {
+    ST_XZK(overrides?: CallOverrides): Promise<BigNumber>;
+
+    XZK(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     pause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
@@ -227,20 +242,24 @@ export interface StakingAction extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(newOwner: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     unpause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    withdraw(_stMstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    ST_XZK(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    XZK(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
@@ -249,14 +268,11 @@ export interface StakingAction extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    stake(
-      _mstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
+    stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
@@ -265,9 +281,6 @@ export interface StakingAction extends BaseContract {
 
     unpause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    withdraw(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
+    withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
   };
 }

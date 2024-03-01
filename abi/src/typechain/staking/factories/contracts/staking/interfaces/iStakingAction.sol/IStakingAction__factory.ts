@@ -21,7 +21,7 @@ const _abi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_mstkoAmount',
+        name: '_amount',
         type: 'uint256',
       },
     ],
@@ -34,11 +34,11 @@ const _abi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_stMstkoAmount',
+        name: '_amount',
         type: 'uint256',
       },
     ],
-    name: 'swapMstko',
+    name: 'swapToStXZK',
     outputs: [
       {
         internalType: 'uint256',
@@ -46,18 +46,18 @@ const _abi = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'uint256',
-        name: '_mstkoAmount',
+        name: '_amount',
         type: 'uint256',
       },
     ],
-    name: 'swapStMstko',
+    name: 'swapToXZK',
     outputs: [
       {
         internalType: 'uint256',
@@ -65,7 +65,7 @@ const _abi = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -79,7 +79,7 @@ const _abi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_stMstkoAmount',
+        name: '_amount',
         type: 'uint256',
       },
     ],

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity ^0.8.20;
 
 library CustomErrors {
-  error OnlyOperator();
   error OnlyMinter();
   error NotChanged();
+  error UnexpectedError();
 }

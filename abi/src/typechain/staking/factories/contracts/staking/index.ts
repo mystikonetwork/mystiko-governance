@@ -4,3 +4,4 @@
 export * as impl from './impl';
 export * as interfaces from './interfaces';
 export * as libs from './libs';
+export * as mock from './mock';

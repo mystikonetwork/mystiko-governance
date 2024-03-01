@@ -20,13 +20,13 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../..
 export interface IStakingTokenInterface extends utils.Interface {
   functions: {
     'burn(address,uint256,uint256)': FunctionFragment;
-    'mint(address,uint256,uint256)': FunctionFragment;
+    'mint(address,uint256)': FunctionFragment;
   };
 
   getFunction(nameOrSignatureOrTopic: 'burn' | 'mint'): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'burn', values: [string, BigNumberish, BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'mint', values: [string, BigNumberish, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'mint', values: [string, BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: 'burn', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'mint', data: BytesLike): Result;
@@ -59,47 +59,40 @@ export interface IStakingToken extends BaseContract {
   functions: {
     burn(
       account: string,
-      _burnAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _burnStXzkAmount: BigNumberish,
+      _xzkAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     mint(
       account: string,
-      _mintAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _mintStXzkAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
 
   burn(
     account: string,
-    _burnAmount: BigNumberish,
-    _mstkoAmount: BigNumberish,
+    _burnStXzkAmount: BigNumberish,
+    _xzkAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   mint(
     account: string,
-    _mintAmount: BigNumberish,
-    _mstkoAmount: BigNumberish,
+    _mintStXzkAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   callStatic: {
     burn(
       account: string,
-      _burnAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _burnStXzkAmount: BigNumberish,
+      _xzkAmount: BigNumberish,
       overrides?: CallOverrides,
     ): Promise<void>;
 
-    mint(
-      account: string,
-      _mintAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    mint(account: string, _mintStXzkAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
@@ -107,15 +100,14 @@ export interface IStakingToken extends BaseContract {
   estimateGas: {
     burn(
       account: string,
-      _burnAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _burnStXzkAmount: BigNumberish,
+      _xzkAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     mint(
       account: string,
-      _mintAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _mintStXzkAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
   };
@@ -123,15 +115,14 @@ export interface IStakingToken extends BaseContract {
   populateTransaction: {
     burn(
       account: string,
-      _burnAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _burnStXzkAmount: BigNumberish,
+      _xzkAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     mint(
       account: string,
-      _mintAmount: BigNumberish,
-      _mstkoAmount: BigNumberish,
+      _mintStXzkAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };

@@ -19,12 +19,12 @@ const _abi = [
       },
       {
         internalType: 'uint256',
-        name: '_burnAmount',
+        name: '_burnStXzkAmount',
         type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: '_mstkoAmount',
+        name: '_xzkAmount',
         type: 'uint256',
       },
     ],
@@ -42,12 +42,7 @@ const _abi = [
       },
       {
         internalType: 'uint256',
-        name: '_mintAmount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_mstkoAmount',
+        name: '_mintStXzkAmount',
         type: 'uint256',
       },
     ],

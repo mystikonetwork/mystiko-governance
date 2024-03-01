@@ -1,34 +1,34 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 
 import "../../../contracts/staking/impl/StakingToken.sol";
 import "../../../contracts/staking/libs/common/CustomErrors.sol";
-import "../../../contracts/token/MstkoToken.sol";
+import "../../../contracts/staking/mock/MockMystikoToken.sol";
 
 contract StakingTokenTokenTest is Test {
-  MstkoToken public mstko;
-  StMstkoToken public stMstko;
+  MockMystikoToken public XZK;
+  StMystikoToken public stXZK;
 
   function setUp() public {
-    mstko = new MstkoToken();
-    stMstko = new StMstkoToken(address(mstko));
+    XZK = new MockMystikoToken();
+    stXZK = new StMystikoToken(address(XZK));
   }
 
   function test_token_name() public {
-    assertEq(stMstko.name(), "Mystiko Staking Token");
+    assertEq(stXZK.name(), "Mystiko Staking Token");
   }
 
   function test_token_symbol() public {
-    assertEq(stMstko.symbol(), "stMSTKO");
+    assertEq(stXZK.symbol(), "stXZK");
   }
 
   function test_token_decimal() public {
-    assertEq(stMstko.decimals(), 18);
+    assertEq(stXZK.decimals(), 18);
   }
 
   function test_token_total_supply() public {
-    assertEq(stMstko.totalSupply(), 0);
+    assertEq(stXZK.totalSupply(), 0);
   }
 }

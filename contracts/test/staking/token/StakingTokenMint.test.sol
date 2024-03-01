@@ -1,53 +1,50 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 
 import "../../../contracts/staking/impl/StakingToken.sol";
 import "../../../contracts/staking/libs/common/CustomErrors.sol";
-import "../../../contracts/token/MstkoToken.sol";
+import "../../../contracts/staking/mock/MockMystikoToken.sol";
+import "../utils/Random.sol";
 
-contract StakingTokenMintTest is Test {
-  MstkoToken public mstko;
-  StMstkoToken public stMstko;
+contract StakingTokenMintTest is Test, Random {
+  MockMystikoToken public XZK;
+  StMystikoToken public stXZK;
 
-  event StMstkoMinted(uint256 amount);
+  event StXZKMinted(address indexed account, uint256 amount);
 
   function setUp() public {
-    mstko = new MstkoToken();
-    stMstko = new StMstkoToken(address(mstko));
+    XZK = new MockMystikoToken();
+    stXZK = new StMystikoToken(address(XZK));
   }
 
-  function test_mint_operator() public {
-    vm.expectRevert(CustomErrors.OnlyMinter.selector);
-    stMstko.mint(address(this), 100, 100);
+  function test_mint_revert_without_role() public {
+    vm.expectRevert();
+    stXZK.mint(address(this), 100);
   }
 
-  function test_mint_success() public {
-    stMstko.changeMinter(address(this));
+  function test_mint() public {
+    address actor = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address account = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    stXZK.grantRole(stXZK.STAKING_TOKEN_MINTER_ROLE(), actor);
 
-    vm.expectEmit(address(stMstko));
-    emit StMstkoMinted(uint256(0));
-    stMstko.mint(address(this), 0, 0);
-    assertEq(stMstko.balanceOf(address(this)), 0);
+    vm.prank(actor);
+    vm.expectEmit(address(stXZK));
+    emit StXZKMinted(address(account), uint256(0));
+    stXZK.mint(address(account), 0);
+    assertEq(stXZK.balanceOf(address(account)), 0);
 
-    mstko.approve(address(stMstko), 100);
-    vm.expectEmit(address(stMstko));
-    emit StMstkoMinted(uint256(100));
-    stMstko.mint(address(this), 100, 100);
-    assertEq(mstko.balanceOf(address(stMstko)), 100);
-    assertEq(stMstko.balanceOf(address(this)), 100);
-    assertEq(stMstko.totalSupply(), 100);
+    vm.prank(actor);
+    vm.expectEmit(address(stXZK));
+    emit StXZKMinted(address(account), uint256(100));
+    stXZK.mint(address(account), 100);
+    assertEq(stXZK.balanceOf(address(account)), 100);
+    assertEq(stXZK.totalSupply(), 100);
 
-    mstko.approve(address(stMstko), 100);
-    stMstko.mint(address(this), 0, 100);
-    assertEq(mstko.balanceOf(address(stMstko)), 200);
-    assertEq(stMstko.balanceOf(address(this)), 100);
-    assertEq(stMstko.totalSupply(), 100);
-
-    stMstko.mint(address(this), 100, 0);
-    assertEq(mstko.balanceOf(address(stMstko)), 200);
-    assertEq(stMstko.balanceOf(address(this)), 200);
-    assertEq(stMstko.totalSupply(), 200);
+    vm.prank(actor);
+    stXZK.mint(address(account), 100);
+    assertEq(stXZK.balanceOf(address(account)), 200);
+    assertEq(stXZK.totalSupply(), 200);
   }
 }

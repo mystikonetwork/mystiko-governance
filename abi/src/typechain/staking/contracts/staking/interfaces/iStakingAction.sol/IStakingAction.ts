@@ -21,27 +21,27 @@ export interface IStakingActionInterface extends utils.Interface {
   functions: {
     'pause()': FunctionFragment;
     'stake(uint256)': FunctionFragment;
-    'swapMstko(uint256)': FunctionFragment;
-    'swapStMstko(uint256)': FunctionFragment;
+    'swapToStXZK(uint256)': FunctionFragment;
+    'swapToXZK(uint256)': FunctionFragment;
     'unpause()': FunctionFragment;
     'withdraw(uint256)': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: 'pause' | 'stake' | 'swapMstko' | 'swapStMstko' | 'unpause' | 'withdraw',
+    nameOrSignatureOrTopic: 'pause' | 'stake' | 'swapToStXZK' | 'swapToXZK' | 'unpause' | 'withdraw',
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
   encodeFunctionData(functionFragment: 'stake', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'swapMstko', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'swapStMstko', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'swapToStXZK', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'swapToXZK', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
   encodeFunctionData(functionFragment: 'withdraw', values: [BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'stake', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'swapMstko', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'swapStMstko', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'swapToStXZK', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'swapToXZK', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
 
@@ -73,62 +73,41 @@ export interface IStakingAction extends BaseContract {
   functions: {
     pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    stake(
-      _mstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    swapMstko(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    swapStMstko(
-      _mstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    withdraw(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
   };
 
   pause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  swapMstko(
-    _stMstkoAmount: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+  swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-  swapStMstko(
-    _mstkoAmount: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+  swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   unpause(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  withdraw(
-    _stMstkoAmount: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+  withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   callStatic: {
     pause(overrides?: CallOverrides): Promise<void>;
 
-    stake(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    stake(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     unpause(overrides?: CallOverrides): Promise<void>;
 
-    withdraw(_stMstkoAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    withdraw(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
@@ -136,40 +115,28 @@ export interface IStakingAction extends BaseContract {
   estimateGas: {
     pause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    stake(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    swapMstko(_stMstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    swapStMstko(_mstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     unpause(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    withdraw(_stMstkoAmount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
     pause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    stake(
-      _mstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
+    stake(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    swapMstko(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
+    swapToStXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    swapStMstko(
-      _mstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
+    swapToXZK(_amount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     unpause(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    withdraw(
-      _stMstkoAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
+    withdraw(_amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
   };
 }

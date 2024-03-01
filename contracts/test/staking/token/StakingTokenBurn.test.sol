@@ -1,107 +1,97 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 
 import "../../../contracts/staking/impl/StakingToken.sol";
 import "../../../contracts/staking/libs/common/CustomErrors.sol";
-import "../../../contracts/token/MstkoToken.sol";
+import "../../../contracts/staking/mock/MockMystikoToken.sol";
+import "../utils/Random.sol";
 
-contract StakingTokenBurnTest is Test {
-  MstkoToken public mstko;
-  StMstkoToken public stMstko;
+contract StakingTokenBurnTest is Test, Random {
+  MockMystikoToken public XZK;
+  StMystikoToken public stXZK;
 
-  event StMstkoBurned(uint256 amount);
+  event StXZKBurned(address indexed account, uint256 amount);
 
   function setUp() public {
-    mstko = new MstkoToken();
-    stMstko = new StMstkoToken(address(mstko));
+    XZK = new MockMystikoToken();
+    stXZK = new StMystikoToken(address(XZK));
   }
 
-  function test_burn_operator() public {
-    vm.expectRevert(CustomErrors.OnlyMinter.selector);
-    stMstko.burn(address(this), 100, 100);
+  function test_burn_revert_without_role() public {
+    vm.expectRevert();
+    stXZK.burn(address(this), 100, 100);
   }
 
-  function test_burn_success() public {
-    address account = vm.addr(uint160(uint256(keccak256(abi.encodePacked(block.timestamp)))));
-    stMstko.changeMinter(address(account));
-    vm.prank(account);
-    vm.expectRevert("ERC20: burn amount exceeds balance");
-    stMstko.burn(address(account), 100, 100);
+  function test_burn() public {
+    address actor = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address account = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    stXZK.grantRole(stXZK.STAKING_TOKEN_MINTER_ROLE(), address(actor));
 
-    mstko.transfer(address(account), 100);
-    assertEq(mstko.balanceOf(address(account)), 100);
-    vm.prank(account);
-    mstko.approve(address(stMstko), 100);
-    vm.prank(account);
-    stMstko.mint(address(account), 100, 100);
-    assertEq(mstko.balanceOf(address(account)), 0);
-    assertEq(mstko.balanceOf(address(stMstko)), 100);
-    assertEq(stMstko.balanceOf(address(account)), 100);
-    assertEq(stMstko.totalSupply(), 100);
+    XZK.transfer(address(stXZK), 100);
+    assertEq(XZK.balanceOf(address(account)), 0);
+    vm.prank(actor);
+    stXZK.mint(address(account), 200);
+    assertEq(stXZK.balanceOf(address(account)), 200);
+    assertEq(stXZK.totalSupply(), 200);
+    vm.prank(actor);
+    vm.expectEmit(address(stXZK));
+    emit StXZKBurned(account, uint256(100));
+    stXZK.burn(address(account), 100, 100);
+    assertEq(XZK.balanceOf(address(account)), 100);
+    assertEq(XZK.balanceOf(address(stXZK)), 0);
+    assertEq(stXZK.balanceOf(address(account)), 100);
+    assertEq(stXZK.totalSupply(), 100);
 
-    vm.prank(account);
-    vm.expectEmit(address(stMstko));
-    emit StMstkoBurned(uint256(0));
-    stMstko.burn(address(account), 0, 0);
-    assertEq(mstko.balanceOf(address(account)), 0);
-    assertEq(mstko.balanceOf(address(stMstko)), 100);
-    assertEq(stMstko.balanceOf(address(account)), 100);
-    assertEq(stMstko.totalSupply(), 100);
+    vm.prank(actor);
+    vm.expectRevert();
+    stXZK.burn(address(account), 100, 100);
+    assertEq(XZK.balanceOf(address(account)), 100);
+    assertEq(XZK.balanceOf(address(stXZK)), 0);
+    assertEq(stXZK.balanceOf(address(account)), 100);
+    assertEq(stXZK.totalSupply(), 100);
 
-    vm.prank(account);
-    vm.expectEmit(address(stMstko));
-    emit StMstkoBurned(uint256(100));
-    stMstko.burn(address(account), 100, 100);
-    assertEq(mstko.balanceOf(address(account)), 100);
-    assertEq(mstko.balanceOf(address(stMstko)), 0);
-    assertEq(stMstko.balanceOf(address(account)), 0);
-    assertEq(stMstko.totalSupply(), 0);
+    XZK.transfer(address(stXZK), 100);
+    vm.prank(actor);
+    vm.expectEmit(address(stXZK));
+    emit StXZKBurned(account, uint256(100));
+    stXZK.burn(address(account), 100, 100);
+    assertEq(XZK.balanceOf(address(account)), 200);
+    assertEq(XZK.balanceOf(address(stXZK)), 0);
+    assertEq(stXZK.balanceOf(address(account)), 0);
+    assertEq(stXZK.totalSupply(), 0);
+  }
 
-    mstko.transfer(address(account), 300);
-    assertEq(mstko.balanceOf(address(account)), 400);
-    vm.prank(account);
-    mstko.approve(address(stMstko), 200);
-    vm.prank(account);
-    stMstko.mint(address(account), 100, 200);
-    assertEq(mstko.balanceOf(address(account)), 200);
-    assertEq(mstko.balanceOf(address(stMstko)), 200);
-    assertEq(stMstko.balanceOf(address(account)), 100);
-    assertEq(stMstko.totalSupply(), 100);
+  function test_mint_and_burn() public {
+    address actor = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address account1 = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address account2 = vm.addr(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    stXZK.grantRole(stXZK.STAKING_TOKEN_MINTER_ROLE(), address(actor));
 
-    vm.prank(account);
-    vm.expectRevert("ERC20: insufficient allowance");
-    stMstko.mint(address(account), 100, 200);
-    vm.prank(account);
-    mstko.approve(address(stMstko), 200);
-    vm.prank(account);
-    stMstko.mint(address(account), 100, 200);
-    assertEq(mstko.balanceOf(address(account)), 0);
-    assertEq(mstko.balanceOf(address(stMstko)), 400);
-    assertEq(stMstko.balanceOf(address(account)), 200);
-    assertEq(stMstko.totalSupply(), 200);
+    assertEq(XZK.balanceOf(address(account1)), 0);
+    assertEq(XZK.balanceOf(address(account2)), 0);
+    assertEq(stXZK.balanceOf(address(account1)), 0);
+    assertEq(stXZK.balanceOf(address(account2)), 0);
 
-    vm.prank(account);
-    stMstko.burn(address(account), 100, 150);
-    assertEq(mstko.balanceOf(address(account)), 150);
-    assertEq(mstko.balanceOf(address(stMstko)), 250);
-    assertEq(stMstko.balanceOf(address(account)), 100);
-    assertEq(stMstko.totalSupply(), 100);
+    vm.prank(actor);
+    stXZK.mint(address(account1), 200);
+    vm.prank(actor);
+    stXZK.mint(address(account2), 200);
+    assertEq(stXZK.balanceOf(address(account1)), 200);
+    assertEq(stXZK.balanceOf(address(account2)), 200);
+    assertEq(stXZK.totalSupply(), 400);
 
-    vm.prank(account);
-    vm.expectRevert("ERC20: burn amount exceeds balance");
-    stMstko.burn(address(account), 200, 150);
+    XZK.transfer(address(stXZK), 100);
 
-    vm.prank(account);
-    vm.expectRevert("ERC20: transfer amount exceeds balance");
-    stMstko.burn(address(account), 100, 350);
-
-    vm.prank(account);
-    stMstko.burn(address(account), 100, 250);
-    assertEq(mstko.balanceOf(address(account)), 400);
-    assertEq(mstko.balanceOf(address(stMstko)), 0);
-    assertEq(stMstko.balanceOf(address(account)), 0);
-    assertEq(stMstko.totalSupply(), 0);
+    vm.prank(actor);
+    stXZK.burn(address(account1), 100, 50);
+    vm.prank(actor);
+    stXZK.burn(address(account2), 100, 50);
+    assertEq(XZK.balanceOf(address(account1)), 50);
+    assertEq(XZK.balanceOf(address(account2)), 50);
+    assertEq(stXZK.balanceOf(address(account1)), 100);
+    assertEq(stXZK.balanceOf(address(account2)), 100);
+    assertEq(stXZK.totalSupply(), 200);
   }
 }

@@ -1,46 +1,40 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity ^0.8.20;
 
 import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {IStakingToken} from "../interfaces/iStakingToken.sol";
 import {CustomErrors} from "../libs/common/CustomErrors.sol";
 
-contract StMstkoToken is ERC20, IStakingToken, Ownable {
+contract StMystikoToken is ERC20, ERC20Permit, IStakingToken, AccessControl {
   using SafeERC20 for IERC20;
 
-  address private mstko;
-  address private minter;
+  bytes32 public constant STAKING_TOKEN_MINTER_ROLE = keccak256("STAKING_TOKEN_MINTER_ROLE");
 
-  modifier onlyMinter() {
-    if (msg.sender != minter) revert CustomErrors.OnlyMinter();
-    _;
+  address public immutable XZK;
+
+  event StXZKMinted(address indexed account, uint256 amount);
+  event StXZKBurned(address indexed account, uint256 amount);
+
+  constructor(
+    address _xzk
+  ) ERC20("Mystiko Staking Token", "stXZK") ERC20Permit("Mystiko Staking Token") AccessControl() {
+    XZK = _xzk;
+    _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
   }
 
-  event MinterChanged(address indexed minter);
-  event StMstkoMinted(uint256 amount);
-  event StMstkoBurned(uint256 amount);
-
-  constructor(address _mstko) ERC20("Mystiko Staking Token", "stMSTKO") Ownable() {
-    mstko = _mstko;
+  function mint(address _account, uint256 _stXZKAmount) external {
+    if (!hasRole(STAKING_TOKEN_MINTER_ROLE, msg.sender)) revert CustomErrors.OnlyMinter();
+    _mint(_account, _stXZKAmount);
+    emit StXZKMinted(_account, _stXZKAmount);
   }
 
-  function mint(address _account, uint256 _mintAmount, uint256 _mstkoAmount) external onlyMinter {
-    IERC20(mstko).safeTransferFrom(_account, address(this), _mstkoAmount);
-    _mint(_account, _mintAmount);
-    emit StMstkoMinted(_mintAmount);
-  }
-
-  function burn(address _account, uint256 _burnAmount, uint256 _mstkoAmount) external onlyMinter {
-    _burn(_account, _burnAmount);
-    IERC20(mstko).safeTransfer(_account, _mstkoAmount);
-    emit StMstkoBurned(_burnAmount);
-  }
-
-  function changeMinter(address _newMinter) external onlyOwner {
-    if (minter == _newMinter) revert CustomErrors.NotChanged();
-    minter = _newMinter;
-    emit MinterChanged(minter);
+  function burn(address _account, uint256 _stXzkAmount, uint256 _xzkAmount) external {
+    if (!hasRole(STAKING_TOKEN_MINTER_ROLE, msg.sender)) revert CustomErrors.OnlyMinter();
+    _burn(_account, _stXzkAmount);
+    IERC20(XZK).safeTransfer(_account, _xzkAmount);
+    emit StXZKBurned(_account, _stXzkAmount);
   }
 }

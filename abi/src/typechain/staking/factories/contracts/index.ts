@@ -2,4 +2,3 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as staking from './staking';
-export * as token from './token';

@@ -7,3 +7,5 @@ import type * as interfaces from './interfaces';
 export type { interfaces };
 import type * as libs from './libs';
 export type { libs };
+import type * as mock from './mock';
+export type { mock };
