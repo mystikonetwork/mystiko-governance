@@ -1,1 +1,1 @@
-# mystiko-staking
+# mystiko-governance
