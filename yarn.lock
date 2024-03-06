@@ -1233,10 +1233,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openzeppelin/contracts@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@openzeppelin/contracts@npm:4.5.0"
-  checksum: b2aeb1fe6fd2a9151657199b9d17c66e87a16836d27d220b0522cefcdba695214e580a208d351a2c77172e6cfa9f2e48a7675855cdc5b535f9ef5df76dcbcf02
+"@openzeppelin/contracts@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@openzeppelin/contracts@npm:5.0.0"
+  checksum: 77714a20788c4993f4e4d7d2ad0bd253fbe288b890045680dd35b216e809f43ff0efe6be47f9dc90acb6f16539192bea15ad762b224346ca6026e83e4e029a2a
   languageName: node
   linkType: hard
 
@@ -1571,6 +1571,13 @@ __metadata:
   version: 1.0.4
   resolution: "@tsconfig/node16@npm:1.0.4"
   checksum: 05f8f2734e266fb1839eb1d57290df1664fe2aa3b0fdd685a9035806daa635f7519bf6d5d9b33f6e69dd545b8c46bd6e2b5c79acb2b1f146e885f7f11a42a5bb
+  languageName: node
+  linkType: hard
+
+"@tsconfig/recommended@npm:^1.0.1":
+  version: 1.0.3
+  resolution: "@tsconfig/recommended@npm:1.0.3"
+  checksum: 2744d2798d52d337a7b0b78f6efa070ecda4e42262e93589d4bed615a55639a84035a8e3b2b020f2396f1f7832294b8c00d7acc78e644418566447ca53df9078
   languageName: node
   linkType: hard
 
@@ -2031,9 +2038,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "abi@workspace:abi"
   dependencies:
+    "@tsconfig/recommended": "npm:^1.0.1"
     "@typechain/ethers-v5": "npm:^11.1.2"
     prettier: "npm:3.2.4"
     typechain: "npm:^8.3.2"
+    typescript: "npm:5.1.6"
   languageName: unknown
   linkType: soft
 
@@ -4356,7 +4365,7 @@ __metadata:
     "@nomicfoundation/hardhat-verify": "npm:^2.0.0"
     "@nomiclabs/hardhat-ethers": "npm:^2.2.3"
     "@nomiclabs/hardhat-waffle": "npm:^2.0.6"
-    "@openzeppelin/contracts": "npm:4.5.0"
+    "@openzeppelin/contracts": "npm:5.0.0"
     "@typechain/ethers-v6": "npm:^0.5.1"
     "@typechain/hardhat": "npm:^9.1.0"
     "@types/mocha": "npm:>=9.1.0"
@@ -9676,9 +9685,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mystiko-staking@workspace:.":
+"mystiko-governance@workspace:.":
   version: 0.0.0-use.local
-  resolution: "mystiko-staking@workspace:."
+  resolution: "mystiko-governance@workspace:."
   languageName: unknown
   linkType: soft
 
