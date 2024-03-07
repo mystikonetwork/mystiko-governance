@@ -30,6 +30,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
     'canDoRelay((address,address))': FunctionFragment;
     'center()': FunctionFragment;
     'changeMinVoteTokenAmount(uint256)': FunctionFragment;
+    'isRelayer(address)': FunctionFragment;
     'minVoteTokenAmount()': FunctionFragment;
     'relayers(address)': FunctionFragment;
     'removeRelayers(address[])': FunctionFragment;
@@ -42,6 +43,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
       | 'canDoRelay'
       | 'center'
       | 'changeMinVoteTokenAmount'
+      | 'isRelayer'
       | 'minVoteTokenAmount'
       | 'relayers'
       | 'removeRelayers'
@@ -52,6 +54,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'canDoRelay', values: [CanDoRelayParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
   encodeFunctionData(functionFragment: 'changeMinVoteTokenAmount', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'isRelayer', values: [string]): string;
   encodeFunctionData(functionFragment: 'minVoteTokenAmount', values?: undefined): string;
   encodeFunctionData(functionFragment: 'relayers', values: [string]): string;
   encodeFunctionData(functionFragment: 'removeRelayers', values: [string[]]): string;
@@ -61,6 +64,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'canDoRelay', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinVoteTokenAmount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isRelayer', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minVoteTokenAmount', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'relayers', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'removeRelayers', data: BytesLike): Result;
@@ -135,6 +139,8 @@ export interface MystikoRelayerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
+    isRelayer(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
+
     minVoteTokenAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     relayers(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
@@ -161,6 +167,8 @@ export interface MystikoRelayerRegistry extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
+  isRelayer(_account: string, overrides?: CallOverrides): Promise<boolean>;
+
   minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
   relayers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
@@ -180,6 +188,8 @@ export interface MystikoRelayerRegistry extends BaseContract {
     center(overrides?: CallOverrides): Promise<string>;
 
     changeMinVoteTokenAmount(_newMinVoteTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    isRelayer(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -213,6 +223,8 @@ export interface MystikoRelayerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
+    isRelayer(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     relayers(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -236,6 +248,8 @@ export interface MystikoRelayerRegistry extends BaseContract {
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
+
+    isRelayer(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
