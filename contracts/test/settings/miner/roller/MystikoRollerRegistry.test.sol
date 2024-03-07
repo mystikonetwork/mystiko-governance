@@ -48,7 +48,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     vm.prank(pool);
     registry.canDoRollup(p1);
 
-    uint256 voteAmount = 100_000e18;
+    uint256 voteAmount = 1_000_000e18;
     XZK.transfer(roller, voteAmount);
     vm.prank(roller);
     XZK.approve(address(vXZK), voteAmount);
@@ -85,17 +85,17 @@ contract MystikoRollerRegistryTest is Test, Random {
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
-    registry.changeMinVoteTokenAmount(100_000e18);
+    registry.changeMinVoteTokenAmount(1_000_000e18);
 
     vm.expectRevert(CustomErrors.NotChanged.selector);
     vm.prank(dao);
-    registry.changeMinVoteTokenAmount(100_000e18);
+    registry.changeMinVoteTokenAmount(1_000_000e18);
 
     vm.expectEmit(address(registry));
-    emit MinVoteTokenAmountChanged(200_000e18);
+    emit MinVoteTokenAmountChanged(2_000_000e18);
     vm.prank(dao);
-    registry.changeMinVoteTokenAmount(200_000e18);
-    assertEq(registry.minVoteTokenAmount(), 200_000e18);
+    registry.changeMinVoteTokenAmount(2_000_000e18);
+    assertEq(registry.minVoteTokenAmount(), 2_000_000e18);
   }
 
   function test_changeMinRollupSize() public {
