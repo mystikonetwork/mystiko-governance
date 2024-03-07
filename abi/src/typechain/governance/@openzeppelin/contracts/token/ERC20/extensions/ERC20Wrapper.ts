@@ -15,34 +15,15 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-<<<<<<< HEAD
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../../common';
 
 export interface ERC20WrapperInterface extends utils.Interface {
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
-
-export interface ERC20Interface extends utils.Interface {
-=======
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../../common';
-
-export interface ERC20WrapperInterface extends utils.Interface {
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   functions: {
     'allowance(address,address)': FunctionFragment;
     'approve(address,uint256)': FunctionFragment;
     'balanceOf(address)': FunctionFragment;
     'decimals()': FunctionFragment;
-<<<<<<< HEAD
     'depositFor(address,uint256)': FunctionFragment;
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
-    'depositFor(address,uint256)': FunctionFragment;
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     'name()': FunctionFragment;
     'symbol()': FunctionFragment;
     'totalSupply()': FunctionFragment;
@@ -58,14 +39,7 @@ export interface ERC20WrapperInterface extends utils.Interface {
       | 'approve'
       | 'balanceOf'
       | 'decimals'
-<<<<<<< HEAD
       | 'depositFor'
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
-      | 'depositFor'
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       | 'name'
       | 'symbol'
       | 'totalSupply'
@@ -79,14 +53,7 @@ export interface ERC20WrapperInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'approve', values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'balanceOf', values: [string]): string;
   encodeFunctionData(functionFragment: 'decimals', values?: undefined): string;
-<<<<<<< HEAD
   encodeFunctionData(functionFragment: 'depositFor', values: [string, BigNumberish]): string;
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
-  encodeFunctionData(functionFragment: 'depositFor', values: [string, BigNumberish]): string;
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   encodeFunctionData(functionFragment: 'name', values?: undefined): string;
   encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
   encodeFunctionData(functionFragment: 'totalSupply', values?: undefined): string;
@@ -99,14 +66,7 @@ export interface ERC20WrapperInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'decimals', data: BytesLike): Result;
-<<<<<<< HEAD
   decodeFunctionResult(functionFragment: 'depositFor', data: BytesLike): Result;
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
-  decodeFunctionResult(functionFragment: 'depositFor', data: BytesLike): Result;
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'symbol', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'totalSupply', data: BytesLike): Result;
@@ -142,28 +102,12 @@ export type TransferEvent = TypedEvent<[string, string, BigNumber], TransferEven
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-<<<<<<< HEAD
 export interface ERC20Wrapper extends BaseContract {
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-export interface ERC20 extends BaseContract {
-=======
-export interface ERC20Wrapper extends BaseContract {
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-<<<<<<< HEAD
   interface: ERC20WrapperInterface;
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-  interface: ERC20Interface;
-=======
-  interface: ERC20WrapperInterface;
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -193,21 +137,12 @@ export interface ERC20Wrapper extends BaseContract {
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     depositFor(
       account: string,
       value: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     name(overrides?: CallOverrides): Promise<[string]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
@@ -224,11 +159,6 @@ export interface ERC20Wrapper extends BaseContract {
       from: string,
       to: string,
       value: BigNumberish,
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
@@ -237,10 +167,6 @@ export interface ERC20Wrapper extends BaseContract {
     withdrawTo(
       account: string,
       value: BigNumberish,
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
@@ -257,21 +183,12 @@ export interface ERC20Wrapper extends BaseContract {
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   depositFor(
     account: string,
     value: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   name(overrides?: CallOverrides): Promise<string>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
@@ -288,11 +205,6 @@ export interface ERC20Wrapper extends BaseContract {
     from: string,
     to: string,
     value: BigNumberish,
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
@@ -301,10 +213,6 @@ export interface ERC20Wrapper extends BaseContract {
   withdrawTo(
     account: string,
     value: BigNumberish,
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
@@ -317,16 +225,8 @@ export interface ERC20Wrapper extends BaseContract {
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
-<<<<<<< HEAD
     depositFor(account: string, value: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
-    depositFor(account: string, value: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
-
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     name(overrides?: CallOverrides): Promise<string>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
@@ -336,19 +236,10 @@ export interface ERC20Wrapper extends BaseContract {
     transfer(to: string, value: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     transferFrom(from: string, to: string, value: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 
     underlying(overrides?: CallOverrides): Promise<string>;
 
     withdrawTo(account: string, value: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
   };
 
   filters: {
@@ -380,21 +271,12 @@ export interface ERC20Wrapper extends BaseContract {
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     depositFor(
       account: string,
       value: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
@@ -407,11 +289,6 @@ export interface ERC20Wrapper extends BaseContract {
       from: string,
       to: string,
       value: BigNumberish,
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
@@ -420,10 +297,6 @@ export interface ERC20Wrapper extends BaseContract {
     withdrawTo(
       account: string,
       value: BigNumberish,
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
   };
@@ -441,21 +314,12 @@ export interface ERC20Wrapper extends BaseContract {
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     depositFor(
       account: string,
       value: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -472,11 +336,6 @@ export interface ERC20Wrapper extends BaseContract {
       from: string,
       to: string,
       value: BigNumberish,
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/ERC20.ts
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
@@ -485,10 +344,6 @@ export interface ERC20Wrapper extends BaseContract {
     withdrawTo(
       account: string,
       value: BigNumberish,
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/@openzeppelin/contracts/token/ERC20/extensions/ERC20Wrapper.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };

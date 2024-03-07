@@ -94,7 +94,6 @@ export type { Checkpoints } from './@openzeppelin/contracts/utils/structs/Checkp
 export { Checkpoints__factory } from './factories/@openzeppelin/contracts/utils/structs/Checkpoints__factory';
 export type { DoubleEndedQueue } from './@openzeppelin/contracts/utils/structs/DoubleEndedQueue';
 export { DoubleEndedQueue__factory } from './factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory';
-<<<<<<< HEAD
 export type { MystikoGovernor } from './contracts/governance/impl/MystikoGovernor';
 export { MystikoGovernor__factory } from './factories/contracts/governance/impl/MystikoGovernor__factory';
 export type { MystikoGovernorCenter } from './contracts/governance/impl/MystikoGovernorCenter';
@@ -119,11 +118,5 @@ export type { MystikoRelayerRegistryProxy } from './contracts/Settings/miner/pro
 export { MystikoRelayerRegistryProxy__factory } from './factories/contracts/Settings/miner/proxy/MystikoRelayerRegistryProxy__factory';
 export type { MystikoRollerRegistryProxy } from './contracts/Settings/miner/proxy/MystikoRollerRegistryProxy';
 export { MystikoRollerRegistryProxy__factory } from './factories/contracts/Settings/miner/proxy/MystikoRollerRegistryProxy__factory';
-=======
-export type { MystikoGovernor } from './contracts/governace/impl/MystikoGovernor';
-export { MystikoGovernor__factory } from './factories/contracts/governace/impl/MystikoGovernor__factory';
-export type { MystikoTimelockController } from './contracts/governace/impl/MystikoTimelockController';
-export { MystikoTimelockController__factory } from './factories/contracts/governace/impl/MystikoTimelockController__factory';
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 export type { MystikoVoteToken } from './contracts/token/MystikoVoteToken';
 export { MystikoVoteToken__factory } from './factories/contracts/token/MystikoVoteToken__factory';

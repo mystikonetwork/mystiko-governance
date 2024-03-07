@@ -18,19 +18,19 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../..
 
 export interface MystikoGovernorCenterInterface extends utils.Interface {
   functions: {
-    'DAO()': FunctionFragment;
     'changeMystikoDAO(address)': FunctionFragment;
+    'dao()': FunctionFragment;
     'getMystikoDAO()': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'DAO' | 'changeMystikoDAO' | 'getMystikoDAO'): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: 'changeMystikoDAO' | 'dao' | 'getMystikoDAO'): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'DAO', values?: undefined): string;
   encodeFunctionData(functionFragment: 'changeMystikoDAO', values: [string]): string;
+  encodeFunctionData(functionFragment: 'dao', values?: undefined): string;
   encodeFunctionData(functionFragment: 'getMystikoDAO', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'DAO', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMystikoDAO', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'dao', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getMystikoDAO', data: BytesLike): Result;
 
   events: {
@@ -41,7 +41,7 @@ export interface MystikoGovernorCenterInterface extends utils.Interface {
 }
 
 export interface MystikoDAOChangedEventObject {
-  DAO: string;
+  dao: string;
 }
 export type MystikoDAOChangedEvent = TypedEvent<[string], MystikoDAOChangedEventObject>;
 
@@ -70,53 +70,53 @@ export interface MystikoGovernorCenter extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    DAO(overrides?: CallOverrides): Promise<[string]>;
-
     changeMystikoDAO(
       _newMystikoDAO: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
+    dao(overrides?: CallOverrides): Promise<[string]>;
+
     getMystikoDAO(overrides?: CallOverrides): Promise<[string]>;
   };
-
-  DAO(overrides?: CallOverrides): Promise<string>;
 
   changeMystikoDAO(
     _newMystikoDAO: string,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
+  dao(overrides?: CallOverrides): Promise<string>;
+
   getMystikoDAO(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    DAO(overrides?: CallOverrides): Promise<string>;
-
     changeMystikoDAO(_newMystikoDAO: string, overrides?: CallOverrides): Promise<void>;
+
+    dao(overrides?: CallOverrides): Promise<string>;
 
     getMystikoDAO(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
-    'MystikoDAOChanged(address)'(DAO?: string | null): MystikoDAOChangedEventFilter;
-    MystikoDAOChanged(DAO?: string | null): MystikoDAOChangedEventFilter;
+    'MystikoDAOChanged(address)'(dao?: string | null): MystikoDAOChangedEventFilter;
+    MystikoDAOChanged(dao?: string | null): MystikoDAOChangedEventFilter;
   };
 
   estimateGas: {
-    DAO(overrides?: CallOverrides): Promise<BigNumber>;
-
     changeMystikoDAO(_newMystikoDAO: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    dao(overrides?: CallOverrides): Promise<BigNumber>;
 
     getMystikoDAO(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    DAO(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     changeMystikoDAO(
       _newMystikoDAO: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
+
+    dao(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getMystikoDAO(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

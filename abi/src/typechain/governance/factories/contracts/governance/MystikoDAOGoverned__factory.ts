@@ -15,7 +15,7 @@ const _abi = [
     name: 'center',
     outputs: [
       {
-        internalType: 'address',
+        internalType: 'contract IMystikoGovernorCenter',
         name: '',
         type: 'address',
       },

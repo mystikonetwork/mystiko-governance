@@ -3,33 +3,15 @@
 /* eslint-disable */
 import { Signer, utils, Contract, ContractFactory, Overrides } from 'ethers';
 import type { Provider, TransactionRequest } from '@ethersproject/providers';
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
-import type { CustomErrors, CustomErrorsInterface } from '../../../../contracts/libs/common/CustomErrors';
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 import type {
   DoubleEndedQueue,
   DoubleEndedQueueInterface,
 } from '../../../../../@openzeppelin/contracts/utils/structs/DoubleEndedQueue';
-<<<<<<< HEAD
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 
 const _abi = [
   {
     inputs: [],
-<<<<<<< HEAD
     name: 'QueueEmpty',
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
-    name: 'InsufficientBalanceForAction',
-=======
-    name: 'QueueEmpty',
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     type: 'error',
   },
   {
@@ -39,44 +21,13 @@ const _abi = [
   },
   {
     inputs: [],
-<<<<<<< HEAD
     name: 'QueueOutOfBounds',
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
-    name: 'NotRelayer',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotRoller',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'OnlyMystikoDAO',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'RollupSizeTooSmall',
-=======
-    name: 'QueueOutOfBounds',
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
     type: 'error',
   },
 ] as const;
 
 const _bytecode =
-<<<<<<< HEAD
   '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201d8b6b3939af25868d3faae2c98f392ddfbc7e00d92181ba5361fa8f65c5017164736f6c63430008140033';
-=======
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
-  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201c36d020883ae0adfd0790ff9147e7724d9ad0bb2ba502db0f821906900c7f1364736f6c63430008140033';
-=======
-  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201d8b6b3939af25868d3faae2c98f392ddfbc7e00d92181ba5361fa8f65c5017164736f6c63430008140033';
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 
 type DoubleEndedQueueConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
 

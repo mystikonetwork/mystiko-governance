@@ -6,18 +6,18 @@ import type { BaseContract, Signer, utils } from 'ethers';
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../common';
 
-export interface IERC20ErrorsInterface extends utils.Interface {
+export interface CustomErrorsInterface extends utils.Interface {
   functions: {};
 
   events: {};
 }
 
-export interface IERC20Errors extends BaseContract {
+export interface CustomErrors extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IERC20ErrorsInterface;
+  interface: CustomErrorsInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

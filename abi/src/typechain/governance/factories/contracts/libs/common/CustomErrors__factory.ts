@@ -3,33 +3,21 @@
 /* eslint-disable */
 import { Signer, utils, Contract, ContractFactory, Overrides } from 'ethers';
 import type { Provider, TransactionRequest } from '@ethersproject/providers';
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
 import type { CustomErrors, CustomErrorsInterface } from '../../../../contracts/libs/common/CustomErrors';
-=======
-import type {
-  DoubleEndedQueue,
-  DoubleEndedQueueInterface,
-} from '../../../../../@openzeppelin/contracts/utils/structs/DoubleEndedQueue';
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
 
 const _abi = [
   {
     inputs: [],
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
     name: 'InsufficientBalanceForAction',
-=======
-    name: 'QueueEmpty',
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
     type: 'error',
   },
   {
     inputs: [],
-    name: 'QueueFull',
+    name: 'NotChanged',
     type: 'error',
   },
   {
     inputs: [],
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
     name: 'NotRelayer',
     type: 'error',
   },
@@ -46,28 +34,21 @@ const _abi = [
   {
     inputs: [],
     name: 'RollupSizeTooSmall',
-=======
-    name: 'QueueOutOfBounds',
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
     type: 'error',
   },
 ] as const;
 
 const _bytecode =
-<<<<<<< HEAD:abi/src/typechain/governance/factories/contracts/libs/common/CustomErrors__factory.ts
   '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201c36d020883ae0adfd0790ff9147e7724d9ad0bb2ba502db0f821906900c7f1364736f6c63430008140033';
-=======
-  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201d8b6b3939af25868d3faae2c98f392ddfbc7e00d92181ba5361fa8f65c5017164736f6c63430008140033';
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory.ts
 
-type DoubleEndedQueueConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+type CustomErrorsConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: DoubleEndedQueueConstructorParams,
+  xs: CustomErrorsConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
-export class DoubleEndedQueue__factory extends ContractFactory {
-  constructor(...args: DoubleEndedQueueConstructorParams) {
+export class CustomErrors__factory extends ContractFactory {
+  constructor(...args: CustomErrorsConstructorParams) {
     if (isSuperArgs(args)) {
       super(...args);
     } else {
@@ -75,25 +56,25 @@ export class DoubleEndedQueue__factory extends ContractFactory {
     }
   }
 
-  override deploy(overrides?: Overrides & { from?: string }): Promise<DoubleEndedQueue> {
-    return super.deploy(overrides || {}) as Promise<DoubleEndedQueue>;
+  override deploy(overrides?: Overrides & { from?: string }): Promise<CustomErrors> {
+    return super.deploy(overrides || {}) as Promise<CustomErrors>;
   }
   override getDeployTransaction(overrides?: Overrides & { from?: string }): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
-  override attach(address: string): DoubleEndedQueue {
-    return super.attach(address) as DoubleEndedQueue;
+  override attach(address: string): CustomErrors {
+    return super.attach(address) as CustomErrors;
   }
-  override connect(signer: Signer): DoubleEndedQueue__factory {
-    return super.connect(signer) as DoubleEndedQueue__factory;
+  override connect(signer: Signer): CustomErrors__factory {
+    return super.connect(signer) as CustomErrors__factory;
   }
 
   static readonly bytecode = _bytecode;
   static readonly abi = _abi;
-  static createInterface(): DoubleEndedQueueInterface {
-    return new utils.Interface(_abi) as DoubleEndedQueueInterface;
+  static createInterface(): CustomErrorsInterface {
+    return new utils.Interface(_abi) as CustomErrorsInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): DoubleEndedQueue {
-    return new Contract(address, _abi, signerOrProvider) as DoubleEndedQueue;
+  static connect(address: string, signerOrProvider: Signer | Provider): CustomErrors {
+    return new Contract(address, _abi, signerOrProvider) as CustomErrors;
   }
 }

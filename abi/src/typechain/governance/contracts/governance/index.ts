@@ -3,11 +3,8 @@
 /* eslint-disable */
 import type * as impl from './impl';
 export type { impl };
-<<<<<<< HEAD:abi/src/typechain/governance/contracts/governance/index.ts
 import type * as interfaces from './interfaces';
 export type { interfaces };
-=======
->>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d:abi/src/typechain/governance/contracts/governace/index.ts
 import type * as libs from './libs';
 export type { libs };
 export type { MystikoDAOGoverned } from './MystikoDAOGoverned';
