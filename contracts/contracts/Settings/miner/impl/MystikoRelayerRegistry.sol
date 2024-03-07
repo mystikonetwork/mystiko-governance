@@ -15,15 +15,23 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOGoverned {
   event RelayerAdded(address indexed _relayer);
   event RelayerRemoved(address indexed _relayer);
 
-  constructor(address _center, address _vXZK) MystikoDAOGoverned(_center) {
-    minVoteTokenAmount = 100_000e18;
+  constructor(address _center, address _vXZK, uint256 _minVoteTokenAmount) MystikoDAOGoverned(_center) {
+    minVoteTokenAmount = _minVoteTokenAmount;
     vXZK = _vXZK;
   }
 
-  function canDoRelay(CanDoRelayParams calldata _params) external view returns (bool) {
+  modifier onlyRelayerOrOpen(address _account) {
+    if (!isRelayer(address(0))) {
+      if (!isRelayer(_account)) revert CustomErrors.NotRelayer();
+    }
+    _;
+  }
+
+  function canDoRelay(
+    CanDoRelayParams calldata _params
+  ) external view onlyRelayerOrOpen(_params.relayer) returns (bool) {
     if (IERC20(vXZK).balanceOf(_params.relayer) < minVoteTokenAmount)
       revert CustomErrors.InsufficientBalanceForAction();
-    if (!relayers[address(0)] && !relayers[_params.relayer]) revert CustomErrors.NotRelayer();
 
     return true;
   }
@@ -46,5 +54,9 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOGoverned {
       relayers[_oldRelayers[i]] = false;
       emit RelayerRemoved(_oldRelayers[i]);
     }
+  }
+
+  function isRelayer(address _account) public view returns (bool) {
+    return relayers[_account];
   }
 }
