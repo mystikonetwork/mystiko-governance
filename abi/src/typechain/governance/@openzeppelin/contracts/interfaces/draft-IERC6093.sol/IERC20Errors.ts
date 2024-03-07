@@ -4,7 +4,11 @@
 import type { BaseContract, Signer, utils } from 'ethers';
 
 import type { Listener, Provider } from '@ethersproject/providers';
+<<<<<<< HEAD
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
+=======
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../common';
+>>>>>>> b6563ba548170aeabf5c904e97e7e11f0e89d46d
 
 export interface IERC20ErrorsInterface extends utils.Interface {
   functions: {};
