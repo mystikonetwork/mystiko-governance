@@ -15,8 +15,8 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOGoverned {
   event RelayerAdded(address indexed _relayer);
   event RelayerRemoved(address indexed _relayer);
 
-  constructor(address _center, address _vXZK) MystikoDAOGoverned(_center) {
-    minVoteTokenAmount = 100_000e18;
+  constructor(address _center, address _vXZK, uint256 _minVoteTokenAmount) MystikoDAOGoverned(_center) {
+    minVoteTokenAmount = _minVoteTokenAmount;
     vXZK = _vXZK;
   }
 

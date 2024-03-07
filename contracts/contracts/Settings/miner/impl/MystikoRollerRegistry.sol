@@ -17,8 +17,8 @@ contract MystikoRollerRegistry is IMystikoRollerRegistry, MystikoDAOGoverned {
   event RollerAdded(address indexed _relayer);
   event RollerRemoved(address indexed _relayer);
 
-  constructor(address _center, address _vXZK) MystikoDAOGoverned(_center) {
-    minVoteTokenAmount = 1_000_000e18;
+  constructor(address _center, address _vXZK, uint256 _minVoteTokenAmount) MystikoDAOGoverned(_center) {
+    minVoteTokenAmount = _minVoteTokenAmount;
     minRollupSize = 1;
     vXZK = _vXZK;
   }

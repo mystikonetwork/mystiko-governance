@@ -27,7 +27,7 @@ contract MystikoRelayerRegistryTest is Test, Random {
     vXZK = new MystikoVoteToken(XZK);
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     center = new MystikoGovernorCenter(dao);
-    registry = new MystikoRelayerRegistry(address(center), address(vXZK));
+    registry = new MystikoRelayerRegistry(address(center), address(vXZK), 100_000e18);
   }
 
   function test_canDoRelay() public {
@@ -74,6 +74,26 @@ contract MystikoRelayerRegistryTest is Test, Random {
 
     bool canDo2 = registry.canDoRelay(p1);
     assertTrue(canDo2);
+  }
+
+  function test_canDoRelay_with_zero_token() public {
+    MystikoRelayerRegistry registryZero = new MystikoRelayerRegistry(address(center), address(vXZK), 0);
+    address relayer = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+
+    CanDoRelayParams memory p1 = CanDoRelayParams({pool: pool, relayer: relayer});
+    vm.expectRevert(CustomErrors.NotRelayer.selector);
+    vm.prank(pool);
+    registryZero.canDoRelay(p1);
+
+    vm.prank(dao);
+    address[] memory newRelayers = new address[](1);
+    newRelayers[0] = relayer;
+    registryZero.addRelayers(newRelayers);
+
+    vm.prank(pool);
+    bool canDo = registryZero.canDoRelay(p1);
+    assertTrue(canDo);
   }
 
   function test_changeMinVoteTokenAmount() public {

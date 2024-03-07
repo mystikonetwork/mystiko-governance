@@ -23,7 +23,7 @@ contract MystikoRelayerRegistryTest is Test, Random {
     MockMystikoToken XZK = new MockMystikoToken();
     MystikoVoteToken vXZK = new MystikoVoteToken(XZK);
     MystikoGovernorCenter center = new MystikoGovernorCenter(dao);
-    MystikoRelayerRegistry registry = new MystikoRelayerRegistry(address(center), address(vXZK));
+    MystikoRelayerRegistry registry = new MystikoRelayerRegistry(address(center), address(vXZK), 100_000e18);
     proxy = new MystikoRelayerRegistryProxy(address(center), address(registry));
   }
 

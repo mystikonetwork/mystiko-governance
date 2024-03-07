@@ -27,7 +27,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     vXZK = new MystikoVoteToken(XZK);
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     center = new MystikoGovernorCenter(dao);
-    registry = new MystikoRollerRegistry(address(center), address(vXZK));
+    registry = new MystikoRollerRegistry(address(center), address(vXZK), 1_000_000e18);
   }
 
   function test_canDoRollup() public {
@@ -79,6 +79,27 @@ contract MystikoRollerRegistryTest is Test, Random {
 
     bool canDo2 = registry.canDoRollup(p1);
     assertTrue(canDo2);
+  }
+
+  function test_canDoRollup_with_zero_token() public {
+    MystikoRollerRegistry registryZero = new MystikoRollerRegistry(address(center), address(vXZK), 0);
+
+    address roller = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+
+    CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
+    vm.expectRevert(CustomErrors.NotRoller.selector);
+    vm.prank(pool);
+    registryZero.canDoRollup(p1);
+
+    vm.prank(dao);
+    address[] memory newRollers = new address[](1);
+    newRollers[0] = roller;
+    registryZero.addRollers(newRollers);
+
+    vm.prank(pool);
+    bool canDo = registryZero.canDoRollup(p1);
+    assertTrue(canDo);
   }
 
   function test_changeMinVoteTokenAmount() public {
