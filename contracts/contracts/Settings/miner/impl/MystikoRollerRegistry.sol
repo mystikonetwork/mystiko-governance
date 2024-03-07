@@ -23,11 +23,19 @@ contract MystikoRollerRegistry is IMystikoRollerRegistry, MystikoDAOGoverned {
     vXZK = _vXZK;
   }
 
-  function canDoRollup(CanDoRollupParams calldata _params) external view returns (bool) {
+  modifier onlyRollerOrOpen(address _account) {
+    if (!isRoller(address(0))) {
+      if (!isRoller(_account)) revert CustomErrors.NotRoller();
+    }
+    _;
+  }
+
+  function canDoRollup(
+    CanDoRollupParams calldata _params
+  ) external view onlyRollerOrOpen(_params.roller) returns (bool) {
     if (_params.rollupSize < minRollupSize) revert CustomErrors.RollupSizeTooSmall();
     if (IERC20(vXZK).balanceOf(_params.roller) < minVoteTokenAmount)
       revert CustomErrors.InsufficientBalanceForAction();
-    if (!rollers[address(0)] && !rollers[_params.roller]) revert CustomErrors.NotRoller();
 
     return true;
   }
@@ -56,5 +64,9 @@ contract MystikoRollerRegistry is IMystikoRollerRegistry, MystikoDAOGoverned {
       rollers[_oldRollers[i]] = false;
       emit RollerRemoved(_oldRollers[i]);
     }
+  }
+
+  function isRoller(address _account) public view returns (bool) {
+    return rollers[_account];
   }
 }

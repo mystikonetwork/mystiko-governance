@@ -36,6 +36,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
     'center()': FunctionFragment;
     'changeMinRollupSize(uint256)': FunctionFragment;
     'changeMinVoteTokenAmount(uint256)': FunctionFragment;
+    'isRoller(address)': FunctionFragment;
     'minRollupSize()': FunctionFragment;
     'minVoteTokenAmount()': FunctionFragment;
     'removeRollers(address[])': FunctionFragment;
@@ -50,6 +51,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
       | 'center'
       | 'changeMinRollupSize'
       | 'changeMinVoteTokenAmount'
+      | 'isRoller'
       | 'minRollupSize'
       | 'minVoteTokenAmount'
       | 'removeRollers'
@@ -62,6 +64,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
   encodeFunctionData(functionFragment: 'changeMinRollupSize', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'changeMinVoteTokenAmount', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'isRoller', values: [string]): string;
   encodeFunctionData(functionFragment: 'minRollupSize', values?: undefined): string;
   encodeFunctionData(functionFragment: 'minVoteTokenAmount', values?: undefined): string;
   encodeFunctionData(functionFragment: 'removeRollers', values: [string[]]): string;
@@ -73,6 +76,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinRollupSize', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinVoteTokenAmount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isRoller', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minRollupSize', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minVoteTokenAmount', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'removeRollers', data: BytesLike): Result;
@@ -162,6 +166,8 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
+    isRoller(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
+
     minRollupSize(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -192,6 +198,8 @@ export interface MystikoRollerRegistry extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
+  isRoller(_account: string, overrides?: CallOverrides): Promise<boolean>;
+
   minRollupSize(overrides?: CallOverrides): Promise<BigNumber>;
 
   minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
@@ -215,6 +223,8 @@ export interface MystikoRollerRegistry extends BaseContract {
     changeMinRollupSize(_newMinRollupSize: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     changeMinVoteTokenAmount(_newMinVoteTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    isRoller(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
     minRollupSize(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -258,6 +268,8 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
+    isRoller(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     minRollupSize(overrides?: CallOverrides): Promise<BigNumber>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
@@ -288,6 +300,8 @@ export interface MystikoRollerRegistry extends BaseContract {
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
+
+    isRoller(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minRollupSize(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
