@@ -21,6 +21,44 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  publish-abi:
+    name: Publish Abi
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Copy env
+        run: echo "" >> .env
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+      - name: Configure npm for GitHub Packages
+        run: |
+          echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+          cp $HOME/.npmrc $GITHUB_WORKSPACE/${{ env.WORK_CONTRACTS_PATH }}/.npmrc
+      - name: Install dependencies
+        run: |
+          yarn install
+      - name: Build
+        run: |
+          yarn build
+      - name: Publish
+        run: yarn npm publish
+        working-directory: ${{ env.WORK_CONTRACTS_PATH }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+  #      - name: Telegram Failure Notification
+  #        uses: appleboy/telegram-action@master
+  #        if: failure()
+  #        with:
+  #          message: ❗ Build failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions) because of ${{ github.actor }}
+  #          format: markdown
+  #          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+  #          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   publish-contracts:
     name: Publish Contracts
     runs-on: ubuntu-latest
@@ -53,3 +91,4 @@ jobs:
 #          format: markdown
 #          to: ${{ secrets.TELEGRAM_CHAT_ID }}
 #          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
