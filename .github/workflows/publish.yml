@@ -1,11 +1,8 @@
 name: Publish
 env:
-  DEBUG: 'napi:*'
-  APP_NAME: 'mystiko-napi'
   WORK_ABI_PATH: 'abi'
   WORK_CONTRACTS_PATH: 'contracts'
   GITHUB_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
 permissions:
   contents: write
   id-token: write
