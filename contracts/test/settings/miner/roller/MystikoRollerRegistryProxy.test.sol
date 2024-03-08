@@ -15,7 +15,7 @@ contract MystikoRollerRegistryTest is Test, Random {
   address public dao;
   MystikoRollerRegistryProxy public proxy;
 
-  event RollerRegistryChanged(address indexed registry);
+  event RegistryChanged(address indexed registry);
 
   function setUp() public {
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
@@ -32,7 +32,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
-    vm.expectRevert(CustomErrors.NotRoller.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     proxy.canDoRollup(p1);
   }
@@ -42,17 +42,17 @@ contract MystikoRollerRegistryTest is Test, Random {
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
-    proxy.changeRollerRegistry(registry);
+    proxy.changeRegistry(registry);
 
     address oldRegistry = proxy.registry();
     vm.expectRevert(CustomErrors.NotChanged.selector);
     vm.prank(dao);
-    proxy.changeRollerRegistry(oldRegistry);
+    proxy.changeRegistry(oldRegistry);
 
     vm.expectEmit(address(proxy));
-    emit RollerRegistryChanged(registry);
+    emit RegistryChanged(registry);
     vm.prank(dao);
-    proxy.changeRollerRegistry(registry);
+    proxy.changeRegistry(registry);
     assertEq(proxy.registry(), registry);
   }
 }

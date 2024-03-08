@@ -33,37 +33,37 @@ export interface MystikoRollerRegistryProxyInterface extends utils.Interface {
   functions: {
     'canDoRollup((address,address,uint256))': FunctionFragment;
     'center()': FunctionFragment;
-    'changeRollerRegistry(address)': FunctionFragment;
+    'changeRegistry(address)': FunctionFragment;
     'registry()': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: 'canDoRollup' | 'center' | 'changeRollerRegistry' | 'registry',
+    nameOrSignatureOrTopic: 'canDoRollup' | 'center' | 'changeRegistry' | 'registry',
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'canDoRollup', values: [CanDoRollupParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'changeRollerRegistry', values: [string]): string;
+  encodeFunctionData(functionFragment: 'changeRegistry', values: [string]): string;
   encodeFunctionData(functionFragment: 'registry', values?: undefined): string;
 
   decodeFunctionResult(functionFragment: 'canDoRollup', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'changeRollerRegistry', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'changeRegistry', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'registry', data: BytesLike): Result;
 
   events: {
-    'RollerRegistryChanged(address)': EventFragment;
+    'RegistryChanged(address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: 'RollerRegistryChanged'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RegistryChanged'): EventFragment;
 }
 
-export interface RollerRegistryChangedEventObject {
+export interface RegistryChangedEventObject {
   registry: string;
 }
-export type RollerRegistryChangedEvent = TypedEvent<[string], RollerRegistryChangedEventObject>;
+export type RegistryChangedEvent = TypedEvent<[string], RegistryChangedEventObject>;
 
-export type RollerRegistryChangedEventFilter = TypedEventFilter<RollerRegistryChangedEvent>;
+export type RegistryChangedEventFilter = TypedEventFilter<RegistryChangedEvent>;
 
 export interface MystikoRollerRegistryProxy extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -92,7 +92,7 @@ export interface MystikoRollerRegistryProxy extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<[string]>;
 
-    changeRollerRegistry(
+    changeRegistry(
       _newRegistry: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
@@ -104,7 +104,7 @@ export interface MystikoRollerRegistryProxy extends BaseContract {
 
   center(overrides?: CallOverrides): Promise<string>;
 
-  changeRollerRegistry(
+  changeRegistry(
     _newRegistry: string,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
@@ -116,14 +116,14 @@ export interface MystikoRollerRegistryProxy extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<string>;
 
-    changeRollerRegistry(_newRegistry: string, overrides?: CallOverrides): Promise<void>;
+    changeRegistry(_newRegistry: string, overrides?: CallOverrides): Promise<void>;
 
     registry(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
-    'RollerRegistryChanged(address)'(registry?: string | null): RollerRegistryChangedEventFilter;
-    RollerRegistryChanged(registry?: string | null): RollerRegistryChangedEventFilter;
+    'RegistryChanged(address)'(registry?: string | null): RegistryChangedEventFilter;
+    RegistryChanged(registry?: string | null): RegistryChangedEventFilter;
   };
 
   estimateGas: {
@@ -131,7 +131,7 @@ export interface MystikoRollerRegistryProxy extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<BigNumber>;
 
-    changeRollerRegistry(_newRegistry: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    changeRegistry(_newRegistry: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     registry(overrides?: CallOverrides): Promise<BigNumber>;
   };
@@ -141,7 +141,7 @@ export interface MystikoRollerRegistryProxy extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    changeRollerRegistry(
+    changeRegistry(
       _newRegistry: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;

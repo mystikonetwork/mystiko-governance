@@ -1,9 +1,15 @@
 {
-  "name": "contracts",
+  "name": "@mystikonetwork/governance",
   "version": "0.1.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "/contracts/**/*.sol"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mystikonetwork/mystiko-staking.git",
+    "url": "git+https://github.com/mystikonetwork/mystiko-governance.git",
     "directory": "contracts"
   },
   "author": "Mystiko Network",

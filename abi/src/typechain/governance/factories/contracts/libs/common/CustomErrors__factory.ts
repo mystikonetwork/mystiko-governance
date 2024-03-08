@@ -18,16 +18,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: 'NotRelayer',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotRoller',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'OnlyMystikoDAO',
     type: 'error',
   },
@@ -36,10 +26,15 @@ const _abi = [
     name: 'RollupSizeTooSmall',
     type: 'error',
   },
+  {
+    inputs: [],
+    name: 'UnauthorizedRole',
+    type: 'error',
+  },
 ] as const;
 
 const _bytecode =
-  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201c36d020883ae0adfd0790ff9147e7724d9ad0bb2ba502db0f821906900c7f1364736f6c63430008140033';
+  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212203a826b1c1669eac134caef473c310ada536ea241f3de8315d1bf8c19caa35d2a64736f6c63430008140033';
 
 type CustomErrorsConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
 

@@ -14,33 +14,21 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../common';
 
-export type CanDoRelayParamsStruct = { pool: string; relayer: string };
-
-export type CanDoRelayParamsStructOutput = [string, string] & {
-  pool: string;
-  relayer: string;
-};
-
-export interface MystikoRelayerRegistryProxyInterface extends utils.Interface {
+export interface MystikoDAOProxyInterface extends utils.Interface {
   functions: {
-    'canDoRelay((address,address))': FunctionFragment;
     'center()': FunctionFragment;
     'changeRegistry(address)': FunctionFragment;
     'registry()': FunctionFragment;
   };
 
-  getFunction(
-    nameOrSignatureOrTopic: 'canDoRelay' | 'center' | 'changeRegistry' | 'registry',
-  ): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: 'center' | 'changeRegistry' | 'registry'): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'canDoRelay', values: [CanDoRelayParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
   encodeFunctionData(functionFragment: 'changeRegistry', values: [string]): string;
   encodeFunctionData(functionFragment: 'registry', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'canDoRelay', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeRegistry', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'registry', data: BytesLike): Result;
@@ -59,12 +47,12 @@ export type RegistryChangedEvent = TypedEvent<[string], RegistryChangedEventObje
 
 export type RegistryChangedEventFilter = TypedEventFilter<RegistryChangedEvent>;
 
-export interface MystikoRelayerRegistryProxy extends BaseContract {
+export interface MystikoDAOProxy extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MystikoRelayerRegistryProxyInterface;
+  interface: MystikoDAOProxyInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -82,8 +70,6 @@ export interface MystikoRelayerRegistryProxy extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
-
     center(overrides?: CallOverrides): Promise<[string]>;
 
     changeRegistry(
@@ -93,8 +79,6 @@ export interface MystikoRelayerRegistryProxy extends BaseContract {
 
     registry(overrides?: CallOverrides): Promise<[string]>;
   };
-
-  canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
   center(overrides?: CallOverrides): Promise<string>;
 
@@ -106,8 +90,6 @@ export interface MystikoRelayerRegistryProxy extends BaseContract {
   registry(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<boolean>;
-
     center(overrides?: CallOverrides): Promise<string>;
 
     changeRegistry(_newRegistry: string, overrides?: CallOverrides): Promise<void>;
@@ -121,8 +103,6 @@ export interface MystikoRelayerRegistryProxy extends BaseContract {
   };
 
   estimateGas: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
-
     center(overrides?: CallOverrides): Promise<BigNumber>;
 
     changeRegistry(_newRegistry: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
@@ -131,8 +111,6 @@ export interface MystikoRelayerRegistryProxy extends BaseContract {
   };
 
   populateTransaction: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     changeRegistry(

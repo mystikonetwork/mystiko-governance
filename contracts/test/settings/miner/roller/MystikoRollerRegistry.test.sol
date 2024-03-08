@@ -19,8 +19,8 @@ contract MystikoRollerRegistryTest is Test, Random {
 
   event MinVoteTokenAmountChanged(uint256 _amount);
   event MinRollupSizeChanged(uint256 _size);
-  event RollerAdded(address indexed _relayer);
-  event RollerRemoved(address indexed _relayer);
+  event RoleGranted(address indexed account);
+  event RoleRevoked(address indexed account);
 
   function setUp() public {
     XZK = new MockMystikoToken();
@@ -35,14 +35,12 @@ contract MystikoRollerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
-    vm.expectRevert(CustomErrors.NotRoller.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registry.canDoRollup(p1);
 
     vm.prank(dao);
-    address[] memory newRollers = new address[](1);
-    newRollers[0] = roller;
-    registry.addRollers(newRollers);
+    registry.grantRole(roller);
 
     vm.expectRevert(CustomErrors.InsufficientBalanceForAction.selector);
     vm.prank(pool);
@@ -64,18 +62,14 @@ contract MystikoRollerRegistryTest is Test, Random {
     registry.canDoRollup(p2);
 
     vm.prank(dao);
-    address[] memory oldRollers = new address[](1);
-    oldRollers[0] = roller;
-    registry.removeRollers(oldRollers);
+    registry.revokeRole(roller);
 
-    vm.expectRevert(CustomErrors.NotRoller.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registry.canDoRollup(p1);
 
     vm.prank(dao);
-    address[] memory newRollers2 = new address[](1);
-    newRollers2[0] = address(0);
-    registry.addRollers(newRollers2);
+    registry.grantRole(address(0));
 
     bool canDo2 = registry.canDoRollup(p1);
     assertTrue(canDo2);
@@ -88,14 +82,12 @@ contract MystikoRollerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
-    vm.expectRevert(CustomErrors.NotRoller.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registryZero.canDoRollup(p1);
 
     vm.prank(dao);
-    address[] memory newRollers = new address[](1);
-    newRollers[0] = roller;
-    registryZero.addRollers(newRollers);
+    registryZero.grantRole(roller);
 
     vm.prank(pool);
     bool canDo = registryZero.canDoRollup(p1);
@@ -136,35 +128,58 @@ contract MystikoRollerRegistryTest is Test, Random {
     assertEq(registry.minRollupSize(), 2);
   }
 
-  function test_add_and_remove_rollers() public {
+  function test_grant_and_revoke_roller() public {
+    address roller = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    assertFalse(registry.hasRole(roller));
+
+    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    registry.grantRole(roller);
+
+    vm.expectEmit(address(registry));
+    emit RoleGranted(roller);
+    vm.prank(dao);
+    registry.grantRole(roller);
+    assertTrue(registry.hasRole(roller));
+
+    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    registry.revokeRole(roller);
+
+    vm.expectEmit(address(registry));
+    emit RoleRevoked(roller);
+    vm.prank(dao);
+    registry.revokeRole(roller);
+    assertFalse(registry.hasRole(roller));
+  }
+
+  function test_grant_and_revoke_rollers() public {
     address roller1 = address(0);
     address roller2 = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    assertFalse(registry.isRoller(roller1));
-    assertFalse(registry.isRoller(roller2));
+    assertFalse(registry.hasRole(roller1));
+    assertFalse(registry.hasRole(roller2));
 
     address[] memory rollers = new address[](2);
     rollers[0] = roller1;
     rollers[1] = roller2;
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
-    registry.addRollers(rollers);
+    registry.grantRoles(rollers);
 
     vm.expectEmit(address(registry));
-    emit RollerAdded(roller1);
-    emit RollerAdded(roller2);
+    emit RoleGranted(roller1);
+    emit RoleGranted(roller2);
     vm.prank(dao);
-    registry.addRollers(rollers);
-    assertTrue(registry.isRoller(roller1));
-    assertTrue(registry.isRoller(roller2));
+    registry.grantRoles(rollers);
+    assertTrue(registry.hasRole(roller1));
+    assertTrue(registry.hasRole(roller2));
 
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
-    registry.removeRollers(rollers);
+    registry.revokeRoles(rollers);
 
     vm.expectEmit(address(registry));
-    emit RollerRemoved(roller1);
-    emit RollerRemoved(roller2);
+    emit RoleRevoked(roller1);
+    emit RoleRevoked(roller2);
     vm.prank(dao);
-    registry.removeRollers(rollers);
-    assertFalse(registry.isRoller(roller1));
-    assertFalse(registry.isRoller(roller2));
+    registry.revokeRoles(rollers);
+    assertFalse(registry.hasRole(roller1));
+    assertFalse(registry.hasRole(roller2));
   }
 }

@@ -102,8 +102,12 @@ export type { MystikoTimelockController } from './contracts/governance/impl/Myst
 export { MystikoTimelockController__factory } from './factories/contracts/governance/impl/MystikoTimelockController__factory';
 export type { IMystikoGovernorCenter } from './contracts/governance/interfaces/IMystikoGovernorCenter';
 export { IMystikoGovernorCenter__factory } from './factories/contracts/governance/interfaces/IMystikoGovernorCenter__factory';
+export type { MystikoDAOAccessControl } from './contracts/governance/MystikoDaoAccessControl.sol/MystikoDAOAccessControl';
+export { MystikoDAOAccessControl__factory } from './factories/contracts/governance/MystikoDaoAccessControl.sol/MystikoDAOAccessControl__factory';
 export type { MystikoDAOGoverned } from './contracts/governance/MystikoDAOGoverned';
 export { MystikoDAOGoverned__factory } from './factories/contracts/governance/MystikoDAOGoverned__factory';
+export type { MystikoDAOProxy } from './contracts/governance/MystikoDAOProxy';
+export { MystikoDAOProxy__factory } from './factories/contracts/governance/MystikoDAOProxy__factory';
 export type { CustomErrors } from './contracts/libs/common/CustomErrors';
 export { CustomErrors__factory } from './factories/contracts/libs/common/CustomErrors__factory';
 export type { MystikoRelayerRegistry } from './contracts/Settings/miner/impl/MystikoRelayerRegistry';
