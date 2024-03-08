@@ -1,11 +1,14 @@
 {
-  "name": "abi",
+  "name": "@mystikonetwork/governance-abi",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mystikonetwork/mystiko-staking.git",
+    "url": "git+https://github.com/mystikonetwork/mystiko-governance.git",
     "directory": "abi"
   },
+  "files": [
+    "build"
+  ],
   "author": "Mystiko Network",
   "license": "MIT",
   "scripts": {

@@ -1,5 +1,5 @@
 {
-  "name": "mystiko-governance",
+  "name": "@mystikonetwork/governance-contracts",
   "description": "mystiko governance contracts",
   "version": "0.1.0",
   "repository": {

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {CustomErrors} from "../libs/common/CustomErrors.sol";
 import {IMystikoGovernorCenter} from "./interfaces/IMystikoGovernorCenter.sol";
+import {CustomErrors} from "../libs/common/CustomErrors.sol";
 
 abstract contract MystikoDAOGoverned {
   IMystikoGovernorCenter public center;

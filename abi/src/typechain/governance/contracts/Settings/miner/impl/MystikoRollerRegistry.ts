@@ -31,69 +31,73 @@ export type CanDoRollupParamsStructOutput = [string, string, BigNumber] & {
 
 export interface MystikoRollerRegistryInterface extends utils.Interface {
   functions: {
-    'addRollers(address[])': FunctionFragment;
     'canDoRollup((address,address,uint256))': FunctionFragment;
     'center()': FunctionFragment;
     'changeMinRollupSize(uint256)': FunctionFragment;
     'changeMinVoteTokenAmount(uint256)': FunctionFragment;
-    'isRoller(address)': FunctionFragment;
+    'grantRole(address)': FunctionFragment;
+    'grantRoles(address[])': FunctionFragment;
+    'hasRole(address)': FunctionFragment;
     'minRollupSize()': FunctionFragment;
     'minVoteTokenAmount()': FunctionFragment;
-    'removeRollers(address[])': FunctionFragment;
-    'rollers(address)': FunctionFragment;
+    'revokeRole(address)': FunctionFragment;
+    'revokeRoles(address[])': FunctionFragment;
     'vXZK()': FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'addRollers'
       | 'canDoRollup'
       | 'center'
       | 'changeMinRollupSize'
       | 'changeMinVoteTokenAmount'
-      | 'isRoller'
+      | 'grantRole'
+      | 'grantRoles'
+      | 'hasRole'
       | 'minRollupSize'
       | 'minVoteTokenAmount'
-      | 'removeRollers'
-      | 'rollers'
+      | 'revokeRole'
+      | 'revokeRoles'
       | 'vXZK',
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'addRollers', values: [string[]]): string;
   encodeFunctionData(functionFragment: 'canDoRollup', values: [CanDoRollupParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
   encodeFunctionData(functionFragment: 'changeMinRollupSize', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'changeMinVoteTokenAmount', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'isRoller', values: [string]): string;
+  encodeFunctionData(functionFragment: 'grantRole', values: [string]): string;
+  encodeFunctionData(functionFragment: 'grantRoles', values: [string[]]): string;
+  encodeFunctionData(functionFragment: 'hasRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'minRollupSize', values?: undefined): string;
   encodeFunctionData(functionFragment: 'minVoteTokenAmount', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'removeRollers', values: [string[]]): string;
-  encodeFunctionData(functionFragment: 'rollers', values: [string]): string;
+  encodeFunctionData(functionFragment: 'revokeRole', values: [string]): string;
+  encodeFunctionData(functionFragment: 'revokeRoles', values: [string[]]): string;
   encodeFunctionData(functionFragment: 'vXZK', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'addRollers', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'canDoRollup', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinRollupSize', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinVoteTokenAmount', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'isRoller', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'grantRoles', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minRollupSize', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minVoteTokenAmount', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'removeRollers', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'rollers', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'revokeRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'revokeRoles', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'vXZK', data: BytesLike): Result;
 
   events: {
     'MinRollupSizeChanged(uint256)': EventFragment;
     'MinVoteTokenAmountChanged(uint256)': EventFragment;
-    'RollerAdded(address)': EventFragment;
-    'RollerRemoved(address)': EventFragment;
+    'RoleGranted(address)': EventFragment;
+    'RoleRevoked(address)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'MinRollupSizeChanged'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'MinVoteTokenAmountChanged'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'RollerAdded'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'RollerRemoved'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
 }
 
 export interface MinRollupSizeChangedEventObject {
@@ -110,19 +114,19 @@ export type MinVoteTokenAmountChangedEvent = TypedEvent<[BigNumber], MinVoteToke
 
 export type MinVoteTokenAmountChangedEventFilter = TypedEventFilter<MinVoteTokenAmountChangedEvent>;
 
-export interface RollerAddedEventObject {
-  _relayer: string;
+export interface RoleGrantedEventObject {
+  account: string;
 }
-export type RollerAddedEvent = TypedEvent<[string], RollerAddedEventObject>;
+export type RoleGrantedEvent = TypedEvent<[string], RoleGrantedEventObject>;
 
-export type RollerAddedEventFilter = TypedEventFilter<RollerAddedEvent>;
+export type RoleGrantedEventFilter = TypedEventFilter<RoleGrantedEvent>;
 
-export interface RollerRemovedEventObject {
-  _relayer: string;
+export interface RoleRevokedEventObject {
+  account: string;
 }
-export type RollerRemovedEvent = TypedEvent<[string], RollerRemovedEventObject>;
+export type RoleRevokedEvent = TypedEvent<[string], RoleRevokedEventObject>;
 
-export type RollerRemovedEventFilter = TypedEventFilter<RollerRemovedEvent>;
+export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
 export interface MystikoRollerRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -147,11 +151,6 @@ export interface MystikoRollerRegistry extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    addRollers(
-      _newRollers: string[],
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
     canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
 
     center(overrides?: CallOverrides): Promise<[string]>;
@@ -166,23 +165,22 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    isRoller(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
+    grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+    grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+    hasRole(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     minRollupSize(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    removeRollers(
-      _oldRollers: string[],
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
+    revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    rollers(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+    revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     vXZK(overrides?: CallOverrides): Promise<[string]>;
   };
-
-  addRollers(_newRollers: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
@@ -198,24 +196,23 @@ export interface MystikoRollerRegistry extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  isRoller(_account: string, overrides?: CallOverrides): Promise<boolean>;
+  grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+  grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+  hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
   minRollupSize(overrides?: CallOverrides): Promise<BigNumber>;
 
   minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
-  removeRollers(
-    _oldRollers: string[],
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+  revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  rollers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   vXZK(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    addRollers(_newRollers: string[], overrides?: CallOverrides): Promise<void>;
-
     canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
     center(overrides?: CallOverrides): Promise<string>;
@@ -224,15 +221,19 @@ export interface MystikoRollerRegistry extends BaseContract {
 
     changeMinVoteTokenAmount(_newMinVoteTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    isRoller(_account: string, overrides?: CallOverrides): Promise<boolean>;
+    grantRole(_account: string, overrides?: CallOverrides): Promise<void>;
+
+    grantRoles(_accounts: string[], overrides?: CallOverrides): Promise<void>;
+
+    hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
     minRollupSize(overrides?: CallOverrides): Promise<BigNumber>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
-    removeRollers(_oldRollers: string[], overrides?: CallOverrides): Promise<void>;
+    revokeRole(_account: string, overrides?: CallOverrides): Promise<void>;
 
-    rollers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+    revokeRoles(_accounts: string[], overrides?: CallOverrides): Promise<void>;
 
     vXZK(overrides?: CallOverrides): Promise<string>;
   };
@@ -244,16 +245,14 @@ export interface MystikoRollerRegistry extends BaseContract {
     'MinVoteTokenAmountChanged(uint256)'(_amount?: null): MinVoteTokenAmountChangedEventFilter;
     MinVoteTokenAmountChanged(_amount?: null): MinVoteTokenAmountChangedEventFilter;
 
-    'RollerAdded(address)'(_relayer?: string | null): RollerAddedEventFilter;
-    RollerAdded(_relayer?: string | null): RollerAddedEventFilter;
+    'RoleGranted(address)'(account?: string | null): RoleGrantedEventFilter;
+    RoleGranted(account?: string | null): RoleGrantedEventFilter;
 
-    'RollerRemoved(address)'(_relayer?: string | null): RollerRemovedEventFilter;
-    RollerRemoved(_relayer?: string | null): RollerRemovedEventFilter;
+    'RoleRevoked(address)'(account?: string | null): RoleRevokedEventFilter;
+    RoleRevoked(account?: string | null): RoleRevokedEventFilter;
   };
 
   estimateGas: {
-    addRollers(_newRollers: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
-
     canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
 
     center(overrides?: CallOverrides): Promise<BigNumber>;
@@ -268,25 +267,24 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-    isRoller(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
+    grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    hasRole(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     minRollupSize(overrides?: CallOverrides): Promise<BigNumber>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
-    removeRollers(_oldRollers: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    rollers(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     vXZK(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    addRollers(
-      _newRollers: string[],
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
     canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -301,18 +299,22 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    isRoller(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+
+    grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+
+    hasRole(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minRollupSize(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minVoteTokenAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    removeRollers(
-      _oldRollers: string[],
+    revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+
+    revokeRoles(
+      _accounts: string[],
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
-
-    rollers(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     vXZK(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

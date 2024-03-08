@@ -15,7 +15,7 @@ contract MystikoRelayerRegistryTest is Test, Random {
   address public dao;
   MystikoRelayerRegistryProxy public proxy;
 
-  event RelayerRegistryChanged(address indexed registry);
+  event RegistryChanged(address indexed registry);
 
   function setUp() public {
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
@@ -32,7 +32,7 @@ contract MystikoRelayerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRelayParams memory p1 = CanDoRelayParams({pool: pool, relayer: relayer});
-    vm.expectRevert(CustomErrors.NotRelayer.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     proxy.canDoRelay(p1);
   }
@@ -42,17 +42,17 @@ contract MystikoRelayerRegistryTest is Test, Random {
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
-    proxy.changeRelayerRegistry(registry);
+    proxy.changeRegistry(registry);
 
     address oldRegistry = proxy.registry();
     vm.expectRevert(CustomErrors.NotChanged.selector);
     vm.prank(dao);
-    proxy.changeRelayerRegistry(oldRegistry);
+    proxy.changeRegistry(oldRegistry);
 
     vm.expectEmit(address(proxy));
-    emit RelayerRegistryChanged(registry);
+    emit RegistryChanged(registry);
     vm.prank(dao);
-    proxy.changeRelayerRegistry(registry);
+    proxy.changeRegistry(registry);
     assertEq(proxy.registry(), registry);
   }
 }

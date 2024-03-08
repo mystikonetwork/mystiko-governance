@@ -4,7 +4,6 @@
 import type {
   BaseContract,
   BigNumber,
-  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -15,82 +14,44 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../common';
 
-export type CanDoRelayParamsStruct = { pool: string; relayer: string };
-
-export type CanDoRelayParamsStructOutput = [string, string] & {
-  pool: string;
-  relayer: string;
-};
-
-export interface MystikoRelayerRegistryInterface extends utils.Interface {
+export interface MystikoDAOAccessControlInterface extends utils.Interface {
   functions: {
-    'canDoRelay((address,address))': FunctionFragment;
     'center()': FunctionFragment;
-    'changeMinVoteTokenAmount(uint256)': FunctionFragment;
     'grantRole(address)': FunctionFragment;
     'grantRoles(address[])': FunctionFragment;
     'hasRole(address)': FunctionFragment;
-    'minVoteTokenAmount()': FunctionFragment;
     'revokeRole(address)': FunctionFragment;
     'revokeRoles(address[])': FunctionFragment;
-    'vXZK()': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | 'canDoRelay'
-      | 'center'
-      | 'changeMinVoteTokenAmount'
-      | 'grantRole'
-      | 'grantRoles'
-      | 'hasRole'
-      | 'minVoteTokenAmount'
-      | 'revokeRole'
-      | 'revokeRoles'
-      | 'vXZK',
+    nameOrSignatureOrTopic: 'center' | 'grantRole' | 'grantRoles' | 'hasRole' | 'revokeRole' | 'revokeRoles',
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'canDoRelay', values: [CanDoRelayParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'changeMinVoteTokenAmount', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'grantRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'grantRoles', values: [string[]]): string;
   encodeFunctionData(functionFragment: 'hasRole', values: [string]): string;
-  encodeFunctionData(functionFragment: 'minVoteTokenAmount', values?: undefined): string;
   encodeFunctionData(functionFragment: 'revokeRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'revokeRoles', values: [string[]]): string;
-  encodeFunctionData(functionFragment: 'vXZK', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'canDoRelay', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'changeMinVoteTokenAmount', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRoles', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'minVoteTokenAmount', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'revokeRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'revokeRoles', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'vXZK', data: BytesLike): Result;
 
   events: {
-    'MinVoteTokenAmountChanged(uint256)': EventFragment;
     'RoleGranted(address)': EventFragment;
     'RoleRevoked(address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: 'MinVoteTokenAmountChanged'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
 }
-
-export interface MinVoteTokenAmountChangedEventObject {
-  _amount: BigNumber;
-}
-export type MinVoteTokenAmountChangedEvent = TypedEvent<[BigNumber], MinVoteTokenAmountChangedEventObject>;
-
-export type MinVoteTokenAmountChangedEventFilter = TypedEventFilter<MinVoteTokenAmountChangedEvent>;
 
 export interface RoleGrantedEventObject {
   account: string;
@@ -106,12 +67,12 @@ export type RoleRevokedEvent = TypedEvent<[string], RoleRevokedEventObject>;
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
-export interface MystikoRelayerRegistry extends BaseContract {
+export interface MystikoDAOAccessControl extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MystikoRelayerRegistryInterface;
+  interface: MystikoDAOAccessControlInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -129,14 +90,7 @@ export interface MystikoRelayerRegistry extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
-
     center(overrides?: CallOverrides): Promise<[string]>;
-
-    changeMinVoteTokenAmount(
-      _newMinVoteTokenAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
 
     grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
@@ -144,23 +98,12 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    minVoteTokenAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
-
-    vXZK(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<boolean>;
-
   center(overrides?: CallOverrides): Promise<string>;
-
-  changeMinVoteTokenAmount(
-    _newMinVoteTokenAmount: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
 
   grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
@@ -168,20 +111,12 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
   hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
-  minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
   revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  vXZK(overrides?: CallOverrides): Promise<string>;
-
   callStatic: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<boolean>;
-
     center(overrides?: CallOverrides): Promise<string>;
-
-    changeMinVoteTokenAmount(_newMinVoteTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     grantRole(_account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -189,19 +124,12 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
-    minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
     revokeRole(_account: string, overrides?: CallOverrides): Promise<void>;
 
     revokeRoles(_accounts: string[], overrides?: CallOverrides): Promise<void>;
-
-    vXZK(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
-    'MinVoteTokenAmountChanged(uint256)'(_amount?: null): MinVoteTokenAmountChangedEventFilter;
-    MinVoteTokenAmountChanged(_amount?: null): MinVoteTokenAmountChangedEventFilter;
-
     'RoleGranted(address)'(account?: string | null): RoleGrantedEventFilter;
     RoleGranted(account?: string | null): RoleGrantedEventFilter;
 
@@ -210,14 +138,7 @@ export interface MystikoRelayerRegistry extends BaseContract {
   };
 
   estimateGas: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
-
     center(overrides?: CallOverrides): Promise<BigNumber>;
-
-    changeMinVoteTokenAmount(
-      _newMinVoteTokenAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
 
     grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
@@ -225,24 +146,13 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    minVoteTokenAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
     revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
-
-    vXZK(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    changeMinVoteTokenAmount(
-      _newMinVoteTokenAmount: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
 
     grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
@@ -250,15 +160,11 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    minVoteTokenAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     revokeRoles(
       _accounts: string[],
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
-
-    vXZK(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

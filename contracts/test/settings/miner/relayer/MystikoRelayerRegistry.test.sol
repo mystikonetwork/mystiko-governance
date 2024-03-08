@@ -19,8 +19,8 @@ contract MystikoRelayerRegistryTest is Test, Random {
 
   event MinVoteTokenAmountChanged(uint256 _amount);
   event MinRollupSizeChanged(uint256 _size);
-  event RelayerAdded(address indexed _relayer);
-  event RelayerRemoved(address indexed _relayer);
+  event RoleGranted(address indexed account);
+  event RoleRevoked(address indexed account);
 
   function setUp() public {
     XZK = new MockMystikoToken();
@@ -35,14 +35,12 @@ contract MystikoRelayerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRelayParams memory p1 = CanDoRelayParams({pool: pool, relayer: relayer});
-    vm.expectRevert(CustomErrors.NotRelayer.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registry.canDoRelay(p1);
 
     vm.prank(dao);
-    address[] memory newRelayers = new address[](1);
-    newRelayers[0] = relayer;
-    registry.addRelayers(newRelayers);
+    registry.grantRole(relayer);
 
     vm.expectRevert(CustomErrors.InsufficientBalanceForAction.selector);
     vm.prank(pool);
@@ -59,18 +57,14 @@ contract MystikoRelayerRegistryTest is Test, Random {
     assertTrue(canDo);
 
     vm.prank(dao);
-    address[] memory oldRelayers = new address[](1);
-    oldRelayers[0] = relayer;
-    registry.removeRelayers(oldRelayers);
+    registry.revokeRole(relayer);
 
-    vm.expectRevert(CustomErrors.NotRelayer.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registry.canDoRelay(p1);
 
     vm.prank(dao);
-    address[] memory newRelayers2 = new address[](1);
-    newRelayers2[0] = address(0);
-    registry.addRelayers(newRelayers2);
+    registry.grantRole(address(0));
 
     bool canDo2 = registry.canDoRelay(p1);
     assertTrue(canDo2);
@@ -82,14 +76,12 @@ contract MystikoRelayerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRelayParams memory p1 = CanDoRelayParams({pool: pool, relayer: relayer});
-    vm.expectRevert(CustomErrors.NotRelayer.selector);
+    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registryZero.canDoRelay(p1);
 
     vm.prank(dao);
-    address[] memory newRelayers = new address[](1);
-    newRelayers[0] = relayer;
-    registryZero.addRelayers(newRelayers);
+    registryZero.grantRole(relayer);
 
     vm.prank(pool);
     bool canDo = registryZero.canDoRelay(p1);
@@ -113,35 +105,58 @@ contract MystikoRelayerRegistryTest is Test, Random {
     assertEq(registry.minVoteTokenAmount(), 200_000e18);
   }
 
-  function test_add_and_remove_Relayers() public {
-    address Relayer1 = address(0);
-    address Relayer2 = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    assertFalse(registry.isRelayer(Relayer1));
-    assertFalse(registry.isRelayer(Relayer2));
+  function test_grant_and_revoke_relayer() public {
+    address relayer = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    assertFalse(registry.hasRole(relayer));
+
+    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    registry.grantRole(relayer);
+
+    vm.expectEmit(address(registry));
+    emit RoleGranted(relayer);
+    vm.prank(dao);
+    registry.grantRole(relayer);
+    assertTrue(registry.hasRole(relayer));
+
+    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    registry.revokeRole(relayer);
+
+    vm.expectEmit(address(registry));
+    emit RoleRevoked(relayer);
+    vm.prank(dao);
+    registry.revokeRole(relayer);
+    assertFalse(registry.hasRole(relayer));
+  }
+
+  function test_grant_and_revoke_relayers() public {
+    address relayer1 = address(0);
+    address relayer2 = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    assertFalse(registry.hasRole(relayer1));
+    assertFalse(registry.hasRole(relayer2));
 
     address[] memory Relayers = new address[](2);
-    Relayers[0] = Relayer1;
-    Relayers[1] = Relayer2;
+    Relayers[0] = relayer1;
+    Relayers[1] = relayer2;
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
-    registry.addRelayers(Relayers);
+    registry.grantRoles(Relayers);
 
     vm.expectEmit(address(registry));
-    emit RelayerAdded(Relayer1);
-    emit RelayerAdded(Relayer2);
+    emit RoleGranted(relayer1);
+    emit RoleGranted(relayer2);
     vm.prank(dao);
-    registry.addRelayers(Relayers);
-    assertTrue(registry.isRelayer(Relayer1));
-    assertTrue(registry.isRelayer(Relayer2));
+    registry.grantRoles(Relayers);
+    assertTrue(registry.hasRole(relayer1));
+    assertTrue(registry.hasRole(relayer2));
 
     vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
-    registry.removeRelayers(Relayers);
+    registry.revokeRoles(Relayers);
 
     vm.expectEmit(address(registry));
-    emit RelayerRemoved(Relayer1);
-    emit RelayerRemoved(Relayer2);
+    emit RoleRevoked(relayer1);
+    emit RoleRevoked(relayer2);
     vm.prank(dao);
-    registry.removeRelayers(Relayers);
-    assertFalse(registry.isRelayer(Relayer1));
-    assertFalse(registry.isRelayer(Relayer2));
+    registry.revokeRoles(Relayers);
+    assertFalse(registry.hasRole(relayer1));
+    assertFalse(registry.hasRole(relayer2));
   }
 }
