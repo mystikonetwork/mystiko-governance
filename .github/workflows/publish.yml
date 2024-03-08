@@ -39,10 +39,10 @@ jobs:
         run: |
           echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
-          cp $HOME/.npmrc $GITHUB_WORKSPACE/${{ env.WORK_NODE_PATH }}/.npmrc
+          cp $HOME/.npmrc $GITHUB_WORKSPACE/${{ env.WORK_CONTRACTS_PATH }}/.npmrc
       - name: Publish
         run: yarn npm publish
-        working-directory: ${{ env.WORK_NODE_PATH }}
+        working-directory: ${{ env.WORK_CONTRACTS_PATH }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 #      - name: Telegram Failure Notification
