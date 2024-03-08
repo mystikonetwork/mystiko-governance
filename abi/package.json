@@ -6,6 +6,9 @@
     "url": "git+https://github.com/mystikonetwork/mystiko-governance.git",
     "directory": "abi"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "files": [
     "build"
   ],
