@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IMystikoRelayerRegistry, CanDoRelayParams} from "../interfaces/IMystikoRelayerRegistry.sol";
-import {MystikoDAOAccessControl} from "../../../governance/MystikoDaoAccessControl.sol";
+import {MystikoDAOAccessControl} from "../../../governance/MystikoDAOAccessControl.sol";
 import {CustomErrors} from "../../../libs/common/CustomErrors.sol";
 
 contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOAccessControl {
@@ -12,7 +12,11 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOAccessCont
 
   event MinVoteTokenAmountChanged(uint256 _amount);
 
-  constructor(address _center, address _vXZK, uint256 _minVoteTokenAmount) MystikoDAOAccessControl(_center) {
+  constructor(
+    address _daoCenter,
+    address _vXZK,
+    uint256 _minVoteTokenAmount
+  ) MystikoDAOAccessControl(_daoCenter) {
     minVoteTokenAmount = _minVoteTokenAmount;
     vXZK = _vXZK;
   }
