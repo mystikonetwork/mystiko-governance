@@ -5,12 +5,12 @@ import {MystikoDAOGoverned} from "./MystikoDAOGoverned.sol";
 import {CustomErrors} from "../libs/common/CustomErrors.sol";
 
 abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
-  mapping(address account => bool) private roles;
+  mapping(address => bool) private roles;
 
   event RoleGranted(address indexed account);
   event RoleRevoked(address indexed account);
 
-  constructor(address _center) MystikoDAOGoverned(_center) {}
+  constructor(address _daoCenter) MystikoDAOGoverned(_daoCenter) {}
 
   modifier onlyRole(address _account) {
     if (!hasRole(_account)) revert CustomErrors.UnauthorizedRole();
@@ -28,24 +28,24 @@ abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
     return roles[_account];
   }
 
-  function grantRole(address _account) public virtual onlyMystikoDAO {
+  function grantRole(address _account) external virtual onlyMystikoDAO {
     roles[_account] = true;
     emit RoleGranted(_account);
   }
 
-  function revokeRole(address _account) public virtual onlyMystikoDAO {
+  function revokeRole(address _account) external virtual onlyMystikoDAO {
     roles[_account] = false;
     emit RoleRevoked(_account);
   }
 
-  function grantRoles(address[] calldata _accounts) public virtual onlyMystikoDAO {
+  function grantRoles(address[] calldata _accounts) external virtual onlyMystikoDAO {
     for (uint256 i = 0; i < _accounts.length; i++) {
       roles[_accounts[i]] = true;
       emit RoleGranted(_accounts[i]);
     }
   }
 
-  function revokeRoles(address[] calldata _accounts) public virtual onlyMystikoDAO {
+  function revokeRoles(address[] calldata _accounts) external virtual onlyMystikoDAO {
     for (uint256 i = 0; i < _accounts.length; i++) {
       roles[_accounts[i]] = false;
       emit RoleRevoked(_accounts[i]);
