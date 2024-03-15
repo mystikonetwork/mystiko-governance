@@ -8,7 +8,7 @@ import "../../../../contracts/Settings/miner/impl/MystikoRollerRegistry.sol";
 import "../../../../contracts/Settings/miner/proxy/MystikoRollerRegistryProxy.sol";
 import "../../../../contracts/Settings/miner/interfaces/IMystikoRollerRegistry.sol";
 import "../../../../contracts/governance/impl/MystikoGovernorCenter.sol";
-import "../../../../contracts/libs/common/CustomErrors.sol";
+import "../../../../contracts/libs/common/GovernanceErrors.sol";
 import "../../../utils/Random.sol";
 
 contract MystikoRollerRegistryTest is Test, Random {
@@ -32,7 +32,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
-    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
+    vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     proxy.canDoRollup(p1);
   }
@@ -40,12 +40,12 @@ contract MystikoRollerRegistryTest is Test, Random {
   function test_changeRollerRegistry() public {
     address registry = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
     proxy.changeRegistry(registry);
 
     address oldRegistry = proxy.registry();
-    vm.expectRevert(CustomErrors.NotChanged.selector);
+    vm.expectRevert(GovernanceErrors.NotChanged.selector);
     vm.prank(dao);
     proxy.changeRegistry(oldRegistry);
 

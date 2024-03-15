@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {MystikoDAOGoverned} from "./MystikoDAOGoverned.sol";
-import {CustomErrors} from "../libs/common/CustomErrors.sol";
+import {GovernanceErrors} from "../libs/common/GovernanceErrors.sol";
 
 abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
   mapping(address => bool) private roles;
@@ -13,13 +13,13 @@ abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
   constructor(address _daoCenter) MystikoDAOGoverned(_daoCenter) {}
 
   modifier onlyRole(address _account) {
-    if (!hasRole(_account)) revert CustomErrors.UnauthorizedRole();
+    if (!hasRole(_account)) revert GovernanceErrors.UnauthorizedRole();
     _;
   }
 
   modifier onlyRoleOrOpen(address _account) {
     if (!hasRole(address(0))) {
-      if (!hasRole(_account)) revert CustomErrors.UnauthorizedRole();
+      if (!hasRole(_account)) revert GovernanceErrors.UnauthorizedRole();
     }
     _;
   }

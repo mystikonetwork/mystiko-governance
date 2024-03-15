@@ -108,8 +108,8 @@ export type { MystikoDAOGoverned } from './contracts/governance/MystikoDAOGovern
 export { MystikoDAOGoverned__factory } from './factories/contracts/governance/MystikoDAOGoverned__factory';
 export type { MystikoDAOProxy } from './contracts/governance/MystikoDAOProxy';
 export { MystikoDAOProxy__factory } from './factories/contracts/governance/MystikoDAOProxy__factory';
-export type { CustomErrors } from './contracts/libs/common/CustomErrors';
-export { CustomErrors__factory } from './factories/contracts/libs/common/CustomErrors__factory';
+export type { GovernanceErrors } from './contracts/libs/common/GovernanceErrors';
+export { GovernanceErrors__factory } from './factories/contracts/libs/common/GovernanceErrors__factory';
 export type { MystikoRelayerRegistry } from './contracts/Settings/miner/impl/MystikoRelayerRegistry';
 export { MystikoRelayerRegistry__factory } from './factories/contracts/Settings/miner/impl/MystikoRelayerRegistry__factory';
 export type { MystikoRollerRegistry } from './contracts/Settings/miner/impl/MystikoRollerRegistry';

@@ -31,6 +31,7 @@ export interface MystikoTimelockControllerInterface extends utils.Interface {
     'getOperationState(bytes32)': FunctionFragment;
     'getRoleAdmin(bytes32)': FunctionFragment;
     'getTimestamp(bytes32)': FunctionFragment;
+    'grantGovernorRole(address)': FunctionFragment;
     'grantRole(bytes32,address)': FunctionFragment;
     'hasRole(bytes32,address)': FunctionFragment;
     'hashOperation(address,uint256,bytes,bytes32,bytes32)': FunctionFragment;
@@ -63,6 +64,7 @@ export interface MystikoTimelockControllerInterface extends utils.Interface {
       | 'getOperationState'
       | 'getRoleAdmin'
       | 'getTimestamp'
+      | 'grantGovernorRole'
       | 'grantRole'
       | 'hasRole'
       | 'hashOperation'
@@ -99,6 +101,7 @@ export interface MystikoTimelockControllerInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'getOperationState', values: [BytesLike]): string;
   encodeFunctionData(functionFragment: 'getRoleAdmin', values: [BytesLike]): string;
   encodeFunctionData(functionFragment: 'getTimestamp', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'grantGovernorRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'grantRole', values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: 'hasRole', values: [BytesLike, string]): string;
   encodeFunctionData(
@@ -149,6 +152,7 @@ export interface MystikoTimelockControllerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'getOperationState', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getRoleAdmin', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getTimestamp', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'grantGovernorRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hashOperation', data: BytesLike): Result;
@@ -299,7 +303,7 @@ export interface MystikoTimelockController extends BaseContract {
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    cancel(_id: BytesLike, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    cancel(id: BytesLike, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     execute(
       target: string,
@@ -326,6 +330,11 @@ export interface MystikoTimelockController extends BaseContract {
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     getTimestamp(id: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    grantGovernorRole(
+      _governor: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
 
     grantRole(
       role: BytesLike,
@@ -400,22 +409,22 @@ export interface MystikoTimelockController extends BaseContract {
     ): Promise<ContractTransaction>;
 
     schedule(
-      _target: string,
-      _value: BigNumberish,
-      _data: BytesLike,
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      target: string,
+      value: BigNumberish,
+      data: BytesLike,
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     scheduleBatch(
-      _targets: string[],
-      _values: BigNumberish[],
-      _payloads: BytesLike[],
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      targets: string[],
+      values: BigNumberish[],
+      payloads: BytesLike[],
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
@@ -435,7 +444,7 @@ export interface MystikoTimelockController extends BaseContract {
 
   PROPOSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  cancel(_id: BytesLike, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  cancel(id: BytesLike, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   execute(
     target: string,
@@ -462,6 +471,11 @@ export interface MystikoTimelockController extends BaseContract {
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
   getTimestamp(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+  grantGovernorRole(
+    _governor: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
 
   grantRole(
     role: BytesLike,
@@ -536,22 +550,22 @@ export interface MystikoTimelockController extends BaseContract {
   ): Promise<ContractTransaction>;
 
   schedule(
-    _target: string,
-    _value: BigNumberish,
-    _data: BytesLike,
-    _predecessor: BytesLike,
-    _salt: BytesLike,
-    _delay: BigNumberish,
+    target: string,
+    value: BigNumberish,
+    data: BytesLike,
+    predecessor: BytesLike,
+    salt: BytesLike,
+    delay: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   scheduleBatch(
-    _targets: string[],
-    _values: BigNumberish[],
-    _payloads: BytesLike[],
-    _predecessor: BytesLike,
-    _salt: BytesLike,
-    _delay: BigNumberish,
+    targets: string[],
+    values: BigNumberish[],
+    payloads: BytesLike[],
+    predecessor: BytesLike,
+    salt: BytesLike,
+    delay: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
@@ -571,7 +585,7 @@ export interface MystikoTimelockController extends BaseContract {
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    cancel(_id: BytesLike, overrides?: CallOverrides): Promise<void>;
+    cancel(id: BytesLike, overrides?: CallOverrides): Promise<void>;
 
     execute(
       target: string,
@@ -598,6 +612,8 @@ export interface MystikoTimelockController extends BaseContract {
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     getTimestamp(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    grantGovernorRole(_governor: string, overrides?: CallOverrides): Promise<void>;
 
     grantRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -660,22 +676,22 @@ export interface MystikoTimelockController extends BaseContract {
     revokeRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
     schedule(
-      _target: string,
-      _value: BigNumberish,
-      _data: BytesLike,
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      target: string,
+      value: BigNumberish,
+      data: BytesLike,
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: CallOverrides,
     ): Promise<void>;
 
     scheduleBatch(
-      _targets: string[],
-      _values: BigNumberish[],
-      _payloads: BytesLike[],
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      targets: string[],
+      values: BigNumberish[],
+      payloads: BytesLike[],
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: CallOverrides,
     ): Promise<void>;
 
@@ -771,7 +787,7 @@ export interface MystikoTimelockController extends BaseContract {
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    cancel(_id: BytesLike, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    cancel(id: BytesLike, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     execute(
       target: string,
@@ -798,6 +814,8 @@ export interface MystikoTimelockController extends BaseContract {
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     getTimestamp(id: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    grantGovernorRole(_governor: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     grantRole(
       role: BytesLike,
@@ -872,22 +890,22 @@ export interface MystikoTimelockController extends BaseContract {
     ): Promise<BigNumber>;
 
     schedule(
-      _target: string,
-      _value: BigNumberish,
-      _data: BytesLike,
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      target: string,
+      value: BigNumberish,
+      data: BytesLike,
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     scheduleBatch(
-      _targets: string[],
-      _values: BigNumberish[],
-      _payloads: BytesLike[],
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      targets: string[],
+      values: BigNumberish[],
+      payloads: BytesLike[],
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
@@ -905,7 +923,7 @@ export interface MystikoTimelockController extends BaseContract {
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    cancel(_id: BytesLike, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+    cancel(id: BytesLike, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     execute(
       target: string,
@@ -932,6 +950,11 @@ export interface MystikoTimelockController extends BaseContract {
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getTimestamp(id: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    grantGovernorRole(
+      _governor: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
 
     grantRole(
       role: BytesLike,
@@ -1006,22 +1029,22 @@ export interface MystikoTimelockController extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     schedule(
-      _target: string,
-      _value: BigNumberish,
-      _data: BytesLike,
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      target: string,
+      value: BigNumberish,
+      data: BytesLike,
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     scheduleBatch(
-      _targets: string[],
-      _values: BigNumberish[],
-      _payloads: BytesLike[],
-      _predecessor: BytesLike,
-      _salt: BytesLike,
-      _delay: BigNumberish,
+      targets: string[],
+      values: BigNumberish[],
+      payloads: BytesLike[],
+      predecessor: BytesLike,
+      salt: BytesLike,
+      delay: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
