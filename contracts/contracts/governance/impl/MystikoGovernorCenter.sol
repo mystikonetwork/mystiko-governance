@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {CustomErrors} from "../../libs/common/CustomErrors.sol";
+import {GovernanceErrors} from "../../libs/common/GovernanceErrors.sol";
 import {IMystikoGovernorCenter} from "../interfaces/IMystikoGovernorCenter.sol";
 
 contract MystikoGovernorCenter is IMystikoGovernorCenter {
@@ -14,7 +14,7 @@ contract MystikoGovernorCenter is IMystikoGovernorCenter {
   }
 
   modifier onlyMystikoDAO() {
-    if (msg.sender != dao) revert CustomErrors.OnlyMystikoDAO();
+    if (msg.sender != dao) revert GovernanceErrors.OnlyMystikoDAO();
     _;
   }
 
@@ -23,7 +23,7 @@ contract MystikoGovernorCenter is IMystikoGovernorCenter {
   }
 
   function changeMystikoDAO(address _newMystikoDAO) public onlyMystikoDAO {
-    if (dao == _newMystikoDAO) revert CustomErrors.NotChanged();
+    if (dao == _newMystikoDAO) revert GovernanceErrors.NotChanged();
     dao = _newMystikoDAO;
     emit MystikoDAOChanged(dao);
   }

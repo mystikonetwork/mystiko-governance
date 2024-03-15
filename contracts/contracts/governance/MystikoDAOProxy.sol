@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {MystikoDAOGoverned} from "./MystikoDAOGoverned.sol";
-import {CustomErrors} from "../libs/common/CustomErrors.sol";
+import {GovernanceErrors} from "../libs/common/GovernanceErrors.sol";
 
 abstract contract MystikoDAOProxy is MystikoDAOGoverned {
   address public registry;
@@ -14,7 +14,7 @@ abstract contract MystikoDAOProxy is MystikoDAOGoverned {
   }
 
   function changeRegistry(address _newRegistry) external onlyMystikoDAO {
-    if (registry == _newRegistry) revert CustomErrors.NotChanged();
+    if (registry == _newRegistry) revert GovernanceErrors.NotChanged();
     registry = _newRegistry;
     emit RegistryChanged(registry);
   }

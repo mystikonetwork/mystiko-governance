@@ -7,7 +7,7 @@ import "../../../mock/MockMystikoToken.sol";
 import "../../../../contracts/Settings/miner/impl/MystikoRollerRegistry.sol";
 import "../../../../contracts/Settings/miner/interfaces/IMystikoRollerRegistry.sol";
 import "../../../../contracts/governance/impl/MystikoGovernorCenter.sol";
-import "../../../../contracts/libs/common/CustomErrors.sol";
+import "../../../../contracts/libs/common/GovernanceErrors.sol";
 import "../../../utils/Random.sol";
 
 contract MystikoRollerRegistryTest is Test, Random {
@@ -35,14 +35,14 @@ contract MystikoRollerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
-    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
+    vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registry.canDoRollup(p1);
 
     vm.prank(dao);
     registry.grantRole(roller);
 
-    vm.expectRevert(CustomErrors.InsufficientBalanceForAction.selector);
+    vm.expectRevert(GovernanceErrors.InsufficientBalanceForAction.selector);
     vm.prank(pool);
     registry.canDoRollup(p1);
 
@@ -57,14 +57,14 @@ contract MystikoRollerRegistryTest is Test, Random {
     assertTrue(canDo);
 
     CanDoRollupParams memory p2 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 0});
-    vm.expectRevert(CustomErrors.RollupSizeTooSmall.selector);
+    vm.expectRevert(GovernanceErrors.RollupSizeTooSmall.selector);
     vm.prank(pool);
     registry.canDoRollup(p2);
 
     vm.prank(dao);
     registry.revokeRole(roller);
 
-    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
+    vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registry.canDoRollup(p1);
 
@@ -82,7 +82,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     address pool = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     CanDoRollupParams memory p1 = CanDoRollupParams({pool: pool, roller: roller, rollupSize: 1});
-    vm.expectRevert(CustomErrors.UnauthorizedRole.selector);
+    vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     vm.prank(pool);
     registryZero.canDoRollup(p1);
 
@@ -96,11 +96,11 @@ contract MystikoRollerRegistryTest is Test, Random {
 
   function test_changeMinVoteTokenAmount() public {
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
     registry.changeMinVoteTokenAmount(1_000_000e18);
 
-    vm.expectRevert(CustomErrors.NotChanged.selector);
+    vm.expectRevert(GovernanceErrors.NotChanged.selector);
     vm.prank(dao);
     registry.changeMinVoteTokenAmount(1_000_000e18);
 
@@ -113,11 +113,11 @@ contract MystikoRollerRegistryTest is Test, Random {
 
   function test_changeMinRollupSize() public {
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
     registry.changeMinRollupSize(1);
 
-    vm.expectRevert(CustomErrors.NotChanged.selector);
+    vm.expectRevert(GovernanceErrors.NotChanged.selector);
     vm.prank(dao);
     registry.changeMinRollupSize(1);
 
@@ -132,7 +132,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     address roller = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     assertFalse(registry.hasRole(roller));
 
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     registry.grantRole(roller);
 
     vm.expectEmit(address(registry));
@@ -141,7 +141,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     registry.grantRole(roller);
     assertTrue(registry.hasRole(roller));
 
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     registry.revokeRole(roller);
 
     vm.expectEmit(address(registry));
@@ -160,7 +160,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     address[] memory rollers = new address[](2);
     rollers[0] = roller1;
     rollers[1] = roller2;
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     registry.grantRoles(rollers);
 
     vm.expectEmit(address(registry));
@@ -171,7 +171,7 @@ contract MystikoRollerRegistryTest is Test, Random {
     assertTrue(registry.hasRole(roller1));
     assertTrue(registry.hasRole(roller2));
 
-    vm.expectRevert(CustomErrors.OnlyMystikoDAO.selector);
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     registry.revokeRoles(rollers);
 
     vm.expectEmit(address(registry));

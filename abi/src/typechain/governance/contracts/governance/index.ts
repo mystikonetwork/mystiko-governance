@@ -5,8 +5,6 @@ import type * as impl from './impl';
 export type { impl };
 import type * as interfaces from './interfaces';
 export type { interfaces };
-import type * as libs from './libs';
-export type { libs };
 export type { MystikoDAOAccessControl } from './MystikoDAOAccessControl';
 export type { MystikoDAOGoverned } from './MystikoDAOGoverned';
 export type { MystikoDAOProxy } from './MystikoDAOProxy';

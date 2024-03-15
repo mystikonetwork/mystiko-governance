@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IMystikoRelayerRegistry, CanDoRelayParams} from "../interfaces/IMystikoRelayerRegistry.sol";
 import {MystikoDAOAccessControl} from "../../../governance/MystikoDAOAccessControl.sol";
-import {CustomErrors} from "../../../libs/common/CustomErrors.sol";
+import {GovernanceErrors} from "../../../libs/common/GovernanceErrors.sol";
 
 contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOAccessControl {
   uint256 public minVoteTokenAmount;
@@ -25,13 +25,13 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOAccessCont
     CanDoRelayParams calldata _params
   ) external view onlyRoleOrOpen(_params.relayer) returns (bool) {
     if (IERC20(vXZK).balanceOf(_params.relayer) < minVoteTokenAmount)
-      revert CustomErrors.InsufficientBalanceForAction();
+      revert GovernanceErrors.InsufficientBalanceForAction();
 
     return true;
   }
 
   function changeMinVoteTokenAmount(uint256 _newMinVoteTokenAmount) external onlyMystikoDAO {
-    if (minVoteTokenAmount == _newMinVoteTokenAmount) revert CustomErrors.NotChanged();
+    if (minVoteTokenAmount == _newMinVoteTokenAmount) revert GovernanceErrors.NotChanged();
     minVoteTokenAmount = _newMinVoteTokenAmount;
     emit MinVoteTokenAmountChanged(minVoteTokenAmount);
   }
