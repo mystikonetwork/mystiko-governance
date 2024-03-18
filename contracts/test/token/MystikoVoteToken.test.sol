@@ -38,4 +38,27 @@ contract MystikoRollerRegistryTest is Test, Random {
     assertEq(XZK.balanceOf(account), amount);
     assertEq(vXZK.balanceOf(account), 0);
   }
+
+  function test_vote() public {
+    address account = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    uint256 amount = 1000;
+
+    XZK.transfer(account, amount);
+    vm.prank(account);
+    XZK.approve(address(vXZK), amount);
+    vm.prank(account);
+    vXZK.depositFor(account, amount);
+    uint256 b = vXZK.balanceOf(account);
+    assertEq(b, amount);
+
+    vm.prank(account);
+    vXZK.delegate(account);
+    uint256 vote = vXZK.getVotes(account);
+    assertEq(vote, amount);
+
+    vm.warp(block.timestamp + 1);
+    vm.roll(block.number + 1);
+    vote = vXZK.getPastVotes(account, vXZK.clock() - 1);
+    assertEq(vote, amount);
+  }
 }
