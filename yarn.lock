@@ -818,7 +818,7 @@ __metadata:
     hardhat-gas-reporter: "npm:^1.0.9"
     prettier: "npm:3.2.4"
     prettier-plugin-solidity: "npm:^1.3.1"
-    solhint: "npm:^4.1.1"
+    solhint: "npm:^4.5.2"
     solhint-plugin-prettier: "npm:^0.1.0"
     solidity-coverage: "npm:^0.8.6"
     ts-node: "npm:>=8.0.0"
@@ -1553,15 +1553,6 @@ __metadata:
   dependencies:
     antlr4ts: "npm:^0.5.0-alpha.4"
   checksum: d5c689d8925a18e1ceb2f6449a8263915b1676117856109b7793eda8f7dafc975b6ed0d0d73fc08257903cac383484e4c8f8cf47b069621e81ba368c4ea4cf6a
-  languageName: node
-  linkType: hard
-
-"@solidity-parser/parser@npm:^0.16.0":
-  version: 0.16.2
-  resolution: "@solidity-parser/parser@npm:0.16.2"
-  dependencies:
-    antlr4ts: "npm:^0.5.0-alpha.4"
-  checksum: f0612b36f9a25def75188b44ce06d7cb286b4f843c54b3f0e8836bdd48438663aafea7839890d54f9ccdbc6fa2c1e1247cae2ab734713463e21e4bd656e526a7
   languageName: node
   linkType: hard
 
@@ -2350,7 +2341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antlr4@npm:^4.11.0":
+"antlr4@npm:^4.13.1-patch-1":
   version: 4.13.1
   resolution: "antlr4@npm:4.13.1"
   checksum: f92191677cf277e9c65806bcc40e0d844838203047e3d50cb2628cdda3052500dad0827f9308fc46283935786b0e6bc2986beb47cdd9b1ac88b5258d1b311294
@@ -12004,13 +11995,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solhint@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "solhint@npm:4.1.1"
+"solhint@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "solhint@npm:4.5.2"
   dependencies:
-    "@solidity-parser/parser": "npm:^0.16.0"
+    "@solidity-parser/parser": "npm:^0.18.0"
     ajv: "npm:^6.12.6"
-    antlr4: "npm:^4.11.0"
+    antlr4: "npm:^4.13.1-patch-1"
     ast-parents: "npm:^0.0.1"
     chalk: "npm:^4.1.2"
     commander: "npm:^10.0.0"
@@ -12032,7 +12023,7 @@ __metadata:
       optional: true
   bin:
     solhint: solhint.js
-  checksum: b4bdb21bdc13f7ba3436d571a30cae6cb8dfb58ab1387df8bef25eeca25c8fbb3f625c49a5dddea41f8361aaeb4d8e2e9f986f580663ddd4574fd3d5de5f66c9
+  checksum: a54cc8df54ed711ca6be783b9291eb9e838f518f236d4df05c6ef412ead6a21f4a5bf3bace62ca7d2ed69f4566d5289db4c8c93e0c5e23ac91401904e1f1f312
   languageName: node
   linkType: hard
 
