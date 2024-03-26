@@ -17,8 +17,7 @@ contract MystikoRelayerRegistryTest is Test, Random {
   MystikoVoteToken public vXZK;
   MystikoRelayerRegistry public registry;
 
-  event MinVoteTokenAmountChanged(uint256 _amount);
-  event MinRollupSizeChanged(uint256 _size);
+  event RelayerMinVoteTokenAmountChanged(uint256 _amount);
   event RoleGranted(address indexed account);
   event RoleRevoked(address indexed account);
 
@@ -88,20 +87,20 @@ contract MystikoRelayerRegistryTest is Test, Random {
     assertTrue(canDo);
   }
 
-  function test_changeMinVoteTokenAmount() public {
+  function test_changeRelayerMinVoteTokenAmount() public {
     address operator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     vm.prank(operator);
-    registry.changeMinVoteTokenAmount(100_000e18);
+    registry.changeRelayerMinVoteTokenAmount(100_000e18);
 
     vm.expectRevert(GovernanceErrors.NotChanged.selector);
     vm.prank(dao);
-    registry.changeMinVoteTokenAmount(100_000e18);
+    registry.changeRelayerMinVoteTokenAmount(100_000e18);
 
     vm.expectEmit(address(registry));
-    emit MinVoteTokenAmountChanged(200_000e18);
+    emit RelayerMinVoteTokenAmountChanged(200_000e18);
     vm.prank(dao);
-    registry.changeMinVoteTokenAmount(200_000e18);
+    registry.changeRelayerMinVoteTokenAmount(200_000e18);
     assertEq(registry.minVoteTokenAmount(), 200_000e18);
   }
 

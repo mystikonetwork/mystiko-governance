@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as miner from './miner';
+export * as pool from './pool';
+export { MystikoSettingsCenter__factory } from './MystikoSettingsCenter__factory';

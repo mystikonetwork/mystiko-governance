@@ -20,7 +20,7 @@
     "build:abi": "cd ../abi && yarn generate",
     "clean": "hardhat clean",
     "test": "yarn test:forge && yarn test:unit",
-    "test:forge": "forge test -vv",
+    "test:forge": "forge test -vvv",
     "test:unit": "hardhat test --parallel --network hardhat",
     "prettier": "yarn prettier:fix",
     "prettier:check": "prettier --plugin=prettier-plugin-solidity --check \"./**/*.{ts,sol}\" --config .prettierrc",

@@ -10,7 +10,7 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOAccessCont
   uint256 public minVoteTokenAmount;
   address public vXZK;
 
-  event MinVoteTokenAmountChanged(uint256 _amount);
+  event RelayerMinVoteTokenAmountChanged(uint256 _amount);
 
   constructor(
     address _daoCenter,
@@ -30,9 +30,9 @@ contract MystikoRelayerRegistry is IMystikoRelayerRegistry, MystikoDAOAccessCont
     return true;
   }
 
-  function changeMinVoteTokenAmount(uint256 _newMinVoteTokenAmount) external onlyMystikoDAO {
+  function changeRelayerMinVoteTokenAmount(uint256 _newMinVoteTokenAmount) external onlyMystikoDAO {
     if (minVoteTokenAmount == _newMinVoteTokenAmount) revert GovernanceErrors.NotChanged();
     minVoteTokenAmount = _newMinVoteTokenAmount;
-    emit MinVoteTokenAmountChanged(minVoteTokenAmount);
+    emit RelayerMinVoteTokenAmountChanged(minVoteTokenAmount);
   }
 }
