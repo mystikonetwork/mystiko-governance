@@ -28,7 +28,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
   functions: {
     'canDoRelay((address,address))': FunctionFragment;
     'center()': FunctionFragment;
-    'changeMinVoteTokenAmount(uint256)': FunctionFragment;
+    'changeRelayerMinVoteTokenAmount(uint256)': FunctionFragment;
     'grantRole(address)': FunctionFragment;
     'grantRoles(address[])': FunctionFragment;
     'hasRole(address)': FunctionFragment;
@@ -42,7 +42,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | 'canDoRelay'
       | 'center'
-      | 'changeMinVoteTokenAmount'
+      | 'changeRelayerMinVoteTokenAmount'
       | 'grantRole'
       | 'grantRoles'
       | 'hasRole'
@@ -54,7 +54,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
 
   encodeFunctionData(functionFragment: 'canDoRelay', values: [CanDoRelayParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'changeMinVoteTokenAmount', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'changeRelayerMinVoteTokenAmount', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'grantRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'grantRoles', values: [string[]]): string;
   encodeFunctionData(functionFragment: 'hasRole', values: [string]): string;
@@ -65,7 +65,7 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: 'canDoRelay', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'changeMinVoteTokenAmount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'changeRelayerMinVoteTokenAmount', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRoles', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
@@ -75,22 +75,26 @@ export interface MystikoRelayerRegistryInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'vXZK', data: BytesLike): Result;
 
   events: {
-    'MinVoteTokenAmountChanged(uint256)': EventFragment;
+    'RelayerMinVoteTokenAmountChanged(uint256)': EventFragment;
     'RoleGranted(address)': EventFragment;
     'RoleRevoked(address)': EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: 'MinVoteTokenAmountChanged'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RelayerMinVoteTokenAmountChanged'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
 }
 
-export interface MinVoteTokenAmountChangedEventObject {
+export interface RelayerMinVoteTokenAmountChangedEventObject {
   _amount: BigNumber;
 }
-export type MinVoteTokenAmountChangedEvent = TypedEvent<[BigNumber], MinVoteTokenAmountChangedEventObject>;
+export type RelayerMinVoteTokenAmountChangedEvent = TypedEvent<
+  [BigNumber],
+  RelayerMinVoteTokenAmountChangedEventObject
+>;
 
-export type MinVoteTokenAmountChangedEventFilter = TypedEventFilter<MinVoteTokenAmountChangedEvent>;
+export type RelayerMinVoteTokenAmountChangedEventFilter =
+  TypedEventFilter<RelayerMinVoteTokenAmountChangedEvent>;
 
 export interface RoleGrantedEventObject {
   account: string;
@@ -133,7 +137,7 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<[string]>;
 
-    changeMinVoteTokenAmount(
+    changeRelayerMinVoteTokenAmount(
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
@@ -157,7 +161,7 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
   center(overrides?: CallOverrides): Promise<string>;
 
-  changeMinVoteTokenAmount(
+  changeRelayerMinVoteTokenAmount(
     _newMinVoteTokenAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
@@ -181,7 +185,10 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<string>;
 
-    changeMinVoteTokenAmount(_newMinVoteTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    changeRelayerMinVoteTokenAmount(
+      _newMinVoteTokenAmount: BigNumberish,
+      overrides?: CallOverrides,
+    ): Promise<void>;
 
     grantRole(_account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -199,8 +206,8 @@ export interface MystikoRelayerRegistry extends BaseContract {
   };
 
   filters: {
-    'MinVoteTokenAmountChanged(uint256)'(_amount?: null): MinVoteTokenAmountChangedEventFilter;
-    MinVoteTokenAmountChanged(_amount?: null): MinVoteTokenAmountChangedEventFilter;
+    'RelayerMinVoteTokenAmountChanged(uint256)'(_amount?: null): RelayerMinVoteTokenAmountChangedEventFilter;
+    RelayerMinVoteTokenAmountChanged(_amount?: null): RelayerMinVoteTokenAmountChangedEventFilter;
 
     'RoleGranted(address)'(account?: string | null): RoleGrantedEventFilter;
     RoleGranted(account?: string | null): RoleGrantedEventFilter;
@@ -214,7 +221,7 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<BigNumber>;
 
-    changeMinVoteTokenAmount(
+    changeRelayerMinVoteTokenAmount(
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
@@ -239,7 +246,7 @@ export interface MystikoRelayerRegistry extends BaseContract {
 
     center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    changeMinVoteTokenAmount(
+    changeRelayerMinVoteTokenAmount(
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;

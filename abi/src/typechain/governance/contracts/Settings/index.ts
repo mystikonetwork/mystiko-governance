@@ -3,3 +3,6 @@
 /* eslint-disable */
 import type * as miner from './miner';
 export type { miner };
+import type * as pool from './pool';
+export type { pool };
+export type { MystikoSettingsCenter } from './MystikoSettingsCenter';

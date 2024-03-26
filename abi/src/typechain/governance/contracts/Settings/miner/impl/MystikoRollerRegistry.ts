@@ -34,7 +34,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
     'canDoRollup((address,address,uint256))': FunctionFragment;
     'center()': FunctionFragment;
     'changeMinRollupSize(uint256)': FunctionFragment;
-    'changeMinVoteTokenAmount(uint256)': FunctionFragment;
+    'changeRollerMinVoteTokenAmount(uint256)': FunctionFragment;
     'grantRole(address)': FunctionFragment;
     'grantRoles(address[])': FunctionFragment;
     'hasRole(address)': FunctionFragment;
@@ -50,7 +50,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
       | 'canDoRollup'
       | 'center'
       | 'changeMinRollupSize'
-      | 'changeMinVoteTokenAmount'
+      | 'changeRollerMinVoteTokenAmount'
       | 'grantRole'
       | 'grantRoles'
       | 'hasRole'
@@ -64,7 +64,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'canDoRollup', values: [CanDoRollupParamsStruct]): string;
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
   encodeFunctionData(functionFragment: 'changeMinRollupSize', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'changeMinVoteTokenAmount', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'changeRollerMinVoteTokenAmount', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'grantRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'grantRoles', values: [string[]]): string;
   encodeFunctionData(functionFragment: 'hasRole', values: [string]): string;
@@ -77,7 +77,7 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'canDoRollup', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'changeMinRollupSize', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'changeMinVoteTokenAmount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'changeRollerMinVoteTokenAmount', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRoles', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
@@ -89,15 +89,15 @@ export interface MystikoRollerRegistryInterface extends utils.Interface {
 
   events: {
     'MinRollupSizeChanged(uint256)': EventFragment;
-    'MinVoteTokenAmountChanged(uint256)': EventFragment;
     'RoleGranted(address)': EventFragment;
     'RoleRevoked(address)': EventFragment;
+    'RollerMinVoteTokenAmountChanged(uint256)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'MinRollupSizeChanged'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'MinVoteTokenAmountChanged'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RollerMinVoteTokenAmountChanged'): EventFragment;
 }
 
 export interface MinRollupSizeChangedEventObject {
@@ -106,13 +106,6 @@ export interface MinRollupSizeChangedEventObject {
 export type MinRollupSizeChangedEvent = TypedEvent<[BigNumber], MinRollupSizeChangedEventObject>;
 
 export type MinRollupSizeChangedEventFilter = TypedEventFilter<MinRollupSizeChangedEvent>;
-
-export interface MinVoteTokenAmountChangedEventObject {
-  _amount: BigNumber;
-}
-export type MinVoteTokenAmountChangedEvent = TypedEvent<[BigNumber], MinVoteTokenAmountChangedEventObject>;
-
-export type MinVoteTokenAmountChangedEventFilter = TypedEventFilter<MinVoteTokenAmountChangedEvent>;
 
 export interface RoleGrantedEventObject {
   account: string;
@@ -127,6 +120,17 @@ export interface RoleRevokedEventObject {
 export type RoleRevokedEvent = TypedEvent<[string], RoleRevokedEventObject>;
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
+
+export interface RollerMinVoteTokenAmountChangedEventObject {
+  _amount: BigNumber;
+}
+export type RollerMinVoteTokenAmountChangedEvent = TypedEvent<
+  [BigNumber],
+  RollerMinVoteTokenAmountChangedEventObject
+>;
+
+export type RollerMinVoteTokenAmountChangedEventFilter =
+  TypedEventFilter<RollerMinVoteTokenAmountChangedEvent>;
 
 export interface MystikoRollerRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -160,7 +164,7 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    changeMinVoteTokenAmount(
+    changeRollerMinVoteTokenAmount(
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
@@ -191,7 +195,7 @@ export interface MystikoRollerRegistry extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  changeMinVoteTokenAmount(
+  changeRollerMinVoteTokenAmount(
     _newMinVoteTokenAmount: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
@@ -219,7 +223,10 @@ export interface MystikoRollerRegistry extends BaseContract {
 
     changeMinRollupSize(_newMinRollupSize: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    changeMinVoteTokenAmount(_newMinVoteTokenAmount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    changeRollerMinVoteTokenAmount(
+      _newMinVoteTokenAmount: BigNumberish,
+      overrides?: CallOverrides,
+    ): Promise<void>;
 
     grantRole(_account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -242,14 +249,14 @@ export interface MystikoRollerRegistry extends BaseContract {
     'MinRollupSizeChanged(uint256)'(_size?: null): MinRollupSizeChangedEventFilter;
     MinRollupSizeChanged(_size?: null): MinRollupSizeChangedEventFilter;
 
-    'MinVoteTokenAmountChanged(uint256)'(_amount?: null): MinVoteTokenAmountChangedEventFilter;
-    MinVoteTokenAmountChanged(_amount?: null): MinVoteTokenAmountChangedEventFilter;
-
     'RoleGranted(address)'(account?: string | null): RoleGrantedEventFilter;
     RoleGranted(account?: string | null): RoleGrantedEventFilter;
 
     'RoleRevoked(address)'(account?: string | null): RoleRevokedEventFilter;
     RoleRevoked(account?: string | null): RoleRevokedEventFilter;
+
+    'RollerMinVoteTokenAmountChanged(uint256)'(_amount?: null): RollerMinVoteTokenAmountChangedEventFilter;
+    RollerMinVoteTokenAmountChanged(_amount?: null): RollerMinVoteTokenAmountChangedEventFilter;
   };
 
   estimateGas: {
@@ -262,7 +269,7 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-    changeMinVoteTokenAmount(
+    changeRollerMinVoteTokenAmount(
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
@@ -294,7 +301,7 @@ export interface MystikoRollerRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    changeMinVoteTokenAmount(
+    changeRollerMinVoteTokenAmount(
       _newMinVoteTokenAmount: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;

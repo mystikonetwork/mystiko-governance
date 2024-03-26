@@ -7,4 +7,8 @@ library GovernanceErrors {
   error UnauthorizedRole();
   error InsufficientBalanceForAction();
   error RollupSizeTooSmall();
+  error AuditorIndexError();
+  error NumInputsGreaterThanZero();
+  error InvalidRollupSize();
+  error RollupSizeNotPowerOfTwo();
 }

@@ -11,7 +11,7 @@ contract MystikoRollerRegistry is IMystikoRollerRegistry, MystikoDAOAccessContro
   uint256 public minRollupSize;
   address public vXZK;
 
-  event MinVoteTokenAmountChanged(uint256 _amount);
+  event RollerMinVoteTokenAmountChanged(uint256 _amount);
   event MinRollupSizeChanged(uint256 _size);
 
   constructor(
@@ -34,10 +34,10 @@ contract MystikoRollerRegistry is IMystikoRollerRegistry, MystikoDAOAccessContro
     return true;
   }
 
-  function changeMinVoteTokenAmount(uint256 _newMinVoteTokenAmount) external onlyMystikoDAO {
+  function changeRollerMinVoteTokenAmount(uint256 _newMinVoteTokenAmount) external onlyMystikoDAO {
     if (minVoteTokenAmount == _newMinVoteTokenAmount) revert GovernanceErrors.NotChanged();
     minVoteTokenAmount = _newMinVoteTokenAmount;
-    emit MinVoteTokenAmountChanged(minVoteTokenAmount);
+    emit RollerMinVoteTokenAmountChanged(minVoteTokenAmount);
   }
 
   function changeMinRollupSize(uint256 _newMinRollupSize) external onlyMystikoDAO {
