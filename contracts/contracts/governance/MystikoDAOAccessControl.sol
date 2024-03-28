@@ -10,8 +10,6 @@ abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
   event RoleGranted(address indexed account);
   event RoleRevoked(address indexed account);
 
-  constructor(address _daoCenter) MystikoDAOGoverned(_daoCenter) {}
-
   modifier onlyRole(address _account) {
     if (!hasRole(_account)) revert GovernanceErrors.UnauthorizedRole();
     _;

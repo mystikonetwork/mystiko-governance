@@ -9,7 +9,7 @@ abstract contract MystikoDAOProxy is MystikoDAOGoverned {
 
   event RegistryChanged(address indexed registry);
 
-  constructor(address _daoCenter, address _registry) MystikoDAOGoverned(_daoCenter) {
+  constructor(address _registry) {
     registry = _registry;
   }
 
