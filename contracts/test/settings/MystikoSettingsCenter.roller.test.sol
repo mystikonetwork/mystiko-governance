@@ -2,14 +2,14 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import "../../contracts/Settings/MystikoSettingsCenter.sol";
-import "../../contracts/Settings/miner/impl/MystikoRelayerRegistry.sol";
-import "../../contracts/Settings/miner/impl/MystikoRollerRegistry.sol";
+import "../../contracts/settings/MystikoSettingsCenter.sol";
+import "../../contracts/settings/miner/impl/MystikoRelayerRegistry.sol";
+import "../../contracts/settings/miner/impl/MystikoRollerRegistry.sol";
 import "../mock/MockMystikoToken.sol";
 import "../../contracts/token/MystikoVoteToken.sol";
 import "../../contracts/governance/impl/MystikoGovernorCenter.sol";
 import "../utils/Random.sol";
-import "../../contracts/Settings/pool/interfaces/IMystikoVerifierRegistry.sol";
+import "../../contracts/settings/pool/interfaces/IMystikoVerifierRegistry.sol";
 
 contract MystikoSettingsCenterTest is Test, Random {
   address public dao;
