@@ -2,9 +2,9 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import "../../contracts/Settings/MystikoSettingsCenter.sol";
-import "../../contracts/Settings/miner/impl/MystikoRelayerRegistry.sol";
-import "../../contracts/Settings/miner/impl/MystikoRollerRegistry.sol";
+import "../../contracts/settings/MystikoSettingsCenter.sol";
+import "../../contracts/settings/miner/impl/MystikoRelayerRegistry.sol";
+import "../../contracts/settings/miner/impl/MystikoRollerRegistry.sol";
 import "../mock/MockMystikoToken.sol";
 import "../../contracts/token/MystikoVoteToken.sol";
 import "../../contracts/governance/impl/MystikoGovernorCenter.sol";

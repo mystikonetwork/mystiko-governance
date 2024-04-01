@@ -7,7 +7,7 @@ import type { Provider } from '@ethersproject/providers';
 import type {
   IMystikoRollerRegistry,
   IMystikoRollerRegistryInterface,
-} from '../../../../../contracts/Settings/miner/interfaces/IMystikoRollerRegistry';
+} from '../../../../../contracts/settings/miner/interfaces/IMystikoRollerRegistry';
 
 const _abi = [
   {

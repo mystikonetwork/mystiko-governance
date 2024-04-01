@@ -7,7 +7,7 @@ import type { Provider } from '@ethersproject/providers';
 import type {
   MystikoVerifierRegistry,
   MystikoVerifierRegistryInterface,
-} from '../../../../../contracts/Settings/pool/impl/MystikoVerifierRegistry';
+} from '../../../../../contracts/settings/pool/impl/MystikoVerifierRegistry';
 
 const _abi = [
   {

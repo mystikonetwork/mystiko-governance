@@ -7,7 +7,7 @@ import type { Provider } from '@ethersproject/providers';
 import type {
   IMystikoRelayerRegistry,
   IMystikoRelayerRegistryInterface,
-} from '../../../../../contracts/Settings/miner/interfaces/IMystikoRelayerRegistry';
+} from '../../../../../contracts/settings/miner/interfaces/IMystikoRelayerRegistry';
 
 const _abi = [
   {

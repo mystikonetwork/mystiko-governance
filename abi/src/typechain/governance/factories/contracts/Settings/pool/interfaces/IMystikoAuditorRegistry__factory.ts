@@ -7,7 +7,7 @@ import type { Provider } from '@ethersproject/providers';
 import type {
   IMystikoAuditorRegistry,
   IMystikoAuditorRegistryInterface,
-} from '../../../../../contracts/Settings/pool/interfaces/IMystikoAuditorRegistry';
+} from '../../../../../contracts/settings/pool/interfaces/IMystikoAuditorRegistry';
 
 const _abi = [
   {
