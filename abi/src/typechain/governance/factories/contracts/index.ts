@@ -3,5 +3,4 @@
 /* eslint-disable */
 export * as governance from './governance';
 export * as libs from './libs';
-export * as settings from './settings';
 export * as token from './token';

@@ -7,12 +7,4 @@ library GovernanceErrors {
   error InvalidMystikoDAOAddress();
   error OnlyOperator();
   error UnauthorizedRole();
-  error InsufficientBalanceForAction();
-  error RollupSizeTooSmall();
-  error AuditorIndexError();
-  error NumInputsGreaterThanZero();
-  error InvalidRollupSize();
-  error RollupSizeNotPowerOfTwo();
-  error ExpiredCertificate(uint256 deadline);
-  error InvalidIssuer();
 }
