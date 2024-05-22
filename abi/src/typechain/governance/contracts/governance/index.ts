@@ -7,4 +7,3 @@ import type * as interfaces from './interfaces';
 export type { interfaces };
 export type { MystikoDAOAccessControl } from './MystikoDAOAccessControl';
 export type { MystikoDAOGoverned } from './MystikoDAOGoverned';
-export type { MystikoDAOProxy } from './MystikoDAOProxy';

@@ -5,7 +5,5 @@ import type * as governance from './governance';
 export type { governance };
 import type * as libs from './libs';
 export type { libs };
-import type * as settings from './settings';
-export type { settings };
 import type * as token from './token';
 export type { token };
