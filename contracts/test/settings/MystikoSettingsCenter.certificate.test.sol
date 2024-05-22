@@ -100,9 +100,4 @@ contract MystikoSettingsCenterTest is Test, Random {
     bool result = settings.verifyCertificate(params);
     assertTrue(result);
   }
-
-  function signMessage(bytes32 hash, address signer) internal returns (bytes memory) {
-    (uint8 v, bytes32 r, bytes32 s) = vm.sign(uint256(uint160(signer)), hash);
-    return abi.encodePacked(r, s, v);
-  }
 }

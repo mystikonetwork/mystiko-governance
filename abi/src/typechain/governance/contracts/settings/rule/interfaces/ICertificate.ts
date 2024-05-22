@@ -32,16 +32,16 @@ export type CertificateParamsStructOutput = [string, string, BigNumber, string] 
 export interface ICertificateInterface extends utils.Interface {
   functions: {
     'getIssuerAddress()': FunctionFragment;
-    'verify((address,address,uint256,bytes))': FunctionFragment;
+    'verifyCertificate((address,address,uint256,bytes))': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'getIssuerAddress' | 'verify'): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: 'getIssuerAddress' | 'verifyCertificate'): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'getIssuerAddress', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'verify', values: [CertificateParamsStruct]): string;
+  encodeFunctionData(functionFragment: 'verifyCertificate', values: [CertificateParamsStruct]): string;
 
   decodeFunctionResult(functionFragment: 'getIssuerAddress', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'verify', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'verifyCertificate', data: BytesLike): Result;
 
   events: {};
 }
@@ -71,17 +71,17 @@ export interface ICertificate extends BaseContract {
   functions: {
     getIssuerAddress(overrides?: CallOverrides): Promise<[string]>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
   };
 
   getIssuerAddress(overrides?: CallOverrides): Promise<string>;
 
-  verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+  verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
   callStatic: {
     getIssuerAddress(overrides?: CallOverrides): Promise<string>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
   };
 
   filters: {};
@@ -89,12 +89,15 @@ export interface ICertificate extends BaseContract {
   estimateGas: {
     getIssuerAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     getIssuerAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    verifyCertificate(
+      _params: CertificateParamsStruct,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>;
   };
 }

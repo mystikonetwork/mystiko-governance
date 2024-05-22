@@ -34,44 +34,44 @@ export type CertificateParamsStructOutput = [string, string, BigNumber, string] 
 export interface CertificateRegistryInterface extends utils.Interface {
   functions: {
     'center()': FunctionFragment;
-    'certCheck()': FunctionFragment;
+    'certificateCheck()': FunctionFragment;
     'disableCertificateCheck()': FunctionFragment;
     'enableCertificateCheck()': FunctionFragment;
     'getIssuerAddress()': FunctionFragment;
     'issuer()': FunctionFragment;
     'updateIssuerAddress(address)': FunctionFragment;
-    'verify((address,address,uint256,bytes))': FunctionFragment;
+    'verifyCertificate((address,address,uint256,bytes))': FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | 'center'
-      | 'certCheck'
+      | 'certificateCheck'
       | 'disableCertificateCheck'
       | 'enableCertificateCheck'
       | 'getIssuerAddress'
       | 'issuer'
       | 'updateIssuerAddress'
-      | 'verify',
+      | 'verifyCertificate',
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'certCheck', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'certificateCheck', values?: undefined): string;
   encodeFunctionData(functionFragment: 'disableCertificateCheck', values?: undefined): string;
   encodeFunctionData(functionFragment: 'enableCertificateCheck', values?: undefined): string;
   encodeFunctionData(functionFragment: 'getIssuerAddress', values?: undefined): string;
   encodeFunctionData(functionFragment: 'issuer', values?: undefined): string;
   encodeFunctionData(functionFragment: 'updateIssuerAddress', values: [string]): string;
-  encodeFunctionData(functionFragment: 'verify', values: [CertificateParamsStruct]): string;
+  encodeFunctionData(functionFragment: 'verifyCertificate', values: [CertificateParamsStruct]): string;
 
   decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'certCheck', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'certificateCheck', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'disableCertificateCheck', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'enableCertificateCheck', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getIssuerAddress', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'issuer', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'updateIssuerAddress', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'verify', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'verifyCertificate', data: BytesLike): Result;
 
   events: {
     'CertificateCheck(bool)': EventFragment;
@@ -121,7 +121,7 @@ export interface CertificateRegistry extends BaseContract {
   functions: {
     center(overrides?: CallOverrides): Promise<[string]>;
 
-    certCheck(overrides?: CallOverrides): Promise<[boolean]>;
+    certificateCheck(overrides?: CallOverrides): Promise<[boolean]>;
 
     disableCertificateCheck(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
@@ -136,12 +136,12 @@ export interface CertificateRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
   };
 
   center(overrides?: CallOverrides): Promise<string>;
 
-  certCheck(overrides?: CallOverrides): Promise<boolean>;
+  certificateCheck(overrides?: CallOverrides): Promise<boolean>;
 
   disableCertificateCheck(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
@@ -156,12 +156,12 @@ export interface CertificateRegistry extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+  verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
   callStatic: {
     center(overrides?: CallOverrides): Promise<string>;
 
-    certCheck(overrides?: CallOverrides): Promise<boolean>;
+    certificateCheck(overrides?: CallOverrides): Promise<boolean>;
 
     disableCertificateCheck(overrides?: CallOverrides): Promise<void>;
 
@@ -173,7 +173,7 @@ export interface CertificateRegistry extends BaseContract {
 
     updateIssuerAddress(_newIssuer: string, overrides?: CallOverrides): Promise<void>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
   };
 
   filters: {
@@ -187,7 +187,7 @@ export interface CertificateRegistry extends BaseContract {
   estimateGas: {
     center(overrides?: CallOverrides): Promise<BigNumber>;
 
-    certCheck(overrides?: CallOverrides): Promise<BigNumber>;
+    certificateCheck(overrides?: CallOverrides): Promise<BigNumber>;
 
     disableCertificateCheck(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
@@ -199,13 +199,13 @@ export interface CertificateRegistry extends BaseContract {
 
     updateIssuerAddress(_newIssuer: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    certCheck(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    certificateCheck(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     disableCertificateCheck(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
@@ -220,6 +220,9 @@ export interface CertificateRegistry extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    verifyCertificate(
+      _params: CertificateParamsStruct,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>;
   };
 }

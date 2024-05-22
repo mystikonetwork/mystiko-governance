@@ -30,8 +30,8 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: 'contract ISanctions',
-        name: 'sanctions',
+        internalType: 'address',
+        name: 'list',
         type: 'address',
       },
     ],

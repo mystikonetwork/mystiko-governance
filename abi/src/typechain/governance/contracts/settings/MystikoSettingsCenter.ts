@@ -85,7 +85,7 @@ export interface MystikoSettingsCenterInterface extends utils.Interface {
     'sanctionsList()': FunctionFragment;
     'updateAuditorPublicKey(uint256,uint256)': FunctionFragment;
     'updateSanctionsListAddress(address)': FunctionFragment;
-    'verify((address,address,uint256,bytes))': FunctionFragment;
+    'verifyCertificate((address,address,uint256,bytes))': FunctionFragment;
   };
 
   getFunction(
@@ -116,7 +116,7 @@ export interface MystikoSettingsCenterInterface extends utils.Interface {
       | 'sanctionsList'
       | 'updateAuditorPublicKey'
       | 'updateSanctionsListAddress'
-      | 'verify',
+      | 'verifyCertificate',
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'AUDITOR_COUNT', values?: undefined): string;
@@ -154,7 +154,7 @@ export interface MystikoSettingsCenterInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(functionFragment: 'updateSanctionsListAddress', values: [string]): string;
-  encodeFunctionData(functionFragment: 'verify', values: [CertificateParamsStruct]): string;
+  encodeFunctionData(functionFragment: 'verifyCertificate', values: [CertificateParamsStruct]): string;
 
   decodeFunctionResult(functionFragment: 'AUDITOR_COUNT', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'canDoRelay', data: BytesLike): Result;
@@ -182,7 +182,7 @@ export interface MystikoSettingsCenterInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'sanctionsList', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'updateAuditorPublicKey', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'updateSanctionsListAddress', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'verify', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'verifyCertificate', data: BytesLike): Result;
 
   events: {
     'AuditorPublicKeyUpdated(uint256,uint256)': EventFragment;
@@ -263,7 +263,7 @@ export type SanctionsCheckEvent = TypedEvent<[boolean], SanctionsCheckEventObjec
 export type SanctionsCheckEventFilter = TypedEventFilter<SanctionsCheckEvent>;
 
 export interface SanctionsListChangedEventObject {
-  sanctions: string;
+  list: string;
 }
 export type SanctionsListChangedEvent = TypedEvent<[string], SanctionsListChangedEventObject>;
 
@@ -397,7 +397,7 @@ export interface MystikoSettingsCenter extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
   };
 
   AUDITOR_COUNT(overrides?: CallOverrides): Promise<BigNumber>;
@@ -489,7 +489,7 @@ export interface MystikoSettingsCenter extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+  verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
   callStatic: {
     AUDITOR_COUNT(overrides?: CallOverrides): Promise<BigNumber>;
@@ -563,7 +563,7 @@ export interface MystikoSettingsCenter extends BaseContract {
 
     updateSanctionsListAddress(_sanction: string, overrides?: CallOverrides): Promise<void>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<boolean>;
   };
 
   filters: {
@@ -594,8 +594,8 @@ export interface MystikoSettingsCenter extends BaseContract {
     'SanctionsCheck(bool)'(state?: null): SanctionsCheckEventFilter;
     SanctionsCheck(state?: null): SanctionsCheckEventFilter;
 
-    'SanctionsListChanged(address)'(sanctions?: null): SanctionsListChangedEventFilter;
-    SanctionsListChanged(sanctions?: null): SanctionsListChangedEventFilter;
+    'SanctionsListChanged(address)'(list?: null): SanctionsListChangedEventFilter;
+    SanctionsListChanged(list?: null): SanctionsListChangedEventFilter;
 
     'TransactVerifierDisabled(uint32,uint32)'(
       inputNumber?: null,
@@ -697,7 +697,7 @@ export interface MystikoSettingsCenter extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
+    verifyCertificate(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -787,6 +787,9 @@ export interface MystikoSettingsCenter extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    verify(_params: CertificateParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    verifyCertificate(
+      _params: CertificateParamsStruct,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>;
   };
 }

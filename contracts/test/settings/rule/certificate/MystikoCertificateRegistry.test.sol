@@ -66,8 +66,6 @@ contract MystikoCertificateRegistryTest is Test, Random {
 
   function test_verify_certificate() public {
     uint256 deadline = block.timestamp + 1 days;
-    uint256 deadline2 = block.timestamp - 1;
-
     address account = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     address asset = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 

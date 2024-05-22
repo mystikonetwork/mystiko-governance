@@ -53,7 +53,7 @@ const _abi = [
         type: 'tuple',
       },
     ],
-    name: 'verify',
+    name: 'verifyCertificate',
     outputs: [
       {
         internalType: 'bool',

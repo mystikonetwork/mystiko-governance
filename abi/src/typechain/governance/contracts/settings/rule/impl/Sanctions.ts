@@ -71,7 +71,7 @@ export type SanctionsCheckEvent = TypedEvent<[boolean], SanctionsCheckEventObjec
 export type SanctionsCheckEventFilter = TypedEventFilter<SanctionsCheckEvent>;
 
 export interface SanctionsListChangedEventObject {
-  sanctions: string;
+  list: string;
 }
 export type SanctionsListChangedEvent = TypedEvent<[string], SanctionsListChangedEventObject>;
 
@@ -155,8 +155,8 @@ export interface Sanctions extends BaseContract {
     'SanctionsCheck(bool)'(state?: null): SanctionsCheckEventFilter;
     SanctionsCheck(state?: null): SanctionsCheckEventFilter;
 
-    'SanctionsListChanged(address)'(sanctions?: null): SanctionsListChangedEventFilter;
-    SanctionsListChanged(sanctions?: null): SanctionsListChangedEventFilter;
+    'SanctionsListChanged(address)'(list?: null): SanctionsListChangedEventFilter;
+    SanctionsListChanged(list?: null): SanctionsListChangedEventFilter;
   };
 
   estimateGas: {
