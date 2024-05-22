@@ -10,9 +10,12 @@ import "../mock/MockMystikoToken.sol";
 import "../../contracts/token/MystikoVoteToken.sol";
 import "../../contracts/governance/impl/MystikoGovernorCenter.sol";
 import "../utils/Random.sol";
+import "../../contracts/settings/rule/interfaces/ICertificate.sol";
 
 contract MystikoSettingsCenterTest is Test, Random {
   address public dao;
+  uint256 public privateKey;
+  address public issuer;
   address[11] public rollupVerifiers;
   address[6] public transactVerifiers;
   uint256[5] public auditors;
@@ -21,7 +24,7 @@ contract MystikoSettingsCenterTest is Test, Random {
   MystikoRelayerRegistry public relayerRegistry;
   MystikoSettingsCenter public settings;
 
-  event AuditorPublicKeyUpdated(uint256 indexed index, uint256 publicKey);
+  event CertificateRegistryChanged(address indexed registry);
 
   function setUp() public {
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
@@ -38,7 +41,9 @@ contract MystikoSettingsCenterTest is Test, Random {
     MockMystikoToken XZK = new MockMystikoToken();
     MystikoVoteToken vXZK = new MystikoVoteToken(XZK);
     MystikoGovernorCenter center = new MystikoGovernorCenter(dao);
-    certificateRegistry = new CertificateRegistry(address(center), address(0));
+    privateKey = uint256(keccak256(abi.encodePacked(_random())));
+    issuer = vm.addr(privateKey);
+    certificateRegistry = new CertificateRegistry(address(center), issuer);
     rollerRegistry = new MystikoRollerRegistry(address(center), address(vXZK), 100_000e18);
     relayerRegistry = new MystikoRelayerRegistry(address(center), address(vXZK), 100_000e18);
 
@@ -53,50 +58,46 @@ contract MystikoSettingsCenterTest is Test, Random {
     );
   }
 
-  function test_query_auditor_public_key() public {
-    assertEq(settings.queryAuditorPublicKey(0), auditors[0]);
-    assertEq(settings.queryAuditorPublicKey(1), auditors[1]);
-    assertEq(settings.queryAuditorPublicKey(2), auditors[2]);
-    assertEq(settings.queryAuditorPublicKey(3), auditors[3]);
-    assertEq(settings.queryAuditorPublicKey(4), auditors[4]);
+  function test_get_issuer_address() public {
+    assertEq(settings.getIssuerAddress(), issuer);
   }
 
-  function test_query_all_auditor_public_keys() public {
-    uint256[] memory keys = settings.queryAllAuditorPublicKeys();
-    for (uint256 i = 0; i < 5; i++) {
-      assertEq(keys[i], auditors[i]);
-    }
-  }
-
-  function test_update_auditor_public_key() public {
-    uint256 newAuditor = uint256(keccak256(abi.encodePacked(_random())));
+  function test_change_certificate_registry() public {
     vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
-    settings.updateAuditorPublicKey(0, newAuditor);
+    settings.changeCertificateRegistry(ICertificate(certificateRegistry));
 
-    vm.expectEmit(address(settings));
-    emit AuditorPublicKeyUpdated(0, newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(0, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(0), newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(1, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(1), newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(2, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(2), newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(3, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(3), newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(4, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(4), newAuditor);
-
-    vm.prank(dao);
-    vm.expectRevert(GovernanceErrors.AuditorIndexError.selector);
-    settings.updateAuditorPublicKey(5, newAuditor);
-
-    vm.prank(dao);
     vm.expectRevert(GovernanceErrors.NotChanged.selector);
-    settings.updateAuditorPublicKey(4, newAuditor);
+    vm.prank(dao);
+    settings.changeCertificateRegistry(ICertificate(certificateRegistry));
+
+    ICertificate newCertificate = ICertificate(
+      address(uint160(uint256(keccak256(abi.encodePacked(_random())))))
+    );
+    vm.expectEmit(address(settings));
+    emit CertificateRegistryChanged(address(newCertificate));
+    vm.prank(dao);
+    settings.changeCertificateRegistry(newCertificate);
+    assertEq(address(settings.certificateRegistry()), address(newCertificate));
+  }
+
+  function test_verify_certificate() public {
+    uint256 deadline = block.timestamp + 1 days;
+    address account = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address asset = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+
+    // Create a valid signature
+    bytes32 hash = keccak256(abi.encodePacked(block.chainid, account, asset, deadline));
+    (uint8 v, bytes32 r, bytes32 s) = vm.sign(privateKey, hash);
+    bytes memory signature = abi.encodePacked(r, s, v);
+
+    CertificateParams memory params = CertificateParams({
+      account: account,
+      asset: asset,
+      deadline: deadline,
+      signature: signature
+    });
+
+    bool result = settings.verifyCertificate(params);
+    assertTrue(result);
   }
 }

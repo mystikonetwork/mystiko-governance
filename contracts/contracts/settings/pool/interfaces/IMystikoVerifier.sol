@@ -6,7 +6,7 @@ struct WrappedVerifier {
   bool enabled;
 }
 
-interface IMystikoVerifierRegistry {
+interface IMystikoVerifier {
   function queryRollupVerifier(uint32 _rollupSize) external view returns (WrappedVerifier memory);
   function queryTransactVerifier(
     uint32 _numInputs,

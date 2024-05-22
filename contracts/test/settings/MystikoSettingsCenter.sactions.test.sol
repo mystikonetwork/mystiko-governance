@@ -10,6 +10,7 @@ import "../mock/MockMystikoToken.sol";
 import "../../contracts/token/MystikoVoteToken.sol";
 import "../../contracts/governance/impl/MystikoGovernorCenter.sol";
 import "../utils/Random.sol";
+import "../../contracts/settings/rule/interfaces/ISanctions.sol";
 
 contract MystikoSettingsCenterTest is Test, Random {
   address public dao;
@@ -21,7 +22,8 @@ contract MystikoSettingsCenterTest is Test, Random {
   MystikoRelayerRegistry public relayerRegistry;
   MystikoSettingsCenter public settings;
 
-  event AuditorPublicKeyUpdated(uint256 indexed index, uint256 publicKey);
+  event SanctionsCheck(bool state);
+  event SanctionsListChanged(address list);
 
   function setUp() public {
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
@@ -53,50 +55,50 @@ contract MystikoSettingsCenterTest is Test, Random {
     );
   }
 
-  function test_query_auditor_public_key() public {
-    assertEq(settings.queryAuditorPublicKey(0), auditors[0]);
-    assertEq(settings.queryAuditorPublicKey(1), auditors[1]);
-    assertEq(settings.queryAuditorPublicKey(2), auditors[2]);
-    assertEq(settings.queryAuditorPublicKey(3), auditors[3]);
-    assertEq(settings.queryAuditorPublicKey(4), auditors[4]);
-  }
-
-  function test_query_all_auditor_public_keys() public {
-    uint256[] memory keys = settings.queryAllAuditorPublicKeys();
-    for (uint256 i = 0; i < 5; i++) {
-      assertEq(keys[i], auditors[i]);
-    }
-  }
-
-  function test_update_auditor_public_key() public {
-    uint256 newAuditor = uint256(keccak256(abi.encodePacked(_random())));
+  function test_enable_sanction_check() public {
     vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
-    settings.updateAuditorPublicKey(0, newAuditor);
+    settings.enableSanctionsCheck();
 
     vm.expectEmit(address(settings));
-    emit AuditorPublicKeyUpdated(0, newAuditor);
+    emit SanctionsCheck(true);
     vm.prank(dao);
-    settings.updateAuditorPublicKey(0, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(0), newAuditor);
+    settings.enableSanctionsCheck();
+    assertTrue(settings.sanctionsCheck());
+  }
+
+  function test_disable_sanction_check() public {
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
+    settings.disableSanctionsCheck();
+
+    vm.expectEmit(address(settings));
+    emit SanctionsCheck(false);
     vm.prank(dao);
-    settings.updateAuditorPublicKey(1, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(1), newAuditor);
+    settings.disableSanctionsCheck();
+    assertFalse(settings.sanctionsCheck());
+  }
+
+  function test_update_sanction_list() public {
+    address list = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
+    settings.updateSanctionsListAddress(ISanctions(list));
+
+    vm.expectEmit(address(settings));
+    emit SanctionsListChanged(list);
     vm.prank(dao);
-    settings.updateAuditorPublicKey(2, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(2), newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(3, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(3), newAuditor);
-    vm.prank(dao);
-    settings.updateAuditorPublicKey(4, newAuditor);
-    assertEq(settings.queryAuditorPublicKey(4), newAuditor);
+    settings.updateSanctionsListAddress(ISanctions(list));
+    assertEq(address(settings.sanctionsList()), list);
+  }
+
+  function test_is_sanctioned() public {
+    address account = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 
     vm.prank(dao);
-    vm.expectRevert(GovernanceErrors.AuditorIndexError.selector);
-    settings.updateAuditorPublicKey(5, newAuditor);
+    settings.disableSanctionsCheck();
+    assertFalse(settings.isSanctioned(account));
 
     vm.prank(dao);
-    vm.expectRevert(GovernanceErrors.NotChanged.selector);
-    settings.updateAuditorPublicKey(4, newAuditor);
+    settings.enableSanctionsCheck();
+    vm.expectRevert();
+    assertFalse(settings.isSanctioned(account));
   }
 }

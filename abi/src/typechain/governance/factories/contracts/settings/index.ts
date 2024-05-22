@@ -3,4 +3,5 @@
 /* eslint-disable */
 export * as miner from './miner';
 export * as pool from './pool';
+export * as rule from './rule';
 export { MystikoSettingsCenter__factory } from './MystikoSettingsCenter__factory';

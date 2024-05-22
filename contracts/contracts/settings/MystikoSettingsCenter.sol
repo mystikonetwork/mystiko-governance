@@ -2,58 +2,80 @@
 pragma solidity ^0.8.20;
 
 import {MystikoDAOGoverned} from "../governance/MystikoDAOProxy.sol";
-import {MystikoVerifierRegistry} from "./pool/impl/MystikoVerifierRegistry.sol";
-import {MystikoAuditorRegistry} from "./pool/impl/MystikoAuditorRegistry.sol";
-import {IMystikoRollerRegistry, CanDoRollupParams} from "./miner/interfaces/IMystikoRollerRegistry.sol";
-import {IMystikoRelayerRegistry, CanDoRelayParams} from "./miner/interfaces/IMystikoRelayerRegistry.sol";
+import {MystikoVerifier} from "./pool/impl/MystikoVerifier.sol";
+import {MystikoAuditor} from "./pool/impl/MystikoAuditor.sol";
+import {Sanctions} from "./rule/impl/Sanctions.sol";
+import {IMystikoRoller, CanDoRollupParams} from "./miner/interfaces/IMystikoRoller.sol";
+import {IMystikoRelayer, CanDoRelayParams} from "./miner/interfaces/IMystikoRelayer.sol";
+import {ICertificate, CertificateParams} from "./rule/interfaces/ICertificate.sol";
 import {GovernanceErrors} from "./../libs/common/GovernanceErrors.sol";
 
 contract MystikoSettingsCenter is
-  IMystikoRollerRegistry,
-  IMystikoRelayerRegistry,
+  ICertificate,
+  IMystikoRoller,
+  IMystikoRelayer,
   MystikoDAOGoverned,
-  MystikoVerifierRegistry,
-  MystikoAuditorRegistry
+  MystikoVerifier,
+  MystikoAuditor,
+  Sanctions
 {
-  address public rollerRegistry;
-  address public relayerRegistry;
+  ICertificate public certificateRegistry;
+  IMystikoRoller public rollerRegistry;
+  IMystikoRelayer public relayerRegistry;
 
+  event CertificateRegistryChanged(address indexed registry);
   event RollerRegistryChanged(address indexed registry);
   event RelayerRegistryChanged(address indexed registry);
 
   constructor(
     address _daoCenter,
-    address _rollerRegistry,
-    address _relayerRegistry,
-    address[5] memory _rollupVerifiers,
+    ICertificate _certificateRegistry,
+    IMystikoRoller _rollerRegistry,
+    IMystikoRelayer _relayerRegistry,
+    address[11] memory _rollupVerifiers,
     address[6] memory _transactVerifiers,
     uint256[AUDITOR_COUNT] memory _auditors
   )
     MystikoDAOGoverned(_daoCenter)
-    MystikoVerifierRegistry(_rollupVerifiers, _transactVerifiers)
-    MystikoAuditorRegistry(_auditors)
+    MystikoVerifier(_rollupVerifiers, _transactVerifiers)
+    MystikoAuditor(_auditors)
   {
+    certificateRegistry = _certificateRegistry;
     rollerRegistry = _rollerRegistry;
     relayerRegistry = _relayerRegistry;
   }
 
+  function getIssuerAddress() external view returns (address) {
+    return certificateRegistry.getIssuerAddress();
+  }
+
+  function verifyCertificate(CertificateParams memory _params) external view returns (bool) {
+    return certificateRegistry.verifyCertificate(_params);
+  }
+
   function canDoRollup(CanDoRollupParams calldata _params) external view returns (bool) {
-    return IMystikoRollerRegistry(rollerRegistry).canDoRollup(_params);
+    return rollerRegistry.canDoRollup(_params);
   }
 
   function canDoRelay(CanDoRelayParams calldata _params) external view returns (bool) {
-    return IMystikoRelayerRegistry(relayerRegistry).canDoRelay(_params);
+    return relayerRegistry.canDoRelay(_params);
   }
 
-  function changeRollerRegistry(address _newRollerRegistry) external onlyMystikoDAO {
+  function changeCertificateRegistry(ICertificate _newCertificateRegistry) external onlyMystikoDAO {
+    if (certificateRegistry == _newCertificateRegistry) revert GovernanceErrors.NotChanged();
+    certificateRegistry = _newCertificateRegistry;
+    emit CertificateRegistryChanged(address(certificateRegistry));
+  }
+
+  function changeRollerRegistry(IMystikoRoller _newRollerRegistry) external onlyMystikoDAO {
     if (rollerRegistry == _newRollerRegistry) revert GovernanceErrors.NotChanged();
     rollerRegistry = _newRollerRegistry;
-    emit RollerRegistryChanged(rollerRegistry);
+    emit RollerRegistryChanged(address(rollerRegistry));
   }
 
-  function changeRelayerRegistry(address _newRelayerRegistry) external onlyMystikoDAO {
+  function changeRelayerRegistry(IMystikoRelayer _newRelayerRegistry) external onlyMystikoDAO {
     if (relayerRegistry == _newRelayerRegistry) revert GovernanceErrors.NotChanged();
     relayerRegistry = _newRelayerRegistry;
-    emit RelayerRegistryChanged(relayerRegistry);
+    emit RelayerRegistryChanged(address(relayerRegistry));
   }
 }

@@ -17,7 +17,7 @@ import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
 
-export interface MystikoAuditorRegistryInterface extends utils.Interface {
+export interface MystikoAuditorInterface extends utils.Interface {
   functions: {
     'AUDITOR_COUNT()': FunctionFragment;
     'center()': FunctionFragment;
@@ -68,12 +68,12 @@ export type AuditorPublicKeyUpdatedEvent = TypedEvent<
 
 export type AuditorPublicKeyUpdatedEventFilter = TypedEventFilter<AuditorPublicKeyUpdatedEvent>;
 
-export interface MystikoAuditorRegistry extends BaseContract {
+export interface MystikoAuditor extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MystikoAuditorRegistryInterface;
+  interface: MystikoAuditorInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

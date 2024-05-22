@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import type {
-  IMystikoRollerRegistry,
-  IMystikoRollerRegistryInterface,
-} from '../../../../../contracts/settings/miner/interfaces/IMystikoRollerRegistry';
+  IMystikoRoller,
+  IMystikoRollerInterface,
+} from '../../../../../contracts/settings/miner/interfaces/IMystikoRoller';
 
 const _abi = [
   {
@@ -48,12 +48,12 @@ const _abi = [
   },
 ] as const;
 
-export class IMystikoRollerRegistry__factory {
+export class IMystikoRoller__factory {
   static readonly abi = _abi;
-  static createInterface(): IMystikoRollerRegistryInterface {
-    return new utils.Interface(_abi) as IMystikoRollerRegistryInterface;
+  static createInterface(): IMystikoRollerInterface {
+    return new utils.Interface(_abi) as IMystikoRollerInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): IMystikoRollerRegistry {
-    return new Contract(address, _abi, signerOrProvider) as IMystikoRollerRegistry;
+  static connect(address: string, signerOrProvider: Signer | Provider): IMystikoRoller {
+    return new Contract(address, _abi, signerOrProvider) as IMystikoRoller;
   }
 }

@@ -5,7 +5,7 @@ import {Test} from "forge-std/Test.sol";
 import "../../../../contracts/token/MystikoVoteToken.sol";
 import "../../../mock/MockMystikoToken.sol";
 import "../../../../contracts/settings/miner/impl/MystikoRollerRegistry.sol";
-import "../../../../contracts/settings/miner/interfaces/IMystikoRollerRegistry.sol";
+import "../../../../contracts/settings/miner/interfaces/IMystikoRoller.sol";
 import "../../../../contracts/governance/impl/MystikoGovernorCenter.sol";
 import "../../../../contracts/libs/common/GovernanceErrors.sol";
 import "../../../utils/Random.sol";

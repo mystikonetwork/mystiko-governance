@@ -2,10 +2,10 @@
 pragma solidity ^0.8.20;
 
 import {MystikoDAOGoverned} from "../../../governance/MystikoDAOGoverned.sol";
-import {IMystikoAuditorRegistry} from "../interfaces/IMystikoAuditorRegistry.sol";
+import {IMystikoAuditor} from "../interfaces/IMystikoAuditor.sol";
 import {GovernanceErrors} from "../../../libs/common/GovernanceErrors.sol";
 
-abstract contract MystikoAuditorRegistry is IMystikoAuditorRegistry, MystikoDAOGoverned {
+abstract contract MystikoAuditor is IMystikoAuditor, MystikoDAOGoverned {
   uint256 public constant AUDITOR_COUNT = 5;
   uint256[AUDITOR_COUNT] private auditorPublicKeys;
 

@@ -15,8 +15,29 @@ const _abi = [
     type: 'error',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'deadline',
+        type: 'uint256',
+      },
+    ],
+    name: 'ExpiredCertificate',
+    type: 'error',
+  },
+  {
     inputs: [],
     name: 'InsufficientBalanceForAction',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'InvalidIssuer',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'InvalidMystikoDAOAddress',
     type: 'error',
   },
   {
@@ -41,6 +62,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: 'OnlyOperator',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'RollupSizeNotPowerOfTwo',
     type: 'error',
   },
@@ -57,7 +83,7 @@ const _abi = [
 ] as const;
 
 const _bytecode =
-  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122033bac24cd3211de0214dec849ea6522669175af62a21cb0ae61db95ab3062ee764736f6c63430008140033';
+  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122068938d8ab531e3cb05713ad8fd5bf14e4cdce83b59d648e73a985a68185af4a564736f6c63430008140033';
 
 type GovernanceErrorsConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
 

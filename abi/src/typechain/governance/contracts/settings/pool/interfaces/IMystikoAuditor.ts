@@ -15,7 +15,7 @@ import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
 
-export interface IMystikoAuditorRegistryInterface extends utils.Interface {
+export interface IMystikoAuditorInterface extends utils.Interface {
   functions: {
     'queryAllAuditorPublicKeys()': FunctionFragment;
     'queryAuditorPublicKey(uint256)': FunctionFragment;
@@ -34,12 +34,12 @@ export interface IMystikoAuditorRegistryInterface extends utils.Interface {
   events: {};
 }
 
-export interface IMystikoAuditorRegistry extends BaseContract {
+export interface IMystikoAuditor extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IMystikoAuditorRegistryInterface;
+  interface: IMystikoAuditorInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import type {
-  IMystikoVerifierRegistry,
-  IMystikoVerifierRegistryInterface,
-} from '../../../../../contracts/settings/pool/interfaces/IMystikoVerifierRegistry';
+  IMystikoVerifier,
+  IMystikoVerifierInterface,
+} from '../../../../../contracts/settings/pool/interfaces/IMystikoVerifier';
 
 const _abi = [
   {
@@ -79,12 +79,12 @@ const _abi = [
   },
 ] as const;
 
-export class IMystikoVerifierRegistry__factory {
+export class IMystikoVerifier__factory {
   static readonly abi = _abi;
-  static createInterface(): IMystikoVerifierRegistryInterface {
-    return new utils.Interface(_abi) as IMystikoVerifierRegistryInterface;
+  static createInterface(): IMystikoVerifierInterface {
+    return new utils.Interface(_abi) as IMystikoVerifierInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): IMystikoVerifierRegistry {
-    return new Contract(address, _abi, signerOrProvider) as IMystikoVerifierRegistry;
+  static connect(address: string, signerOrProvider: Signer | Provider): IMystikoVerifier {
+    return new Contract(address, _abi, signerOrProvider) as IMystikoVerifier;
   }
 }

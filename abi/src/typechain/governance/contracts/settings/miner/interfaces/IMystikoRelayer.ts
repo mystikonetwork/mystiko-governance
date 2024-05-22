@@ -4,7 +4,6 @@
 import type {
   BaseContract,
   BigNumber,
-  BigNumberish,
   BytesLike,
   CallOverrides,
   PopulatedTransaction,
@@ -15,38 +14,33 @@ import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../../common';
 
-export type CanDoRollupParamsStruct = {
+export type CanDoRelayParamsStruct = { pool: string; relayer: string };
+
+export type CanDoRelayParamsStructOutput = [string, string] & {
   pool: string;
-  roller: string;
-  rollupSize: BigNumberish;
+  relayer: string;
 };
 
-export type CanDoRollupParamsStructOutput = [string, string, BigNumber] & {
-  pool: string;
-  roller: string;
-  rollupSize: BigNumber;
-};
-
-export interface IMystikoRollerRegistryInterface extends utils.Interface {
+export interface IMystikoRelayerInterface extends utils.Interface {
   functions: {
-    'canDoRollup((address,address,uint256))': FunctionFragment;
+    'canDoRelay((address,address))': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'canDoRollup'): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: 'canDoRelay'): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'canDoRollup', values: [CanDoRollupParamsStruct]): string;
+  encodeFunctionData(functionFragment: 'canDoRelay', values: [CanDoRelayParamsStruct]): string;
 
-  decodeFunctionResult(functionFragment: 'canDoRollup', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'canDoRelay', data: BytesLike): Result;
 
   events: {};
 }
 
-export interface IMystikoRollerRegistry extends BaseContract {
+export interface IMystikoRelayer extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IMystikoRollerRegistryInterface;
+  interface: IMystikoRelayerInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -64,22 +58,22 @@ export interface IMystikoRollerRegistry extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
+    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<[boolean]>;
   };
 
-  canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+  canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<boolean>;
 
   callStatic: {
-    canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<boolean>;
+    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<boolean>;
   };
 
   filters: {};
 
   estimateGas: {
-    canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
+    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    canDoRollup(_params: CanDoRollupParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    canDoRelay(_params: CanDoRelayParamsStruct, overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }
