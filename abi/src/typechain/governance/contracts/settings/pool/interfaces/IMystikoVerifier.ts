@@ -22,7 +22,7 @@ export type WrappedVerifierStructOutput = [string, boolean] & {
   enabled: boolean;
 };
 
-export interface IMystikoVerifierRegistryInterface extends utils.Interface {
+export interface IMystikoVerifierInterface extends utils.Interface {
   functions: {
     'queryRollupVerifier(uint32)': FunctionFragment;
     'queryTransactVerifier(uint32,uint32)': FunctionFragment;
@@ -39,12 +39,12 @@ export interface IMystikoVerifierRegistryInterface extends utils.Interface {
   events: {};
 }
 
-export interface IMystikoVerifierRegistry extends BaseContract {
+export interface IMystikoVerifier extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IMystikoVerifierRegistryInterface;
+  interface: IMystikoVerifierInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

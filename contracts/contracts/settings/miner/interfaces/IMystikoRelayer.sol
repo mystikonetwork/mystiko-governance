@@ -6,6 +6,6 @@ struct CanDoRelayParams {
   address relayer;
 }
 
-interface IMystikoRelayerRegistry {
+interface IMystikoRelayer {
   function canDoRelay(CanDoRelayParams calldata _params) external view returns (bool);
 }

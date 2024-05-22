@@ -2,12 +2,12 @@
 pragma solidity ^0.8.20;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {IMystikoRollerRegistry, CanDoRollupParams} from "../interfaces/IMystikoRollerRegistry.sol";
+import {IMystikoRoller, CanDoRollupParams} from "../interfaces/IMystikoRoller.sol";
 import {MystikoDAOGoverned} from "../../../governance/MystikoDAOGoverned.sol";
 import {MystikoDAOAccessControl} from "../../../governance/MystikoDAOAccessControl.sol";
 import {GovernanceErrors} from "../../../libs/common/GovernanceErrors.sol";
 
-contract MystikoRollerRegistry is IMystikoRollerRegistry, MystikoDAOGoverned, MystikoDAOAccessControl {
+contract MystikoRollerRegistry is IMystikoRoller, MystikoDAOGoverned, MystikoDAOAccessControl {
   uint256 public minVoteTokenAmount;
   uint256 public minRollupSize;
   address public vXZK;

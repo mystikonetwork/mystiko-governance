@@ -2,24 +2,30 @@
 pragma solidity ^0.8.20;
 
 import {MystikoDAOGoverned} from "../../../governance/MystikoDAOGoverned.sol";
-import {WrappedVerifier, IMystikoVerifierRegistry} from "../interfaces/IMystikoVerifierRegistry.sol";
+import {WrappedVerifier, IMystikoVerifier} from "../interfaces/IMystikoVerifier.sol";
 import {GovernanceErrors} from "../../../libs/common/GovernanceErrors.sol";
 
-abstract contract MystikoVerifierRegistry is IMystikoVerifierRegistry, MystikoDAOGoverned {
+abstract contract MystikoVerifier is IMystikoVerifier, MystikoDAOGoverned {
   mapping(uint32 => mapping(uint32 => WrappedVerifier)) private transactVerifiers;
   mapping(uint32 => WrappedVerifier) private rollupVerifiers;
 
-  event RollupVerifierEnabled(uint32 rollupSize, address verifier);
+  event RollupVerifierEnabled(uint32 rollupSize);
   event RollupVerifierDisabled(uint32 rollupSize);
-  event TransactVerifierEnabled(uint32 inputNumber, uint32 outputNumber, address verifier);
+  event TransactVerifierEnabled(uint32 inputNumber, uint32 outputNumber);
   event TransactVerifierDisabled(uint32 inputNumber, uint32 outputNumber);
 
-  constructor(address[5] memory _rollupVerifiers, address[6] memory _transactVerifiers) {
+  constructor(address[11] memory _rollupVerifiers, address[6] memory _transactVerifiers) {
     rollupVerifiers[1] = WrappedVerifier(_rollupVerifiers[0], true);
     rollupVerifiers[2] = WrappedVerifier(_rollupVerifiers[1], true);
     rollupVerifiers[4] = WrappedVerifier(_rollupVerifiers[2], true);
     rollupVerifiers[8] = WrappedVerifier(_rollupVerifiers[3], true);
     rollupVerifiers[16] = WrappedVerifier(_rollupVerifiers[4], true);
+    rollupVerifiers[32] = WrappedVerifier(_rollupVerifiers[5], true);
+    rollupVerifiers[64] = WrappedVerifier(_rollupVerifiers[6], true);
+    rollupVerifiers[128] = WrappedVerifier(_rollupVerifiers[7], true);
+    rollupVerifiers[256] = WrappedVerifier(_rollupVerifiers[8], true);
+    rollupVerifiers[512] = WrappedVerifier(_rollupVerifiers[9], true);
+    rollupVerifiers[1024] = WrappedVerifier(_rollupVerifiers[10], true);
     transactVerifiers[1][0] = WrappedVerifier(_transactVerifiers[0], true);
     transactVerifiers[1][1] = WrappedVerifier(_transactVerifiers[1], true);
     transactVerifiers[1][2] = WrappedVerifier(_transactVerifiers[2], true);
@@ -39,11 +45,11 @@ abstract contract MystikoVerifierRegistry is IMystikoVerifierRegistry, MystikoDA
     return transactVerifiers[_numInputs][_numOutputs];
   }
 
-  function enableRollupVerifier(uint32 _rollupSize, address _rollupVerifier) external onlyMystikoDAO {
+  function enableRollupVerifier(uint32 _rollupSize) external onlyMystikoDAO {
     if (_rollupSize == 0 || _rollupSize > 1024) revert GovernanceErrors.InvalidRollupSize();
     if (_rollupSize & (_rollupSize - 1) != 0) revert GovernanceErrors.RollupSizeNotPowerOfTwo();
-    rollupVerifiers[_rollupSize] = WrappedVerifier(_rollupVerifier, true);
-    emit RollupVerifierEnabled(_rollupSize, _rollupVerifier);
+    rollupVerifiers[_rollupSize].enabled = true;
+    emit RollupVerifierEnabled(_rollupSize);
   }
 
   function disableRollupVerifier(uint32 _rollupSize) external onlyMystikoDAO {
@@ -53,14 +59,10 @@ abstract contract MystikoVerifierRegistry is IMystikoVerifierRegistry, MystikoDA
     emit RollupVerifierDisabled(_rollupSize);
   }
 
-  function enableTransactVerifier(
-    uint32 _numInputs,
-    uint32 _numOutputs,
-    address _transactVerifier
-  ) external onlyMystikoDAO {
+  function enableTransactVerifier(uint32 _numInputs, uint32 _numOutputs) external onlyMystikoDAO {
     if (_numInputs == 0) revert GovernanceErrors.NumInputsGreaterThanZero();
-    transactVerifiers[_numInputs][_numOutputs] = WrappedVerifier(_transactVerifier, true);
-    emit TransactVerifierEnabled(_numInputs, _numOutputs, _transactVerifier);
+    transactVerifiers[_numInputs][_numOutputs].enabled = true;
+    emit TransactVerifierEnabled(_numInputs, _numOutputs);
   }
 
   function disableTransactVerifier(uint32 _numInputs, uint32 _numOutputs) external onlyMystikoDAO {

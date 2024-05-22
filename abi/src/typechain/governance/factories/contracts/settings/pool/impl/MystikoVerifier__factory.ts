@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import type {
-  MystikoVerifierRegistry,
-  MystikoVerifierRegistryInterface,
-} from '../../../../../contracts/settings/pool/impl/MystikoVerifierRegistry';
+  MystikoVerifier,
+  MystikoVerifierInterface,
+} from '../../../../../contracts/settings/pool/impl/MystikoVerifier';
 
 const _abi = [
   {
@@ -52,12 +52,6 @@ const _abi = [
         name: 'rollupSize',
         type: 'uint32',
       },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'verifier',
-        type: 'address',
-      },
     ],
     name: 'RollupVerifierEnabled',
     type: 'event',
@@ -95,12 +89,6 @@ const _abi = [
         internalType: 'uint32',
         name: 'outputNumber',
         type: 'uint32',
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'verifier',
-        type: 'address',
       },
     ],
     name: 'TransactVerifierEnabled',
@@ -157,11 +145,6 @@ const _abi = [
         name: '_rollupSize',
         type: 'uint32',
       },
-      {
-        internalType: 'address',
-        name: '_rollupVerifier',
-        type: 'address',
-      },
     ],
     name: 'enableRollupVerifier',
     outputs: [],
@@ -179,11 +162,6 @@ const _abi = [
         internalType: 'uint32',
         name: '_numOutputs',
         type: 'uint32',
-      },
-      {
-        internalType: 'address',
-        name: '_transactVerifier',
-        type: 'address',
       },
     ],
     name: 'enableTransactVerifier',
@@ -260,12 +238,12 @@ const _abi = [
   },
 ] as const;
 
-export class MystikoVerifierRegistry__factory {
+export class MystikoVerifier__factory {
   static readonly abi = _abi;
-  static createInterface(): MystikoVerifierRegistryInterface {
-    return new utils.Interface(_abi) as MystikoVerifierRegistryInterface;
+  static createInterface(): MystikoVerifierInterface {
+    return new utils.Interface(_abi) as MystikoVerifierInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): MystikoVerifierRegistry {
-    return new Contract(address, _abi, signerOrProvider) as MystikoVerifierRegistry;
+  static connect(address: string, signerOrProvider: Signer | Provider): MystikoVerifier {
+    return new Contract(address, _abi, signerOrProvider) as MystikoVerifier;
   }
 }

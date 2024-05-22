@@ -7,6 +7,6 @@ struct CanDoRollupParams {
   uint256 rollupSize;
 }
 
-interface IMystikoRollerRegistry {
+interface IMystikoRoller {
   function canDoRollup(CanDoRollupParams calldata _params) external view returns (bool);
 }

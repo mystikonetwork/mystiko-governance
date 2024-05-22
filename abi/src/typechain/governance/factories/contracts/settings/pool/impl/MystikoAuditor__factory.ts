@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import type {
-  MystikoAuditorRegistry,
-  MystikoAuditorRegistryInterface,
-} from '../../../../../contracts/settings/pool/impl/MystikoAuditorRegistry';
+  MystikoAuditor,
+  MystikoAuditorInterface,
+} from '../../../../../contracts/settings/pool/impl/MystikoAuditor';
 
 const _abi = [
   {
@@ -122,12 +122,12 @@ const _abi = [
   },
 ] as const;
 
-export class MystikoAuditorRegistry__factory {
+export class MystikoAuditor__factory {
   static readonly abi = _abi;
-  static createInterface(): MystikoAuditorRegistryInterface {
-    return new utils.Interface(_abi) as MystikoAuditorRegistryInterface;
+  static createInterface(): MystikoAuditorInterface {
+    return new utils.Interface(_abi) as MystikoAuditorInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): MystikoAuditorRegistry {
-    return new Contract(address, _abi, signerOrProvider) as MystikoAuditorRegistry;
+  static connect(address: string, signerOrProvider: Signer | Provider): MystikoAuditor {
+    return new Contract(address, _abi, signerOrProvider) as MystikoAuditor;
   }
 }

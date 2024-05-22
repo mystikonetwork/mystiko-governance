@@ -6,15 +6,24 @@ import {IMystikoGovernorCenter} from "../interfaces/IMystikoGovernorCenter.sol";
 
 contract MystikoGovernorCenter is IMystikoGovernorCenter {
   address public dao;
+  address public operator;
+  mapping(address => bool) public previousDaos;
 
   event MystikoDAOChanged(address indexed dao);
+  event OperatorRenounced();
 
   constructor(address _dao) {
     dao = _dao;
+    operator = msg.sender;
   }
 
   modifier onlyMystikoDAO() {
     if (msg.sender != dao) revert GovernanceErrors.OnlyMystikoDAO();
+    _;
+  }
+
+  modifier onlyOperator() {
+    if (msg.sender != operator) revert GovernanceErrors.OnlyOperator();
     _;
   }
 
@@ -23,8 +32,19 @@ contract MystikoGovernorCenter is IMystikoGovernorCenter {
   }
 
   function changeMystikoDAO(address _newMystikoDAO) public onlyMystikoDAO {
-    if (dao == _newMystikoDAO) revert GovernanceErrors.NotChanged();
+    previousDaos[dao] = true;
     dao = _newMystikoDAO;
     emit MystikoDAOChanged(dao);
+  }
+
+  function rollBackMystikoDAO(address _previousDao) external onlyOperator {
+    if (!previousDaos[_previousDao]) revert GovernanceErrors.InvalidMystikoDAOAddress();
+    dao = _previousDao;
+    emit MystikoDAOChanged(dao);
+  }
+
+  function renounceOperator() external onlyOperator {
+    operator = address(0);
+    emit OperatorRenounced();
   }
 }

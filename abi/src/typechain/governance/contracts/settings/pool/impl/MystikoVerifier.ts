@@ -24,13 +24,13 @@ export type WrappedVerifierStructOutput = [string, boolean] & {
   enabled: boolean;
 };
 
-export interface MystikoVerifierRegistryInterface extends utils.Interface {
+export interface MystikoVerifierInterface extends utils.Interface {
   functions: {
     'center()': FunctionFragment;
     'disableRollupVerifier(uint32)': FunctionFragment;
     'disableTransactVerifier(uint32,uint32)': FunctionFragment;
-    'enableRollupVerifier(uint32,address)': FunctionFragment;
-    'enableTransactVerifier(uint32,uint32,address)': FunctionFragment;
+    'enableRollupVerifier(uint32)': FunctionFragment;
+    'enableTransactVerifier(uint32,uint32)': FunctionFragment;
     'queryRollupVerifier(uint32)': FunctionFragment;
     'queryTransactVerifier(uint32,uint32)': FunctionFragment;
   };
@@ -52,10 +52,10 @@ export interface MystikoVerifierRegistryInterface extends utils.Interface {
     functionFragment: 'disableTransactVerifier',
     values: [BigNumberish, BigNumberish],
   ): string;
-  encodeFunctionData(functionFragment: 'enableRollupVerifier', values: [BigNumberish, string]): string;
+  encodeFunctionData(functionFragment: 'enableRollupVerifier', values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: 'enableTransactVerifier',
-    values: [BigNumberish, BigNumberish, string],
+    values: [BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(functionFragment: 'queryRollupVerifier', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'queryTransactVerifier', values: [BigNumberish, BigNumberish]): string;
@@ -70,9 +70,9 @@ export interface MystikoVerifierRegistryInterface extends utils.Interface {
 
   events: {
     'RollupVerifierDisabled(uint32)': EventFragment;
-    'RollupVerifierEnabled(uint32,address)': EventFragment;
+    'RollupVerifierEnabled(uint32)': EventFragment;
     'TransactVerifierDisabled(uint32,uint32)': EventFragment;
-    'TransactVerifierEnabled(uint32,uint32,address)': EventFragment;
+    'TransactVerifierEnabled(uint32,uint32)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'RollupVerifierDisabled'): EventFragment;
@@ -90,9 +90,8 @@ export type RollupVerifierDisabledEventFilter = TypedEventFilter<RollupVerifierD
 
 export interface RollupVerifierEnabledEventObject {
   rollupSize: number;
-  verifier: string;
 }
-export type RollupVerifierEnabledEvent = TypedEvent<[number, string], RollupVerifierEnabledEventObject>;
+export type RollupVerifierEnabledEvent = TypedEvent<[number], RollupVerifierEnabledEventObject>;
 
 export type RollupVerifierEnabledEventFilter = TypedEventFilter<RollupVerifierEnabledEvent>;
 
@@ -107,21 +106,17 @@ export type TransactVerifierDisabledEventFilter = TypedEventFilter<TransactVerif
 export interface TransactVerifierEnabledEventObject {
   inputNumber: number;
   outputNumber: number;
-  verifier: string;
 }
-export type TransactVerifierEnabledEvent = TypedEvent<
-  [number, number, string],
-  TransactVerifierEnabledEventObject
->;
+export type TransactVerifierEnabledEvent = TypedEvent<[number, number], TransactVerifierEnabledEventObject>;
 
 export type TransactVerifierEnabledEventFilter = TypedEventFilter<TransactVerifierEnabledEvent>;
 
-export interface MystikoVerifierRegistry extends BaseContract {
+export interface MystikoVerifier extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MystikoVerifierRegistryInterface;
+  interface: MystikoVerifierInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -154,14 +149,12 @@ export interface MystikoVerifierRegistry extends BaseContract {
 
     enableRollupVerifier(
       _rollupSize: BigNumberish,
-      _rollupVerifier: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     enableTransactVerifier(
       _numInputs: BigNumberish,
       _numOutputs: BigNumberish,
-      _transactVerifier: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
@@ -192,14 +185,12 @@ export interface MystikoVerifierRegistry extends BaseContract {
 
   enableRollupVerifier(
     _rollupSize: BigNumberish,
-    _rollupVerifier: string,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   enableTransactVerifier(
     _numInputs: BigNumberish,
     _numOutputs: BigNumberish,
-    _transactVerifier: string,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
@@ -225,16 +216,11 @@ export interface MystikoVerifierRegistry extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<void>;
 
-    enableRollupVerifier(
-      _rollupSize: BigNumberish,
-      _rollupVerifier: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    enableRollupVerifier(_rollupSize: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     enableTransactVerifier(
       _numInputs: BigNumberish,
       _numOutputs: BigNumberish,
-      _transactVerifier: string,
       overrides?: CallOverrides,
     ): Promise<void>;
 
@@ -254,11 +240,8 @@ export interface MystikoVerifierRegistry extends BaseContract {
     'RollupVerifierDisabled(uint32)'(rollupSize?: null): RollupVerifierDisabledEventFilter;
     RollupVerifierDisabled(rollupSize?: null): RollupVerifierDisabledEventFilter;
 
-    'RollupVerifierEnabled(uint32,address)'(
-      rollupSize?: null,
-      verifier?: null,
-    ): RollupVerifierEnabledEventFilter;
-    RollupVerifierEnabled(rollupSize?: null, verifier?: null): RollupVerifierEnabledEventFilter;
+    'RollupVerifierEnabled(uint32)'(rollupSize?: null): RollupVerifierEnabledEventFilter;
+    RollupVerifierEnabled(rollupSize?: null): RollupVerifierEnabledEventFilter;
 
     'TransactVerifierDisabled(uint32,uint32)'(
       inputNumber?: null,
@@ -266,16 +249,11 @@ export interface MystikoVerifierRegistry extends BaseContract {
     ): TransactVerifierDisabledEventFilter;
     TransactVerifierDisabled(inputNumber?: null, outputNumber?: null): TransactVerifierDisabledEventFilter;
 
-    'TransactVerifierEnabled(uint32,uint32,address)'(
+    'TransactVerifierEnabled(uint32,uint32)'(
       inputNumber?: null,
       outputNumber?: null,
-      verifier?: null,
     ): TransactVerifierEnabledEventFilter;
-    TransactVerifierEnabled(
-      inputNumber?: null,
-      outputNumber?: null,
-      verifier?: null,
-    ): TransactVerifierEnabledEventFilter;
+    TransactVerifierEnabled(inputNumber?: null, outputNumber?: null): TransactVerifierEnabledEventFilter;
   };
 
   estimateGas: {
@@ -294,14 +272,12 @@ export interface MystikoVerifierRegistry extends BaseContract {
 
     enableRollupVerifier(
       _rollupSize: BigNumberish,
-      _rollupVerifier: string,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     enableTransactVerifier(
       _numInputs: BigNumberish,
       _numOutputs: BigNumberish,
-      _transactVerifier: string,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
@@ -330,14 +306,12 @@ export interface MystikoVerifierRegistry extends BaseContract {
 
     enableRollupVerifier(
       _rollupSize: BigNumberish,
-      _rollupVerifier: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     enableTransactVerifier(
       _numInputs: BigNumberish,
       _numOutputs: BigNumberish,
-      _transactVerifier: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
