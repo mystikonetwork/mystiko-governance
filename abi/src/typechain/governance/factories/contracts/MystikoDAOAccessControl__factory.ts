@@ -7,7 +7,7 @@ import type { Provider } from '@ethersproject/providers';
 import type {
   MystikoDAOAccessControl,
   MystikoDAOAccessControlInterface,
-} from '../../../contracts/governance/MystikoDAOAccessControl';
+} from '../../contracts/MystikoDAOAccessControl';
 
 const _abi = [
   {
@@ -46,7 +46,7 @@ const _abi = [
     name: 'center',
     outputs: [
       {
-        internalType: 'contract IMystikoGovernorCenter',
+        internalType: 'contract MystikoGovernorCenter',
         name: '',
         type: 'address',
       },

@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {GovernanceErrors} from "../../libs/common/GovernanceErrors.sol";
-import {IMystikoGovernorCenter} from "../interfaces/IMystikoGovernorCenter.sol";
+import {GovernanceErrors} from "../GovernanceErrors.sol";
 
-contract MystikoGovernorCenter is IMystikoGovernorCenter {
+contract MystikoGovernorCenter {
   address public dao;
   address public operator;
   mapping(address => bool) public previousDaos;

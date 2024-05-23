@@ -2,11 +2,12 @@
 pragma solidity ^0.8.20;
 
 import {MystikoDAOGoverned} from "./MystikoDAOGoverned.sol";
-import {GovernanceErrors} from "../libs/common/GovernanceErrors.sol";
+import {GovernanceErrors} from "./GovernanceErrors.sol";
 
 abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
   mapping(address => bool) private roles;
 
+  event RoleOpened();
   event RoleGranted(address indexed account);
   event RoleRevoked(address indexed account);
 
@@ -29,6 +30,11 @@ abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
   function grantRole(address _account) external virtual onlyMystikoDAO {
     roles[_account] = true;
     emit RoleGranted(_account);
+  }
+
+  function openRole() external virtual onlyMystikoDAO {
+    roles[address(0)] = true;
+    emit RoleOpened();
   }
 
   function revokeRole(address _account) external virtual onlyMystikoDAO {

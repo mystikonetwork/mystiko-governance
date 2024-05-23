@@ -12,7 +12,7 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../common';
 
 export interface MystikoDAOGovernedInterface extends utils.Interface {
   functions: {

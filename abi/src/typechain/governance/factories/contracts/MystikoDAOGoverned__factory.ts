@@ -4,10 +4,7 @@
 
 import { Contract, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
-import type {
-  MystikoDAOGoverned,
-  MystikoDAOGovernedInterface,
-} from '../../../contracts/governance/MystikoDAOGoverned';
+import type { MystikoDAOGoverned, MystikoDAOGovernedInterface } from '../../contracts/MystikoDAOGoverned';
 
 const _abi = [
   {
@@ -15,7 +12,7 @@ const _abi = [
     name: 'center',
     outputs: [
       {
-        internalType: 'contract IMystikoGovernorCenter',
+        internalType: 'contract MystikoGovernorCenter',
         name: '',
         type: 'address',
       },

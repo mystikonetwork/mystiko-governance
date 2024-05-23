@@ -3,10 +3,7 @@
 /* eslint-disable */
 import { Signer, utils, Contract, ContractFactory, Overrides } from 'ethers';
 import type { Provider, TransactionRequest } from '@ethersproject/providers';
-import type {
-  GovernanceErrors,
-  GovernanceErrorsInterface,
-} from '../../../../contracts/libs/common/GovernanceErrors';
+import type { GovernanceErrors, GovernanceErrorsInterface } from '../../contracts/GovernanceErrors';
 
 const _abi = [
   {
@@ -37,7 +34,7 @@ const _abi = [
 ] as const;
 
 const _bytecode =
-  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212204d2437b9f4c7d19afd95360371e28938fee70d42590267cfbe89d01375ce19d964736f6c63430008140033';
+  '0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220f66adab7907e23a22e2b9b8c10d0b77daa7f76d34149d0c88cba225aacacc57864736f6c63430008140033';
 
 type GovernanceErrorsConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
 

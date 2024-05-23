@@ -4,7 +4,7 @@
 import type { BaseContract, Signer, utils } from 'ethers';
 
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../common';
 
 export interface GovernanceErrorsInterface extends utils.Interface {
   functions: {};

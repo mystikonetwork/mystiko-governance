@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import "../../../contracts/governance/impl/MystikoGovernorCenter.sol";
+import "../../../contracts/impl/MystikoGovernorCenter.sol";
 import "../../utils/Random.sol";
 
 contract MystikoGovernorCenterTest is Test, Random {
