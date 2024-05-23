@@ -14,13 +14,12 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../../common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../common';
 
-export interface MystikoGovernorCenterInterface extends utils.Interface {
+export interface MystikoGovernorRegistryInterface extends utils.Interface {
   functions: {
     'changeMystikoDAO(address)': FunctionFragment;
     'dao()': FunctionFragment;
-    'getMystikoDAO()': FunctionFragment;
     'operator()': FunctionFragment;
     'previousDaos(address)': FunctionFragment;
     'renounceOperator()': FunctionFragment;
@@ -31,7 +30,6 @@ export interface MystikoGovernorCenterInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | 'changeMystikoDAO'
       | 'dao'
-      | 'getMystikoDAO'
       | 'operator'
       | 'previousDaos'
       | 'renounceOperator'
@@ -40,7 +38,6 @@ export interface MystikoGovernorCenterInterface extends utils.Interface {
 
   encodeFunctionData(functionFragment: 'changeMystikoDAO', values: [string]): string;
   encodeFunctionData(functionFragment: 'dao', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getMystikoDAO', values?: undefined): string;
   encodeFunctionData(functionFragment: 'operator', values?: undefined): string;
   encodeFunctionData(functionFragment: 'previousDaos', values: [string]): string;
   encodeFunctionData(functionFragment: 'renounceOperator', values?: undefined): string;
@@ -48,7 +45,6 @@ export interface MystikoGovernorCenterInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: 'changeMystikoDAO', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'dao', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getMystikoDAO', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'operator', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'previousDaos', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'renounceOperator', data: BytesLike): Result;
@@ -75,12 +71,12 @@ export type OperatorRenouncedEvent = TypedEvent<[], OperatorRenouncedEventObject
 
 export type OperatorRenouncedEventFilter = TypedEventFilter<OperatorRenouncedEvent>;
 
-export interface MystikoGovernorCenter extends BaseContract {
+export interface MystikoGovernorRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MystikoGovernorCenterInterface;
+  interface: MystikoGovernorRegistryInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -105,8 +101,6 @@ export interface MystikoGovernorCenter extends BaseContract {
 
     dao(overrides?: CallOverrides): Promise<[string]>;
 
-    getMystikoDAO(overrides?: CallOverrides): Promise<[string]>;
-
     operator(overrides?: CallOverrides): Promise<[string]>;
 
     previousDaos(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
@@ -126,8 +120,6 @@ export interface MystikoGovernorCenter extends BaseContract {
 
   dao(overrides?: CallOverrides): Promise<string>;
 
-  getMystikoDAO(overrides?: CallOverrides): Promise<string>;
-
   operator(overrides?: CallOverrides): Promise<string>;
 
   previousDaos(arg0: string, overrides?: CallOverrides): Promise<boolean>;
@@ -143,8 +135,6 @@ export interface MystikoGovernorCenter extends BaseContract {
     changeMystikoDAO(_newMystikoDAO: string, overrides?: CallOverrides): Promise<void>;
 
     dao(overrides?: CallOverrides): Promise<string>;
-
-    getMystikoDAO(overrides?: CallOverrides): Promise<string>;
 
     operator(overrides?: CallOverrides): Promise<string>;
 
@@ -168,8 +158,6 @@ export interface MystikoGovernorCenter extends BaseContract {
 
     dao(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getMystikoDAO(overrides?: CallOverrides): Promise<BigNumber>;
-
     operator(overrides?: CallOverrides): Promise<BigNumber>;
 
     previousDaos(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -186,8 +174,6 @@ export interface MystikoGovernorCenter extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     dao(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getMystikoDAO(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     operator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

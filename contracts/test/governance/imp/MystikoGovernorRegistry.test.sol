@@ -2,11 +2,11 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import "../../../contracts/governance/impl/MystikoGovernorCenter.sol";
+import "../../../contracts/impl/MystikoGovernorRegistry.sol";
 import "../../utils/Random.sol";
 
-contract MystikoGovernorCenterTest is Test, Random {
-  MystikoGovernorCenter public center;
+contract MystikoGovernorRegistryTest is Test, Random {
+  MystikoGovernorRegistry public daoRegistry;
   address public dao;
 
   event MystikoDAOChanged(address indexed dao);
@@ -14,27 +14,27 @@ contract MystikoGovernorCenterTest is Test, Random {
 
   function setUp() public {
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    center = new MystikoGovernorCenter(dao);
+    daoRegistry = new MystikoGovernorRegistry(dao);
   }
 
   function test_get_mystiko_dao() public {
-    assertEq(center.getMystikoDAO(), dao);
+    assertEq(daoRegistry.dao(), dao);
   }
 
   function test_change_mystiko_dao() public {
-    address newDao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address dao1 = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
-    center.changeMystikoDAO(newDao);
+    daoRegistry.changeMystikoDAO(dao1);
 
     address preDao = dao;
     for (uint256 i = 0; i < 10; i++) {
       address newDao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-      vm.expectEmit(address(center));
+      vm.expectEmit(address(daoRegistry));
       emit MystikoDAOChanged(newDao);
       vm.prank(preDao);
-      center.changeMystikoDAO(newDao);
-      assertEq(center.getMystikoDAO(), newDao);
-      assertTrue(center.previousDaos(preDao));
+      daoRegistry.changeMystikoDAO(newDao);
+      assertEq(daoRegistry.dao(), newDao);
+      assertTrue(daoRegistry.previousDaos(preDao));
       preDao = newDao;
     }
   }
@@ -44,35 +44,35 @@ contract MystikoGovernorCenterTest is Test, Random {
     address newOperator = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(GovernanceErrors.OnlyOperator.selector);
     vm.prank(newOperator);
-    center.rollBackMystikoDAO(newDao);
+    daoRegistry.rollBackMystikoDAO(newDao);
 
     vm.expectRevert(GovernanceErrors.InvalidMystikoDAOAddress.selector);
-    center.rollBackMystikoDAO(dao);
+    daoRegistry.rollBackMystikoDAO(dao);
 
     vm.expectRevert(GovernanceErrors.InvalidMystikoDAOAddress.selector);
-    center.rollBackMystikoDAO(newDao);
+    daoRegistry.rollBackMystikoDAO(newDao);
 
     vm.prank(dao);
-    center.changeMystikoDAO(newDao);
-    assertEq(center.getMystikoDAO(), newDao);
+    daoRegistry.changeMystikoDAO(newDao);
+    assertEq(daoRegistry.dao(), newDao);
 
-    vm.expectEmit(address(center));
+    vm.expectEmit(address(daoRegistry));
     emit MystikoDAOChanged(dao);
-    center.rollBackMystikoDAO(dao);
+    daoRegistry.rollBackMystikoDAO(dao);
   }
 
   function test_renounce_operator() public {
     vm.expectRevert(GovernanceErrors.OnlyOperator.selector);
     vm.prank(address(0));
-    center.renounceOperator();
+    daoRegistry.renounceOperator();
 
-    vm.expectEmit(address(center));
+    vm.expectEmit(address(daoRegistry));
     emit OperatorRenounced();
-    center.renounceOperator();
-    assertEq(center.operator(), address(0));
+    daoRegistry.renounceOperator();
+    assertEq(daoRegistry.operator(), address(0));
 
     vm.expectRevert(GovernanceErrors.OnlyOperator.selector);
-    center.renounceOperator();
-    assertEq(center.operator(), address(0));
+    daoRegistry.renounceOperator();
+    assertEq(daoRegistry.operator(), address(0));
   }
 }

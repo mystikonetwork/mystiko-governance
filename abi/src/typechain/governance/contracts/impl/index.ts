@@ -2,5 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { MystikoGovernor } from './MystikoGovernor';
-export type { MystikoGovernorCenter } from './MystikoGovernorCenter';
+export type { MystikoGovernorRegistry } from './MystikoGovernorRegistry';
 export type { MystikoTimelockController } from './MystikoTimelockController';

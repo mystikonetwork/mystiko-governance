@@ -4,10 +4,10 @@ pragma solidity ^0.8.20;
 import {Test} from "forge-std/Test.sol";
 import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
-import "../../../contracts/governance/impl/MystikoTimelockController.sol";
+import "../../../contracts/impl/MystikoTimelockController.sol";
 import "../../utils/Random.sol";
 
-contract MystikoRelayerRegistryTest is Test, Random {
+contract MystikoTimelockControllerTest is Test, Random {
   MystikoTimelockController public controller;
   address public admin;
   address public governor;

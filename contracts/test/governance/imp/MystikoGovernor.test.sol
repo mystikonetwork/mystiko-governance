@@ -6,8 +6,8 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IGovernor} from "@openzeppelin/contracts/governance/IGovernor.sol";
 import {DoubleEndedQueue} from "@openzeppelin/contracts/utils/structs/DoubleEndedQueue.sol";
 import "../../utils/Random.sol";
-import "../../../contracts/governance/impl/MystikoGovernor.sol";
-import "../../../contracts/governance/impl/MystikoTimelockController.sol";
+import "../../../contracts/impl/MystikoGovernor.sol";
+import "../../../contracts/impl/MystikoTimelockController.sol";
 import "../../mock/MockMystikoToken.sol";
 import "../../../contracts/token/MystikoVoteToken.sol";
 
