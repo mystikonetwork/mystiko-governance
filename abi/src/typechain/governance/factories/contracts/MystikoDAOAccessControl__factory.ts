@@ -30,6 +30,12 @@ const _abi = [
   },
   {
     anonymous: false,
+    inputs: [],
+    name: 'RoleOpened',
+    type: 'event',
+  },
+  {
+    anonymous: false,
     inputs: [
       {
         indexed: true,
@@ -97,6 +103,13 @@ const _abi = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'openRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

@@ -22,18 +22,27 @@ export interface MystikoDAOAccessControlInterface extends utils.Interface {
     'grantRole(address)': FunctionFragment;
     'grantRoles(address[])': FunctionFragment;
     'hasRole(address)': FunctionFragment;
+    'openRole()': FunctionFragment;
     'revokeRole(address)': FunctionFragment;
     'revokeRoles(address[])': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: 'center' | 'grantRole' | 'grantRoles' | 'hasRole' | 'revokeRole' | 'revokeRoles',
+    nameOrSignatureOrTopic:
+      | 'center'
+      | 'grantRole'
+      | 'grantRoles'
+      | 'hasRole'
+      | 'openRole'
+      | 'revokeRole'
+      | 'revokeRoles',
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'center', values?: undefined): string;
   encodeFunctionData(functionFragment: 'grantRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'grantRoles', values: [string[]]): string;
   encodeFunctionData(functionFragment: 'hasRole', values: [string]): string;
+  encodeFunctionData(functionFragment: 'openRole', values?: undefined): string;
   encodeFunctionData(functionFragment: 'revokeRole', values: [string]): string;
   encodeFunctionData(functionFragment: 'revokeRoles', values: [string[]]): string;
 
@@ -41,15 +50,18 @@ export interface MystikoDAOAccessControlInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRoles', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'openRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'revokeRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'revokeRoles', data: BytesLike): Result;
 
   events: {
     'RoleGranted(address)': EventFragment;
+    'RoleOpened()': EventFragment;
     'RoleRevoked(address)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RoleOpened'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
 }
 
@@ -59,6 +71,11 @@ export interface RoleGrantedEventObject {
 export type RoleGrantedEvent = TypedEvent<[string], RoleGrantedEventObject>;
 
 export type RoleGrantedEventFilter = TypedEventFilter<RoleGrantedEvent>;
+
+export interface RoleOpenedEventObject {}
+export type RoleOpenedEvent = TypedEvent<[], RoleOpenedEventObject>;
+
+export type RoleOpenedEventFilter = TypedEventFilter<RoleOpenedEvent>;
 
 export interface RoleRevokedEventObject {
   account: string;
@@ -98,6 +115,8 @@ export interface MystikoDAOAccessControl extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
+    openRole(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
     revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
@@ -110,6 +129,8 @@ export interface MystikoDAOAccessControl extends BaseContract {
   grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
+
+  openRole(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
@@ -124,6 +145,8 @@ export interface MystikoDAOAccessControl extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
 
+    openRole(overrides?: CallOverrides): Promise<void>;
+
     revokeRole(_account: string, overrides?: CallOverrides): Promise<void>;
 
     revokeRoles(_accounts: string[], overrides?: CallOverrides): Promise<void>;
@@ -132,6 +155,9 @@ export interface MystikoDAOAccessControl extends BaseContract {
   filters: {
     'RoleGranted(address)'(account?: string | null): RoleGrantedEventFilter;
     RoleGranted(account?: string | null): RoleGrantedEventFilter;
+
+    'RoleOpened()'(): RoleOpenedEventFilter;
+    RoleOpened(): RoleOpenedEventFilter;
 
     'RoleRevoked(address)'(account?: string | null): RoleRevokedEventFilter;
     RoleRevoked(account?: string | null): RoleRevokedEventFilter;
@@ -146,6 +172,8 @@ export interface MystikoDAOAccessControl extends BaseContract {
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    openRole(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
     revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
@@ -159,6 +187,8 @@ export interface MystikoDAOAccessControl extends BaseContract {
     grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     hasRole(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    openRole(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
