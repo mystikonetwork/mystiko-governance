@@ -18,69 +18,81 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../co
 
 export interface MystikoDAOAccessControlInterface extends utils.Interface {
   functions: {
-    'center()': FunctionFragment;
-    'grantRole(address)': FunctionFragment;
-    'grantRoles(address[])': FunctionFragment;
-    'hasRole(address)': FunctionFragment;
-    'openRole()': FunctionFragment;
-    'revokeRole(address)': FunctionFragment;
-    'revokeRoles(address[])': FunctionFragment;
+    'DEFAULT_ADMIN_ROLE()': FunctionFragment;
+    'daoRegistry()': FunctionFragment;
+    'getRoleAdmin(bytes32)': FunctionFragment;
+    'grantRole(bytes32,address)': FunctionFragment;
+    'hasRole(bytes32,address)': FunctionFragment;
+    'renounceRole(bytes32,address)': FunctionFragment;
+    'revokeRole(bytes32,address)': FunctionFragment;
+    'supportsInterface(bytes4)': FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'center'
+      | 'DEFAULT_ADMIN_ROLE'
+      | 'daoRegistry'
+      | 'getRoleAdmin'
       | 'grantRole'
-      | 'grantRoles'
       | 'hasRole'
-      | 'openRole'
+      | 'renounceRole'
       | 'revokeRole'
-      | 'revokeRoles',
+      | 'supportsInterface',
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'center', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'grantRole', values: [string]): string;
-  encodeFunctionData(functionFragment: 'grantRoles', values: [string[]]): string;
-  encodeFunctionData(functionFragment: 'hasRole', values: [string]): string;
-  encodeFunctionData(functionFragment: 'openRole', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'revokeRole', values: [string]): string;
-  encodeFunctionData(functionFragment: 'revokeRoles', values: [string[]]): string;
+  encodeFunctionData(functionFragment: 'DEFAULT_ADMIN_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'daoRegistry', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getRoleAdmin', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'grantRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'hasRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'renounceRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'revokeRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'supportsInterface', values: [BytesLike]): string;
 
-  decodeFunctionResult(functionFragment: 'center', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'DEFAULT_ADMIN_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'daoRegistry', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoleAdmin', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'grantRoles', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'openRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'renounceRole', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'revokeRole', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'revokeRoles', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'supportsInterface', data: BytesLike): Result;
 
   events: {
-    'RoleGranted(address)': EventFragment;
-    'RoleOpened()': EventFragment;
-    'RoleRevoked(address)': EventFragment;
+    'RoleAdminChanged(bytes32,bytes32,bytes32)': EventFragment;
+    'RoleGranted(bytes32,address,address)': EventFragment;
+    'RoleRevoked(bytes32,address,address)': EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: 'RoleAdminChanged'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'RoleOpened'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
 }
 
-export interface RoleGrantedEventObject {
-  account: string;
+export interface RoleAdminChangedEventObject {
+  role: string;
+  previousAdminRole: string;
+  newAdminRole: string;
 }
-export type RoleGrantedEvent = TypedEvent<[string], RoleGrantedEventObject>;
+export type RoleAdminChangedEvent = TypedEvent<[string, string, string], RoleAdminChangedEventObject>;
+
+export type RoleAdminChangedEventFilter = TypedEventFilter<RoleAdminChangedEvent>;
+
+export interface RoleGrantedEventObject {
+  role: string;
+  account: string;
+  sender: string;
+}
+export type RoleGrantedEvent = TypedEvent<[string, string, string], RoleGrantedEventObject>;
 
 export type RoleGrantedEventFilter = TypedEventFilter<RoleGrantedEvent>;
 
-export interface RoleOpenedEventObject {}
-export type RoleOpenedEvent = TypedEvent<[], RoleOpenedEventObject>;
-
-export type RoleOpenedEventFilter = TypedEventFilter<RoleOpenedEvent>;
-
 export interface RoleRevokedEventObject {
+  role: string;
   account: string;
+  sender: string;
 }
-export type RoleRevokedEvent = TypedEvent<[string], RoleRevokedEventObject>;
+export type RoleRevokedEvent = TypedEvent<[string, string, string], RoleRevokedEventObject>;
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
@@ -107,94 +119,173 @@ export interface MystikoDAOAccessControl extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    center(overrides?: CallOverrides): Promise<[string]>;
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    daoRegistry(overrides?: CallOverrides): Promise<[string]>;
 
-    grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
-    hasRole(_account: string, overrides?: CallOverrides): Promise<[boolean]>;
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
 
-    openRole(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    renounceRole(
+      role: BytesLike,
+      callerConfirmation: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
 
-    revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
+
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
   };
 
-  center(overrides?: CallOverrides): Promise<string>;
+  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  daoRegistry(overrides?: CallOverrides): Promise<string>;
 
-  grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-  hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
+  grantRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
 
-  openRole(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-  revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  renounceRole(
+    role: BytesLike,
+    callerConfirmation: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
 
-  revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  revokeRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
+
+  supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   callStatic: {
-    center(overrides?: CallOverrides): Promise<string>;
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    grantRole(_account: string, overrides?: CallOverrides): Promise<void>;
+    daoRegistry(overrides?: CallOverrides): Promise<string>;
 
-    grantRoles(_accounts: string[], overrides?: CallOverrides): Promise<void>;
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-    hasRole(_account: string, overrides?: CallOverrides): Promise<boolean>;
+    grantRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
-    openRole(overrides?: CallOverrides): Promise<void>;
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-    revokeRole(_account: string, overrides?: CallOverrides): Promise<void>;
+    renounceRole(role: BytesLike, callerConfirmation: string, overrides?: CallOverrides): Promise<void>;
 
-    revokeRoles(_accounts: string[], overrides?: CallOverrides): Promise<void>;
+    revokeRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
+
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
   };
 
   filters: {
-    'RoleGranted(address)'(account?: string | null): RoleGrantedEventFilter;
-    RoleGranted(account?: string | null): RoleGrantedEventFilter;
+    'RoleAdminChanged(bytes32,bytes32,bytes32)'(
+      role?: BytesLike | null,
+      previousAdminRole?: BytesLike | null,
+      newAdminRole?: BytesLike | null,
+    ): RoleAdminChangedEventFilter;
+    RoleAdminChanged(
+      role?: BytesLike | null,
+      previousAdminRole?: BytesLike | null,
+      newAdminRole?: BytesLike | null,
+    ): RoleAdminChangedEventFilter;
 
-    'RoleOpened()'(): RoleOpenedEventFilter;
-    RoleOpened(): RoleOpenedEventFilter;
+    'RoleGranted(bytes32,address,address)'(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null,
+    ): RoleGrantedEventFilter;
+    RoleGranted(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null,
+    ): RoleGrantedEventFilter;
 
-    'RoleRevoked(address)'(account?: string | null): RoleRevokedEventFilter;
-    RoleRevoked(account?: string | null): RoleRevokedEventFilter;
+    'RoleRevoked(bytes32,address,address)'(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null,
+    ): RoleRevokedEventFilter;
+    RoleRevoked(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null,
+    ): RoleRevokedEventFilter;
   };
 
   estimateGas: {
-    center(overrides?: CallOverrides): Promise<BigNumber>;
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    daoRegistry(overrides?: CallOverrides): Promise<BigNumber>;
 
-    grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    hasRole(_account: string, overrides?: CallOverrides): Promise<BigNumber>;
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<BigNumber>;
 
-    openRole(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    renounceRole(
+      role: BytesLike,
+      callerConfirmation: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<BigNumber>;
 
-    revokeRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<BigNumber>;
+
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    center(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    grantRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+    daoRegistry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    grantRoles(_accounts: string[], overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    hasRole(_account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    openRole(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
-
-    revokeRole(_account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
-
-    revokeRoles(
-      _accounts: string[],
+    grantRole(
+      role: BytesLike,
+      account: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
+
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceRole(
+      role: BytesLike,
+      callerConfirmation: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

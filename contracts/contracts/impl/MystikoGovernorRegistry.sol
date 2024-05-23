@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {GovernanceErrors} from "../GovernanceErrors.sol";
 
-contract MystikoGovernorCenter {
+contract MystikoGovernorRegistry {
   address public dao;
   address public operator;
   mapping(address => bool) public previousDaos;
@@ -16,7 +16,7 @@ contract MystikoGovernorCenter {
     operator = msg.sender;
   }
 
-  modifier onlyMystikoDAO() {
+  modifier onlyDAO() {
     if (msg.sender != dao) revert GovernanceErrors.OnlyMystikoDAO();
     _;
   }
@@ -26,11 +26,7 @@ contract MystikoGovernorCenter {
     _;
   }
 
-  function getMystikoDAO() external view returns (address) {
-    return dao;
-  }
-
-  function changeMystikoDAO(address _newMystikoDAO) public onlyMystikoDAO {
+  function changeMystikoDAO(address _newMystikoDAO) public onlyDAO {
     previousDaos[dao] = true;
     dao = _newMystikoDAO;
     emit MystikoDAOChanged(dao);

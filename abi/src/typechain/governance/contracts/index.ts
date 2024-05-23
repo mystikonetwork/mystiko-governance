@@ -7,4 +7,3 @@ import type * as token from './token';
 export type { token };
 export type { GovernanceErrors } from './GovernanceErrors';
 export type { MystikoDAOAccessControl } from './MystikoDAOAccessControl';
-export type { MystikoDAOGoverned } from './MystikoDAOGoverned';

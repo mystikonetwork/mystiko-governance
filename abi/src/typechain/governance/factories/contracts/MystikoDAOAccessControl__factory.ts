@@ -12,7 +12,23 @@ import type {
 const _abi = [
   {
     inputs: [],
-    name: 'OnlyMystikoDAO',
+    name: 'AccessControlBadConfirmation',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        internalType: 'bytes32',
+        name: 'neededRole',
+        type: 'bytes32',
+      },
+    ],
+    name: 'AccessControlUnauthorizedAccount',
     type: 'error',
   },
   {
@@ -20,8 +36,45 @@ const _abi = [
     inputs: [
       {
         indexed: true,
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'previousAdminRole',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'newAdminRole',
+        type: 'bytes32',
+      },
+    ],
+    name: 'RoleAdminChanged',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
         internalType: 'address',
         name: 'account',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
         type: 'address',
       },
     ],
@@ -30,17 +83,23 @@ const _abi = [
   },
   {
     anonymous: false,
-    inputs: [],
-    name: 'RoleOpened',
-    type: 'event',
-  },
-  {
-    anonymous: false,
     inputs: [
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
       {
         indexed: true,
         internalType: 'address',
         name: 'account',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
         type: 'address',
       },
     ],
@@ -49,10 +108,23 @@ const _abi = [
   },
   {
     inputs: [],
-    name: 'center',
+    name: 'DEFAULT_ADMIN_ROLE',
     outputs: [
       {
-        internalType: 'contract MystikoGovernorCenter',
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'daoRegistry',
+    outputs: [
+      {
+        internalType: 'contract MystikoGovernorRegistry',
         name: '',
         type: 'address',
       },
@@ -63,8 +135,32 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+    ],
+    name: 'getRoleAdmin',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
         internalType: 'address',
-        name: '_account',
+        name: 'account',
         type: 'address',
       },
     ],
@@ -76,21 +172,13 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: 'address[]',
-        name: '_accounts',
-        type: 'address[]',
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
       },
-    ],
-    name: 'grantRoles',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
         internalType: 'address',
-        name: '_account',
+        name: 'account',
         type: 'address',
       },
     ],
@@ -106,8 +194,19 @@ const _abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'openRole',
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'address',
+        name: 'callerConfirmation',
+        type: 'address',
+      },
+    ],
+    name: 'renounceRole',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -115,8 +214,13 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
         internalType: 'address',
-        name: '_account',
+        name: 'account',
         type: 'address',
       },
     ],
@@ -128,14 +232,20 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: 'address[]',
-        name: '_accounts',
-        type: 'address[]',
+        internalType: 'bytes4',
+        name: 'interfaceId',
+        type: 'bytes4',
       },
     ],
-    name: 'revokeRoles',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'supportsInterface',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
 ] as const;

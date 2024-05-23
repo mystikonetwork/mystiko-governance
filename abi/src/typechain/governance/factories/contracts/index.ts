@@ -5,4 +5,3 @@ export * as impl from './impl';
 export * as token from './token';
 export { GovernanceErrors__factory } from './GovernanceErrors__factory';
 export { MystikoDAOAccessControl__factory } from './MystikoDAOAccessControl__factory';
-export { MystikoDAOGoverned__factory } from './MystikoDAOGoverned__factory';

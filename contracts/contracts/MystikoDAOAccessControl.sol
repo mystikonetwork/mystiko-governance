@@ -1,58 +1,32 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {MystikoDAOGoverned} from "./MystikoDAOGoverned.sol";
 import {GovernanceErrors} from "./GovernanceErrors.sol";
+import {MystikoGovernorRegistry} from "./impl/MystikoGovernorRegistry.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-abstract contract MystikoDAOAccessControl is MystikoDAOGoverned {
-  mapping(address => bool) private roles;
+abstract contract MystikoDAOAccessControl is AccessControl {
+  MystikoGovernorRegistry public daoRegistry;
 
-  event RoleOpened();
-  event RoleGranted(address indexed account);
-  event RoleRevoked(address indexed account);
+  constructor(address _daoRegistry) {
+    daoRegistry = MystikoGovernorRegistry(_daoRegistry);
+    _grantRole(DEFAULT_ADMIN_ROLE, daoRegistry.dao());
+  }
 
-  modifier onlyRole(address _account) {
-    if (!hasRole(_account)) revert GovernanceErrors.UnauthorizedRole();
+  modifier onlyMystikoDAO() {
+    if (daoRegistry.dao() != msg.sender) revert GovernanceErrors.OnlyMystikoDAO();
     _;
   }
 
-  modifier onlyRoleOrOpen(address _account) {
-    if (!hasRole(address(0))) {
-      if (!hasRole(_account)) revert GovernanceErrors.UnauthorizedRole();
-    }
+  modifier onlyHasRole(bytes32 _role, address _account) {
+    if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
     _;
   }
 
-  function hasRole(address _account) public view returns (bool) {
-    return roles[_account];
-  }
-
-  function grantRole(address _account) external virtual onlyMystikoDAO {
-    roles[_account] = true;
-    emit RoleGranted(_account);
-  }
-
-  function openRole() external virtual onlyMystikoDAO {
-    roles[address(0)] = true;
-    emit RoleOpened();
-  }
-
-  function revokeRole(address _account) external virtual onlyMystikoDAO {
-    roles[_account] = false;
-    emit RoleRevoked(_account);
-  }
-
-  function grantRoles(address[] calldata _accounts) external virtual onlyMystikoDAO {
-    for (uint256 i = 0; i < _accounts.length; i++) {
-      roles[_accounts[i]] = true;
-      emit RoleGranted(_accounts[i]);
+  modifier onlyHasRoleOrOpen(bytes32 _role, address _account) {
+    if (!hasRole(_role, address(0))) {
+      if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
     }
-  }
-
-  function revokeRoles(address[] calldata _accounts) external virtual onlyMystikoDAO {
-    for (uint256 i = 0; i < _accounts.length; i++) {
-      roles[_accounts[i]] = false;
-      emit RoleRevoked(_accounts[i]);
-    }
+    _;
   }
 }
