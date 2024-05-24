@@ -22,6 +22,7 @@
     "test": "yarn test:forge && yarn test:unit",
     "test:forge": "forge test -vvv",
     "test:unit": "hardhat test --parallel --network hardhat",
+    "test:coverage": "forge coverage",
     "prettier": "yarn prettier:fix",
     "prettier:check": "prettier --plugin=prettier-plugin-solidity --check \"./**/*.{ts,sol}\" --config .prettierrc",
     "prettier:fix": "prettier --plugin=prettier-plugin-solidity --write \"./**/*.{ts,sol}\" --config .prettierrc",

@@ -8,7 +8,7 @@ import {MystikoDAOAccessControl} from "../../contracts/MystikoDAOAccessControl.s
 import "../utils/Random.sol";
 import "forge-std/console.sol";
 
-contract MockAccessControlTest is MystikoDAOAccessControl, Random {
+contract MockMystikoContract is MystikoDAOAccessControl, Random {
   bytes32 public constant TEST_ROLE = keccak256("TEST_ROLE");
 
   constructor(address _daoCenter) MystikoDAOAccessControl(_daoCenter) {}
@@ -28,17 +28,17 @@ contract MockAccessControlTest is MystikoDAOAccessControl, Random {
   }
 }
 
-contract MystikoDAOAccessControlTest is Test, Random {
+contract MystikoDaoAccessControlTest is Test, Random {
   bytes32 public constant TEST_ROLE = keccak256("TEST_ROLE");
 
   MystikoGovernorRegistry public daoRegistry;
   address public dao;
-  MockAccessControlTest public mock;
+  MockMystikoContract public mock;
 
   function setUp() public {
     dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     daoRegistry = new MystikoGovernorRegistry(dao);
-    mock = new MockAccessControlTest(address(daoRegistry));
+    mock = new MockMystikoContract(address(daoRegistry));
   }
 
   function test_role_admin() public {

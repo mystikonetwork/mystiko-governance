@@ -6,7 +6,7 @@ import "../../contracts/token/MystikoVoteToken.sol";
 import "../mock/MockMystikoToken.sol";
 import "../utils/Random.sol";
 
-contract MystikoRollerRegistryTest is Test, Random {
+contract MystikoVoteTokenTest is Test, Random {
   MockMystikoToken public XZK;
   MystikoVoteToken public vXZK;
 
