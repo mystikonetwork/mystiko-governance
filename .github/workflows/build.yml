@@ -39,9 +39,6 @@ jobs:
       - run: yarn build
       - run: yarn lint
       - run: yarn test
-      - name: Run Contract Coverage
-        working-directory: contracts
-        run: forge coverage --report lcov
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:

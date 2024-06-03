@@ -14,4 +14,4 @@ artifacts
 cache
 out
 .idea
-
+lcov.info
