@@ -19,6 +19,14 @@ contract MystikoVoteTokenTest is Test, Random {
     assertEq(vXZK.decimals(), 18);
   }
 
+  function test_CLOCK_MODE() public {
+    assertEq(vXZK.CLOCK_MODE(), "mode=timestamp");
+  }
+
+  function test_nonces() public {
+    assertEq(vXZK.nonces(address(0)), 0);
+  }
+
   function test_deposit_and_withdraw() public {
     address account = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
 

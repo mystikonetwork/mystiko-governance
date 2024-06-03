@@ -26,7 +26,7 @@ contract MystikoGovernorRegistry {
     _;
   }
 
-  function changeMystikoDAO(address _newMystikoDAO) public onlyDAO {
+  function setMystikoDAO(address _newMystikoDAO) public onlyDAO {
     previousDaos[dao] = true;
     dao = _newMystikoDAO;
     emit MystikoDAOChanged(dao);

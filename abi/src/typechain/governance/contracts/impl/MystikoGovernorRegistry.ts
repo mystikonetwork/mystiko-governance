@@ -18,37 +18,37 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../..
 
 export interface MystikoGovernorRegistryInterface extends utils.Interface {
   functions: {
-    'changeMystikoDAO(address)': FunctionFragment;
     'dao()': FunctionFragment;
     'operator()': FunctionFragment;
     'previousDaos(address)': FunctionFragment;
     'renounceOperator()': FunctionFragment;
     'rollBackMystikoDAO(address)': FunctionFragment;
+    'setMystikoDAO(address)': FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'changeMystikoDAO'
       | 'dao'
       | 'operator'
       | 'previousDaos'
       | 'renounceOperator'
-      | 'rollBackMystikoDAO',
+      | 'rollBackMystikoDAO'
+      | 'setMystikoDAO',
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'changeMystikoDAO', values: [string]): string;
   encodeFunctionData(functionFragment: 'dao', values?: undefined): string;
   encodeFunctionData(functionFragment: 'operator', values?: undefined): string;
   encodeFunctionData(functionFragment: 'previousDaos', values: [string]): string;
   encodeFunctionData(functionFragment: 'renounceOperator', values?: undefined): string;
   encodeFunctionData(functionFragment: 'rollBackMystikoDAO', values: [string]): string;
+  encodeFunctionData(functionFragment: 'setMystikoDAO', values: [string]): string;
 
-  decodeFunctionResult(functionFragment: 'changeMystikoDAO', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'dao', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'operator', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'previousDaos', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'renounceOperator', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'rollBackMystikoDAO', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setMystikoDAO', data: BytesLike): Result;
 
   events: {
     'MystikoDAOChanged(address)': EventFragment;
@@ -94,11 +94,6 @@ export interface MystikoGovernorRegistry extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    changeMystikoDAO(
-      _newMystikoDAO: string,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
     dao(overrides?: CallOverrides): Promise<[string]>;
 
     operator(overrides?: CallOverrides): Promise<[string]>;
@@ -111,12 +106,12 @@ export interface MystikoGovernorRegistry extends BaseContract {
       _previousDao: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
-  };
 
-  changeMystikoDAO(
-    _newMystikoDAO: string,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+    setMystikoDAO(
+      _newMystikoDAO: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
+  };
 
   dao(overrides?: CallOverrides): Promise<string>;
 
@@ -131,9 +126,12 @@ export interface MystikoGovernorRegistry extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  callStatic: {
-    changeMystikoDAO(_newMystikoDAO: string, overrides?: CallOverrides): Promise<void>;
+  setMystikoDAO(
+    _newMystikoDAO: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
 
+  callStatic: {
     dao(overrides?: CallOverrides): Promise<string>;
 
     operator(overrides?: CallOverrides): Promise<string>;
@@ -143,6 +141,8 @@ export interface MystikoGovernorRegistry extends BaseContract {
     renounceOperator(overrides?: CallOverrides): Promise<void>;
 
     rollBackMystikoDAO(_previousDao: string, overrides?: CallOverrides): Promise<void>;
+
+    setMystikoDAO(_newMystikoDAO: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -154,8 +154,6 @@ export interface MystikoGovernorRegistry extends BaseContract {
   };
 
   estimateGas: {
-    changeMystikoDAO(_newMystikoDAO: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
-
     dao(overrides?: CallOverrides): Promise<BigNumber>;
 
     operator(overrides?: CallOverrides): Promise<BigNumber>;
@@ -165,14 +163,11 @@ export interface MystikoGovernorRegistry extends BaseContract {
     renounceOperator(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     rollBackMystikoDAO(_previousDao: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    setMystikoDAO(_newMystikoDAO: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    changeMystikoDAO(
-      _newMystikoDAO: string,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
     dao(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     operator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -183,6 +178,11 @@ export interface MystikoGovernorRegistry extends BaseContract {
 
     rollBackMystikoDAO(
       _previousDao: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    setMystikoDAO(
+      _newMystikoDAO: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };

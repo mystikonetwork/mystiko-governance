@@ -24,7 +24,7 @@ contract MystikoGovernorRegistryTest is Test, Random {
   function test_change_mystiko_dao() public {
     address dao1 = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
-    daoRegistry.changeMystikoDAO(dao1);
+    daoRegistry.setMystikoDAO(dao1);
 
     address preDao = dao;
     for (uint256 i = 0; i < 10; i++) {
@@ -32,7 +32,7 @@ contract MystikoGovernorRegistryTest is Test, Random {
       vm.expectEmit(address(daoRegistry));
       emit MystikoDAOChanged(newDao);
       vm.prank(preDao);
-      daoRegistry.changeMystikoDAO(newDao);
+      daoRegistry.setMystikoDAO(newDao);
       assertEq(daoRegistry.dao(), newDao);
       assertTrue(daoRegistry.previousDaos(preDao));
       preDao = newDao;
@@ -53,7 +53,7 @@ contract MystikoGovernorRegistryTest is Test, Random {
     daoRegistry.rollBackMystikoDAO(newDao);
 
     vm.prank(dao);
-    daoRegistry.changeMystikoDAO(newDao);
+    daoRegistry.setMystikoDAO(newDao);
     assertEq(daoRegistry.dao(), newDao);
 
     vm.expectEmit(address(daoRegistry));
