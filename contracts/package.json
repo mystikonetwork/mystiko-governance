@@ -15,6 +15,9 @@
   "author": "Mystiko Network",
   "license": "MIT",
   "scripts": {
+    "install": "yarn install:sol && yarn install:ts",
+    "install:sol": "forge install foundry-rs/forge-std:1.8.2 Openzeppelin/openzeppelin-contracts@v5.0.0",
+    "install:ts": "yarn install",
     "build": "yarn build:contract && yarn build:abi",
     "build:contract": "forge build --sizes",
     "build:abi": "cd ../abi && yarn generate",
@@ -29,7 +32,6 @@
     "lint:sol": "solhint \"contracts/**/*.sol\""
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "5.0.0",
     "@typechain/ethers-v6": "^0.5.1",
     "@types/mocha": ">=9.1.0",
     "@typescript-eslint/eslint-plugin": "^5.13.0",

@@ -716,7 +716,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mystikonetwork/governance@workspace:contracts"
   dependencies:
-    "@openzeppelin/contracts": "npm:5.0.0"
     "@typechain/ethers-v6": "npm:^0.5.1"
     "@types/mocha": "npm:>=9.1.0"
     "@typescript-eslint/eslint-plugin": "npm:^5.13.0"
@@ -804,13 +803,6 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.5"
   checksum: 162b4a0b8705cd6f5c2470b851d1dc6cd228c86d2170e1769d738c1fbb69a87160901411c3c035331e9e99db72f1f1099a8b734bf1637cc32b9a5be1660e4e1e
-  languageName: node
-  linkType: hard
-
-"@openzeppelin/contracts@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@openzeppelin/contracts@npm:5.0.0"
-  checksum: 77714a20788c4993f4e4d7d2ad0bd253fbe288b890045680dd35b216e809f43ff0efe6be47f9dc90acb6f16539192bea15ad762b224346ca6026e83e4e029a2a
   languageName: node
   linkType: hard
 

@@ -14,6 +14,7 @@
     "contracts"
   ],
   "scripts": {
+    "install": "yarn workspaces foreach -A run install",
     "build": "yarn workspaces foreach -A run build",
     "prettier": "yarn workspaces foreach -A run prettier",
     "lint": "yarn workspaces foreach -A run lint",
