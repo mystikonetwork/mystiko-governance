@@ -166,6 +166,9 @@ contract MystikoGovernorTest is Test, Random {
     vm.roll(block.number + 1);
     governor.queue(targets, values, calldatas, keccak256(bytes(description)));
 
+    bool needsQueuing = governor.proposalNeedsQueuing(proposeId);
+    assertTrue(needsQueuing);
+
     vm.expectRevert();
     governor.execute(targets, values, calldatas, keccak256(bytes(description)));
 
@@ -173,5 +176,30 @@ contract MystikoGovernorTest is Test, Random {
     vm.roll(block.number + 1);
     governor.execute(targets, values, calldatas, keccak256(bytes(description)));
     assertEq(governor.votingDelay(), 4 days);
+  }
+
+  function test_cancel_propose() public {
+    address proposer = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address[] memory targets = new address[](1);
+    targets[0] = address(governor);
+    uint256[] memory values = new uint256[](1);
+    values[0] = 0;
+    bytes[] memory calldatas = new bytes[](1);
+    calldatas[0] = abi.encodeWithSignature("setVotingDelay(uint48)", 4 days);
+    string memory description = "test cancel propose";
+    uint256 proposalThreshold = 10_000_000e18;
+
+    _delegateVote(proposer, proposalThreshold);
+    vm.prank(proposer);
+    uint256 proposeId = governor.propose(targets, values, calldatas, description);
+
+    IGovernor.ProposalState status1 = governor.state(proposeId);
+    assertEq(uint32(status1), uint32(IGovernor.ProposalState.Pending));
+
+    vm.prank(proposer);
+    governor.cancel(targets, values, calldatas, keccak256(bytes(description)));
+
+    IGovernor.ProposalState status2 = governor.state(proposeId);
+    assertEq(uint32(status2), uint32(IGovernor.ProposalState.Canceled));
   }
 }

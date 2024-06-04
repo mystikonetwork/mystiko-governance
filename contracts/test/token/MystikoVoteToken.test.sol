@@ -6,7 +6,7 @@ import "../../contracts/token/MystikoVoteToken.sol";
 import "../mock/MockMystikoToken.sol";
 import "../utils/Random.sol";
 
-contract MystikoRollerRegistryTest is Test, Random {
+contract MystikoVoteTokenTest is Test, Random {
   MockMystikoToken public XZK;
   MystikoVoteToken public vXZK;
 
@@ -17,6 +17,14 @@ contract MystikoRollerRegistryTest is Test, Random {
 
   function test_decimal() public {
     assertEq(vXZK.decimals(), 18);
+  }
+
+  function test_CLOCK_MODE() public {
+    assertEq(vXZK.CLOCK_MODE(), "mode=timestamp");
+  }
+
+  function test_nonces() public {
+    assertEq(vXZK.nonces(address(0)), 0);
   }
 
   function test_deposit_and_withdraw() public {

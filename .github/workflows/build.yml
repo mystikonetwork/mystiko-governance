@@ -39,6 +39,13 @@ jobs:
       - run: yarn build
       - run: yarn lint
       - run: yarn test
+      - run: yarn coverage
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ./contracts/lcov.info
       - run: git diff --quiet || (echo "some generated files are not included in repo" && exit 1)
       - name: Telegram Failure Notification
         uses: appleboy/telegram-action@master

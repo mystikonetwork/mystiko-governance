@@ -18,58 +18,62 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../..
 
 export interface MystikoGovernorRegistryInterface extends utils.Interface {
   functions: {
-    'changeMystikoDAO(address)': FunctionFragment;
     'dao()': FunctionFragment;
-    'operator()': FunctionFragment;
-    'previousDaos(address)': FunctionFragment;
-    'renounceOperator()': FunctionFragment;
+    'daoMap(address)': FunctionFragment;
+    'deployer()': FunctionFragment;
+    'renounceDeployer()': FunctionFragment;
     'rollBackMystikoDAO(address)': FunctionFragment;
+    'setMystikoDAO(address)': FunctionFragment;
+    'transferOwnerToDAO(address)': FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'changeMystikoDAO'
       | 'dao'
-      | 'operator'
-      | 'previousDaos'
-      | 'renounceOperator'
-      | 'rollBackMystikoDAO',
+      | 'daoMap'
+      | 'deployer'
+      | 'renounceDeployer'
+      | 'rollBackMystikoDAO'
+      | 'setMystikoDAO'
+      | 'transferOwnerToDAO',
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'changeMystikoDAO', values: [string]): string;
   encodeFunctionData(functionFragment: 'dao', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'operator', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'previousDaos', values: [string]): string;
-  encodeFunctionData(functionFragment: 'renounceOperator', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'daoMap', values: [string]): string;
+  encodeFunctionData(functionFragment: 'deployer', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'renounceDeployer', values?: undefined): string;
   encodeFunctionData(functionFragment: 'rollBackMystikoDAO', values: [string]): string;
+  encodeFunctionData(functionFragment: 'setMystikoDAO', values: [string]): string;
+  encodeFunctionData(functionFragment: 'transferOwnerToDAO', values: [string]): string;
 
-  decodeFunctionResult(functionFragment: 'changeMystikoDAO', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'dao', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'operator', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'previousDaos', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'renounceOperator', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'daoMap', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'deployer', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'renounceDeployer', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'rollBackMystikoDAO', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setMystikoDAO', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferOwnerToDAO', data: BytesLike): Result;
 
   events: {
+    'DeployerRenounced()': EventFragment;
     'MystikoDAOChanged(address)': EventFragment;
-    'OperatorRenounced()': EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: 'DeployerRenounced'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'MystikoDAOChanged'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OperatorRenounced'): EventFragment;
 }
 
+export interface DeployerRenouncedEventObject {}
+export type DeployerRenouncedEvent = TypedEvent<[], DeployerRenouncedEventObject>;
+
+export type DeployerRenouncedEventFilter = TypedEventFilter<DeployerRenouncedEvent>;
+
 export interface MystikoDAOChangedEventObject {
-  dao: string;
+  newDao: string;
 }
 export type MystikoDAOChangedEvent = TypedEvent<[string], MystikoDAOChangedEventObject>;
 
 export type MystikoDAOChangedEventFilter = TypedEventFilter<MystikoDAOChangedEvent>;
-
-export interface OperatorRenouncedEventObject {}
-export type OperatorRenouncedEvent = TypedEvent<[], OperatorRenouncedEventObject>;
-
-export type OperatorRenouncedEventFilter = TypedEventFilter<OperatorRenouncedEvent>;
 
 export interface MystikoGovernorRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -94,95 +98,105 @@ export interface MystikoGovernorRegistry extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    changeMystikoDAO(
-      _newMystikoDAO: string,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
     dao(overrides?: CallOverrides): Promise<[string]>;
 
-    operator(overrides?: CallOverrides): Promise<[string]>;
+    daoMap(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    previousDaos(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+    deployer(overrides?: CallOverrides): Promise<[string]>;
 
-    renounceOperator(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+    renounceDeployer(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     rollBackMystikoDAO(
       _previousDao: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
-  };
 
-  changeMystikoDAO(
-    _newMystikoDAO: string,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
+    setMystikoDAO(_newDao: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+
+    transferOwnerToDAO(
+      _newDao: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
+  };
 
   dao(overrides?: CallOverrides): Promise<string>;
 
-  operator(overrides?: CallOverrides): Promise<string>;
+  daoMap(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
-  previousDaos(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  deployer(overrides?: CallOverrides): Promise<string>;
 
-  renounceOperator(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
+  renounceDeployer(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   rollBackMystikoDAO(
     _previousDao: string,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  callStatic: {
-    changeMystikoDAO(_newMystikoDAO: string, overrides?: CallOverrides): Promise<void>;
+  setMystikoDAO(_newDao: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
+  transferOwnerToDAO(
+    _newDao: string,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
+
+  callStatic: {
     dao(overrides?: CallOverrides): Promise<string>;
 
-    operator(overrides?: CallOverrides): Promise<string>;
+    daoMap(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
-    previousDaos(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+    deployer(overrides?: CallOverrides): Promise<string>;
 
-    renounceOperator(overrides?: CallOverrides): Promise<void>;
+    renounceDeployer(overrides?: CallOverrides): Promise<void>;
 
     rollBackMystikoDAO(_previousDao: string, overrides?: CallOverrides): Promise<void>;
+
+    setMystikoDAO(_newDao: string, overrides?: CallOverrides): Promise<void>;
+
+    transferOwnerToDAO(_newDao: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
-    'MystikoDAOChanged(address)'(dao?: string | null): MystikoDAOChangedEventFilter;
-    MystikoDAOChanged(dao?: string | null): MystikoDAOChangedEventFilter;
+    'DeployerRenounced()'(): DeployerRenouncedEventFilter;
+    DeployerRenounced(): DeployerRenouncedEventFilter;
 
-    'OperatorRenounced()'(): OperatorRenouncedEventFilter;
-    OperatorRenounced(): OperatorRenouncedEventFilter;
+    'MystikoDAOChanged(address)'(newDao?: string | null): MystikoDAOChangedEventFilter;
+    MystikoDAOChanged(newDao?: string | null): MystikoDAOChangedEventFilter;
   };
 
   estimateGas: {
-    changeMystikoDAO(_newMystikoDAO: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
-
     dao(overrides?: CallOverrides): Promise<BigNumber>;
 
-    operator(overrides?: CallOverrides): Promise<BigNumber>;
+    daoMap(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    previousDaos(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    deployer(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceOperator(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    renounceDeployer(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     rollBackMystikoDAO(_previousDao: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    setMystikoDAO(_newDao: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+
+    transferOwnerToDAO(_newDao: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    changeMystikoDAO(
-      _newMystikoDAO: string,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
     dao(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    operator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    daoMap(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    previousDaos(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    deployer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceOperator(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+    renounceDeployer(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     rollBackMystikoDAO(
       _previousDao: string,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    setMystikoDAO(_newDao: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
+
+    transferOwnerToDAO(
+      _newDao: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };

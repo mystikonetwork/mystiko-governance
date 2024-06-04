@@ -8,7 +8,7 @@ import {MystikoDAOAccessControl} from "../../contracts/MystikoDAOAccessControl.s
 import "../utils/Random.sol";
 import "forge-std/console.sol";
 
-contract MockAccessControlTest is MystikoDAOAccessControl, Random {
+contract MockMystikoContract is MystikoDAOAccessControl, Random {
   bytes32 public constant TEST_ROLE = keccak256("TEST_ROLE");
 
   constructor(address _daoCenter) MystikoDAOAccessControl(_daoCenter) {}
@@ -28,21 +28,22 @@ contract MockAccessControlTest is MystikoDAOAccessControl, Random {
   }
 }
 
-contract MystikoDAOAccessControlTest is Test, Random {
+contract MystikoDaoAccessControlTest is Test, Random {
   bytes32 public constant TEST_ROLE = keccak256("TEST_ROLE");
 
   MystikoGovernorRegistry public daoRegistry;
-  address public dao;
-  MockAccessControlTest public mock;
+  address public deployer;
+  MockMystikoContract public mock;
 
   function setUp() public {
-    dao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    daoRegistry = new MystikoGovernorRegistry(dao);
-    mock = new MockAccessControlTest(address(daoRegistry));
+    deployer = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    vm.prank(deployer);
+    daoRegistry = new MystikoGovernorRegistry();
+    mock = new MockMystikoContract(address(daoRegistry));
   }
 
   function test_role_admin() public {
-    bool result = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), dao);
+    bool result = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), deployer);
     assertTrue(result);
 
     bytes32 adminRole = mock.getRoleAdmin(TEST_ROLE);
@@ -53,7 +54,7 @@ contract MystikoDAOAccessControlTest is Test, Random {
     vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
     mock.runOnlyDao();
 
-    vm.prank(dao);
+    vm.prank(deployer);
     bool result = mock.runOnlyDao();
     assertTrue(result);
   }
@@ -65,21 +66,21 @@ contract MystikoDAOAccessControlTest is Test, Random {
     vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     mock.runWithRole(account);
 
-    vm.prank(dao);
+    vm.prank(deployer);
     mock.grantRole(TEST_ROLE, account);
     assertTrue(mock.hasRole(TEST_ROLE, account));
 
     bool result1 = mock.runWithRole(account);
     assertTrue(result1);
 
-    vm.prank(dao);
+    vm.prank(deployer);
     mock.revokeRole(TEST_ROLE, account);
     assertFalse(mock.hasRole(TEST_ROLE, account));
     vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     bool result2 = mock.runWithRole(account);
     assertFalse(result2);
 
-    vm.prank(dao);
+    vm.prank(deployer);
     mock.grantRole(TEST_ROLE, address(0));
     assertTrue(mock.hasRole(TEST_ROLE, address(0)));
     vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
@@ -94,21 +95,21 @@ contract MystikoDAOAccessControlTest is Test, Random {
     vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     mock.runWithRole(account);
 
-    vm.prank(dao);
+    vm.prank(deployer);
     mock.grantRole(TEST_ROLE, account);
     assertTrue(mock.hasRole(TEST_ROLE, account));
 
     bool result1 = mock.runWithRole(account);
     assertTrue(result1);
 
-    vm.prank(dao);
+    vm.prank(deployer);
     mock.revokeRole(TEST_ROLE, account);
     assertFalse(mock.hasRole(TEST_ROLE, account));
     vm.expectRevert(GovernanceErrors.UnauthorizedRole.selector);
     bool result2 = mock.runWithRole(account);
     assertFalse(result2);
 
-    vm.prank(dao);
+    vm.prank(deployer);
     mock.grantRole(TEST_ROLE, address(0));
     assertTrue(mock.hasRole(TEST_ROLE, address(0)));
     bool result3 = mock.runWithRoleOrOpen(account);
