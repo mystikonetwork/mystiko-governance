@@ -10,13 +10,7 @@ import type {
 
 const _abi = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_dao',
-        type: 'address',
-      },
-    ],
+    inputs: [],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -27,13 +21,29 @@ const _abi = [
   },
   {
     inputs: [],
-    name: 'OnlyMystikoDAO',
+    name: 'NotChanged',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'OnlyOperator',
+    name: 'OnlyBeforeDaoInitialized',
     type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'OnlyDeployer',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'OnlyMystikoDAO',
+    type: 'error',
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: 'DeployerRenounced',
+    type: 'event',
   },
   {
     anonymous: false,
@@ -41,17 +51,11 @@ const _abi = [
       {
         indexed: true,
         internalType: 'address',
-        name: 'dao',
+        name: 'newDao',
         type: 'address',
       },
     ],
     name: 'MystikoDAOChanged',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: 'OperatorRenounced',
     type: 'event',
   },
   {
@@ -68,19 +72,6 @@ const _abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'operator',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -88,7 +79,7 @@ const _abi = [
         type: 'address',
       },
     ],
-    name: 'previousDaos',
+    name: 'daoMap',
     outputs: [
       {
         internalType: 'bool',
@@ -101,7 +92,20 @@ const _abi = [
   },
   {
     inputs: [],
-    name: 'renounceOperator',
+    name: 'deployer',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'renounceDeployer',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -123,7 +127,7 @@ const _abi = [
     inputs: [
       {
         internalType: 'address',
-        name: '_newMystikoDAO',
+        name: '_newDao',
         type: 'address',
       },
     ],
@@ -132,10 +136,23 @@ const _abi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_newDao',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnerToDAO',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
 ] as const;
 
 const _bytecode =
-  '0x608060405234801561001057600080fd5b506040516103af3803806103af83398101604081905261002f9161005d565b600080546001600160a01b039092166001600160a01b0319928316179055600180549091163317905561008d565b60006020828403121561006f57600080fd5b81516001600160a01b038116811461008657600080fd5b9392505050565b6103138061009c6000396000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c806326abb3fd1461006757806327781ff01461007c5780632ab6f8db1461008f5780634162169f14610097578063570ca735146100c7578063fef8ceb9146100da575b600080fd5b61007a6100753660046102ad565b61010d565b005b61007a61008a3660046102ad565b6101b8565b61007a610247565b6000546100aa906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b6001546100aa906001600160a01b031681565b6100fd6100e83660046102ad565b60026020526000908152604090205460ff1681565b60405190151581526020016100be565b6001546001600160a01b03163314610138576040516327e1f1e560e01b815260040160405180910390fd5b6001600160a01b03811660009081526002602052604090205460ff1661017057604051623e148760e41b815260040160405180910390fd5b600080546001600160a01b0319166001600160a01b038316908117825560405190917fde2e1324f3df3c01ca8d6df2ffe554430c8ad84c48bef85f850875e15f81eb8691a250565b6000546001600160a01b031633146101e35760405163177bc95160e11b815260040160405180910390fd5b600080546001600160a01b03908116825260026020526040808320805460ff1916600117905582549184166001600160a01b0319909216821783555190917fde2e1324f3df3c01ca8d6df2ffe554430c8ad84c48bef85f850875e15f81eb8691a250565b6001546001600160a01b03163314610272576040516327e1f1e560e01b815260040160405180910390fd5b600180546001600160a01b03191690556040517f28c7a5e83d73ddcbedb683cf4205e26069658d9228053225bcaacce0cdfc47dd90600090a1565b6000602082840312156102bf57600080fd5b81356001600160a01b03811681146102d657600080fd5b939250505056fea2646970667358221220e4d46097681db1b36c608360b24a1274d43a507d5760e9fcca4857d23625cf2c64736f6c63430008140033';
+  '0x608060405234801561001057600080fd5b5060008054336001600160a01b031991821681178355600180549092161790556103ca90819061004090396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c80639545c1711161005b5780639545c171146100da578063bf6f00d81461010d578063d5f3948814610115578063ddee8f9b1461012857600080fd5b806326abb3fd1461008257806327781ff0146100975780634162169f146100aa575b600080fd5b610095610090366004610364565b61013b565b005b6100956100a5366004610364565b610215565b6000546100bd906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b6100fd6100e8366004610364565b60026020526000908152604090205460ff1681565b60405190151581526020016100d1565b6100956102b5565b6001546100bd906001600160a01b031681565b610095610136366004610364565b61031b565b6001546001600160a01b031633146101665760405163618bbdd560e01b815260040160405180910390fd5b6000546001600160a01b0390811690821603610195576040516336a1c33f60e01b815260040160405180910390fd5b6001600160a01b03811660009081526002602052604090205460ff166101cd57604051623e148760e41b815260040160405180910390fd5b600080546001600160a01b0319166001600160a01b038316908117825560405190917fde2e1324f3df3c01ca8d6df2ffe554430c8ad84c48bef85f850875e15f81eb8691a250565b6000546001600160a01b03163314158061023957506001546001600160a01b031633145b156102575760405163177bc95160e11b815260040160405180910390fd5b600080546001600160a01b0319166001600160a01b038316908117825580825260026020526040808320805460ff191660011790555190917fde2e1324f3df3c01ca8d6df2ffe554430c8ad84c48bef85f850875e15f81eb8691a250565b6001546001600160a01b031633146102e05760405163618bbdd560e01b815260040160405180910390fd5b600180546001600160a01b03191690556040517f10dc94362cceafb01741f9b4a773a328c549fb0ff6f72ddaddedc4b7b96f6f1990600090a1565b6001546001600160a01b03163314158061034657506001546000546001600160a01b03908116911614155b156102575760405163363da34960e11b815260040160405180910390fd5b60006020828403121561037657600080fd5b81356001600160a01b038116811461038d57600080fd5b939250505056fea264697066735822122021da82fb2e1ef1ac3a314d9d79857293fb83263494458d6a307a906cf7b62de764736f6c63430008140033';
 
 type MystikoGovernorRegistryConstructorParams =
   | [signer?: Signer]
@@ -154,11 +171,11 @@ export class MystikoGovernorRegistry__factory extends ContractFactory {
     }
   }
 
-  override deploy(_dao: string, overrides?: Overrides & { from?: string }): Promise<MystikoGovernorRegistry> {
-    return super.deploy(_dao, overrides || {}) as Promise<MystikoGovernorRegistry>;
+  override deploy(overrides?: Overrides & { from?: string }): Promise<MystikoGovernorRegistry> {
+    return super.deploy(overrides || {}) as Promise<MystikoGovernorRegistry>;
   }
-  override getDeployTransaction(_dao: string, overrides?: Overrides & { from?: string }): TransactionRequest {
-    return super.getDeployTransaction(_dao, overrides || {});
+  override getDeployTransaction(overrides?: Overrides & { from?: string }): TransactionRequest {
+    return super.getDeployTransaction(overrides || {});
   }
   override attach(address: string): MystikoGovernorRegistry {
     return super.attach(address) as MystikoGovernorRegistry;

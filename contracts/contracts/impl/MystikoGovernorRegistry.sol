@@ -5,41 +5,53 @@ import {GovernanceErrors} from "../GovernanceErrors.sol";
 
 contract MystikoGovernorRegistry {
   address public dao;
-  address public operator;
-  mapping(address => bool) public previousDaos;
+  address public deployer;
+  mapping(address => bool) public daoMap;
 
-  event MystikoDAOChanged(address indexed dao);
-  event OperatorRenounced();
-
-  constructor(address _dao) {
-    dao = _dao;
-    operator = msg.sender;
-  }
+  event MystikoDAOChanged(address indexed newDao);
+  event DeployerRenounced();
 
   modifier onlyDAO() {
-    if (msg.sender != dao) revert GovernanceErrors.OnlyMystikoDAO();
+    if (msg.sender != dao || msg.sender == deployer) revert GovernanceErrors.OnlyMystikoDAO();
     _;
   }
 
-  modifier onlyOperator() {
-    if (msg.sender != operator) revert GovernanceErrors.OnlyOperator();
+  modifier onlyDeployer() {
+    if (msg.sender != deployer) revert GovernanceErrors.OnlyDeployer();
     _;
   }
 
-  function setMystikoDAO(address _newMystikoDAO) public onlyDAO {
-    previousDaos[dao] = true;
-    dao = _newMystikoDAO;
-    emit MystikoDAOChanged(dao);
+  modifier onlyBeforeDaoInitialized() {
+    if (msg.sender != deployer || dao != deployer) revert GovernanceErrors.OnlyBeforeDaoInitialized();
+    _;
   }
 
-  function rollBackMystikoDAO(address _previousDao) external onlyOperator {
-    if (!previousDaos[_previousDao]) revert GovernanceErrors.InvalidMystikoDAOAddress();
+  constructor() {
+    dao = msg.sender;
+    deployer = msg.sender;
+  }
+
+  function transferOwnerToDAO(address _newDao) external onlyBeforeDaoInitialized {
+    dao = _newDao;
+    daoMap[_newDao] = true;
+    emit MystikoDAOChanged(_newDao);
+  }
+
+  function setMystikoDAO(address _newDao) external onlyDAO {
+    dao = _newDao;
+    daoMap[_newDao] = true;
+    emit MystikoDAOChanged(_newDao);
+  }
+
+  function rollBackMystikoDAO(address _previousDao) external onlyDeployer {
+    if (_previousDao == dao) revert GovernanceErrors.NotChanged();
+    if (!daoMap[_previousDao]) revert GovernanceErrors.InvalidMystikoDAOAddress();
     dao = _previousDao;
-    emit MystikoDAOChanged(dao);
+    emit MystikoDAOChanged(_previousDao);
   }
 
-  function renounceOperator() external onlyOperator {
-    operator = address(0);
-    emit OperatorRenounced();
+  function renounceDeployer() external onlyDeployer {
+    deployer = address(0);
+    emit DeployerRenounced();
   }
 }

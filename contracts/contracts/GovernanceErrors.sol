@@ -5,6 +5,7 @@ library GovernanceErrors {
   error NotChanged();
   error OnlyMystikoDAO();
   error InvalidMystikoDAOAddress();
-  error OnlyOperator();
+  error OnlyDeployer();
+  error OnlyBeforeDaoInitialized();
   error UnauthorizedRole();
 }
