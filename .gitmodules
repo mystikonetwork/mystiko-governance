@@ -7,3 +7,6 @@
 [submodule "contracts/solidity-scripting/lib/solmate"]
 	path = contracts/solidity-scripting/lib/solmate
 	url = https://github.com/transmissions11/solmate
+[submodule "contracts/solidity-scripting/lib/openzeppelin-contracts"]
+	path = contracts/solidity-scripting/lib/openzeppelin-contracts
+	url = https://github.com/Openzeppelin/openzeppelin-contracts
