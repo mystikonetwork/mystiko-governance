@@ -16,7 +16,7 @@
   "license": "MIT",
   "scripts": {
     "install": "yarn install:sol && yarn install:ts",
-    "install:sol": "forge install foundry-rs/forge-std:1.8.2 Openzeppelin/openzeppelin-contracts@v5.0.0",
+    "install:sol": "forge install foundry-rs/forge-std Openzeppelin/openzeppelin-contracts@v5.0.0",
     "install:ts": "yarn install",
     "build": "yarn build:contract && yarn build:abi",
     "build:contract": "forge build --sizes",
