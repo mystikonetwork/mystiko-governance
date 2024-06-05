@@ -118,6 +118,10 @@ contract MystikoDaoAccessControlTest is Test, Random {
     assertEq(adminRole, mock.DEFAULT_ADMIN_ROLE());
 
     address newDao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
+    vm.prank(newDao);
+    mock.setAdminRole();
+
     vm.prank(deployer);
     daoRegistry.transferOwnerToDAO(newDao);
     bool result2 = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), newDao);
