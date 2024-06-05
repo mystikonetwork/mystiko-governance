@@ -1,6 +1,6 @@
 {
   "name": "@mystikonetwork/governance",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
@@ -15,13 +15,13 @@
   "author": "Mystiko Network",
   "license": "MIT",
   "scripts": {
+    "forge:install": "forge install foundry-rs/forge-std Openzeppelin/openzeppelin-contracts@v5.0.0",
     "build": "yarn build:contract && yarn build:abi",
     "build:contract": "hardhat compile",
     "build:abi": "cd ../abi && yarn generate",
     "clean": "hardhat clean",
-    "test": "yarn test:forge && yarn test:unit",
+    "test": "yarn test:forge",
     "test:forge": "forge test -vvv",
-    "test:unit": "hardhat test --parallel --network hardhat",
     "coverage": "forge coverage --report lcov",
     "prettier": "yarn prettier:fix",
     "prettier:check": "prettier --plugin=prettier-plugin-solidity --check \"./**/*.{ts,sol}\" --config .prettierrc",
