@@ -33,21 +33,21 @@ contract DeployTimelock is Script {
     vm.stopBroadcast();
   }
 }
-//
-//contract DeployGovernor is Script {
-//  function run() external {
-//    address voteToken = vm.envAddress("VOTE_XZK_ADDRESS");
-//    address payable timelock = payable(vm.envAddress("TIMELOCK_ADDRESS"));
-//
-//    vm.startBroadcast();
-//    MystikoGovernor governor = new MystikoGovernor(
-//      MystikoVoteToken(voteToken),
-//      MystikoTimelockController(timelock)
-//    );
-//    MystikoTimelockController(timelock).grantGovernorRole(address(governor));
-//    vm.stopBroadcast();
-//  }
-//}
+
+contract DeployGovernor is Script {
+  function run() external {
+    address voteToken = vm.envAddress("VOTE_XZK_ADDRESS");
+    address payable timelock = payable(vm.envAddress("TIMELOCK_ADDRESS"));
+
+    vm.startBroadcast();
+    MystikoGovernor governor = new MystikoGovernor(
+      MystikoVoteToken(voteToken),
+      MystikoTimelockController(timelock)
+    );
+    MystikoTimelockController(timelock).grantGovernorRole(address(governor));
+    vm.stopBroadcast();
+  }
+}
 
 contract SetTimelockRole is Script {
   function run() external {
