@@ -7,4 +7,6 @@ cache = true
 cache_path  = 'foundry/cache'
 match_path = '**/test/**/*.test.sol'
 solc = "0.8.20"
+
+[default]
 gas_cap = "2.5 ether"
