@@ -20,6 +20,7 @@ contract MystikoGovernor is
   GovernorVotesQuorumFraction,
   GovernorTimelockControl
 {
+  uint256 public constant TOKEN_TOTAL_SUPPLY = 1000 * 1000 * 1000 * (10 ** 18);
   constructor(
     IVotes _voteToken,
     TimelockController _timelock
@@ -103,5 +104,11 @@ contract MystikoGovernor is
 
   function _executor() internal view override(Governor, GovernorTimelockControl) returns (address) {
     return super._executor();
+  }
+
+  function quorum(
+    uint256 timepoint
+  ) public view override(Governor, GovernorVotesQuorumFraction) returns (uint256) {
+    return (TOKEN_TOTAL_SUPPLY * super.quorumNumerator(timepoint)) / super.quorumDenominator();
   }
 }

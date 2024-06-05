@@ -24,6 +24,7 @@ export interface MystikoGovernorInterface extends utils.Interface {
     'CLOCK_MODE()': FunctionFragment;
     'COUNTING_MODE()': FunctionFragment;
     'EXTENDED_BALLOT_TYPEHASH()': FunctionFragment;
+    'TOKEN_TOTAL_SUPPLY()': FunctionFragment;
     'cancel(address[],uint256[],bytes[],bytes32)': FunctionFragment;
     'castVote(uint256,uint8)': FunctionFragment;
     'castVoteBySig(uint256,uint8,address,bytes)': FunctionFragment;
@@ -78,6 +79,7 @@ export interface MystikoGovernorInterface extends utils.Interface {
       | 'CLOCK_MODE'
       | 'COUNTING_MODE'
       | 'EXTENDED_BALLOT_TYPEHASH'
+      | 'TOKEN_TOTAL_SUPPLY'
       | 'cancel'
       | 'castVote'
       | 'castVoteBySig'
@@ -130,6 +132,7 @@ export interface MystikoGovernorInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'CLOCK_MODE', values?: undefined): string;
   encodeFunctionData(functionFragment: 'COUNTING_MODE', values?: undefined): string;
   encodeFunctionData(functionFragment: 'EXTENDED_BALLOT_TYPEHASH', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'TOKEN_TOTAL_SUPPLY', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'cancel',
     values: [string[], BigNumberish[], BytesLike[], BytesLike],
@@ -220,6 +223,7 @@ export interface MystikoGovernorInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'CLOCK_MODE', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'COUNTING_MODE', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'EXTENDED_BALLOT_TYPEHASH', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'TOKEN_TOTAL_SUPPLY', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'cancel', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'castVote', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'castVoteBySig', data: BytesLike): Result;
@@ -464,6 +468,8 @@ export interface MystikoGovernor extends BaseContract {
 
     EXTENDED_BALLOT_TYPEHASH(overrides?: CallOverrides): Promise<[string]>;
 
+    TOKEN_TOTAL_SUPPLY(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     cancel(
       targets: string[],
       values: BigNumberish[],
@@ -691,6 +697,8 @@ export interface MystikoGovernor extends BaseContract {
 
   EXTENDED_BALLOT_TYPEHASH(overrides?: CallOverrides): Promise<string>;
 
+  TOKEN_TOTAL_SUPPLY(overrides?: CallOverrides): Promise<BigNumber>;
+
   cancel(
     targets: string[],
     values: BigNumberish[],
@@ -917,6 +925,8 @@ export interface MystikoGovernor extends BaseContract {
     COUNTING_MODE(overrides?: CallOverrides): Promise<string>;
 
     EXTENDED_BALLOT_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+    TOKEN_TOTAL_SUPPLY(overrides?: CallOverrides): Promise<BigNumber>;
 
     cancel(
       targets: string[],
@@ -1236,6 +1246,8 @@ export interface MystikoGovernor extends BaseContract {
 
     EXTENDED_BALLOT_TYPEHASH(overrides?: CallOverrides): Promise<BigNumber>;
 
+    TOKEN_TOTAL_SUPPLY(overrides?: CallOverrides): Promise<BigNumber>;
+
     cancel(
       targets: string[],
       values: BigNumberish[],
@@ -1441,6 +1453,8 @@ export interface MystikoGovernor extends BaseContract {
     COUNTING_MODE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     EXTENDED_BALLOT_TYPEHASH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    TOKEN_TOTAL_SUPPLY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     cancel(
       targets: string[],
