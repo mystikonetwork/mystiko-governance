@@ -9,3 +9,6 @@ match_path = '**/test/**/*.test.sol'
 solc = "0.8.20"
 
 [profile.coverage]
+
+[default]
+gas_cap = "2.5 ether"

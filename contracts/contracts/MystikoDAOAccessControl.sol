@@ -10,7 +10,6 @@ abstract contract MystikoDAOAccessControl is AccessControl {
 
   constructor(address _daoRegistry) {
     daoRegistry = MystikoGovernorRegistry(_daoRegistry);
-    _grantRole(DEFAULT_ADMIN_ROLE, daoRegistry.dao());
   }
 
   modifier onlyMystikoDAO() {
@@ -28,5 +27,9 @@ abstract contract MystikoDAOAccessControl is AccessControl {
       if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
     }
     _;
+  }
+
+  function setAdminRole() public onlyMystikoDAO {
+    _grantRole(DEFAULT_ADMIN_ROLE, daoRegistry.dao());
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@mystikonetwork/governance",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
@@ -15,13 +15,11 @@
   "author": "Mystiko Network",
   "license": "MIT",
   "scripts": {
-    "install": "yarn install:sol && yarn install:ts",
-    "install:sol": "forge install foundry-rs/forge-std Openzeppelin/openzeppelin-contracts@v5.0.0",
-    "install:ts": "yarn install",
+    "forge:install": "forge install foundry-rs/forge-std Openzeppelin/openzeppelin-contracts@v5.0.0",
     "build": "yarn build:contract && yarn build:abi",
     "build:contract": "forge build --sizes",
     "build:abi": "cd ../abi && yarn generate",
-    "test": "yarn test:forge && yarn test:unit",
+    "test": "yarn test:forge",
     "test:forge": "forge test -vvv",
     "coverage": "forge coverage --report lcov",
     "prettier": "yarn prettier:fix",
