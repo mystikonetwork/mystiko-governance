@@ -40,14 +40,8 @@ contract MystikoDaoAccessControlTest is Test, Random {
     vm.prank(deployer);
     daoRegistry = new MystikoGovernorRegistry();
     mock = new MockMystikoContract(address(daoRegistry));
-  }
-
-  function test_role_admin() public {
-    bool result = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), deployer);
-    assertTrue(result);
-
-    bytes32 adminRole = mock.getRoleAdmin(TEST_ROLE);
-    assertEq(adminRole, mock.DEFAULT_ADMIN_ROLE());
+    vm.prank(deployer);
+    mock.setAdminRole();
   }
 
   function test_only_dao() public {
@@ -114,5 +108,34 @@ contract MystikoDaoAccessControlTest is Test, Random {
     assertTrue(mock.hasRole(TEST_ROLE, address(0)));
     bool result3 = mock.runWithRoleOrOpen(account);
     assertTrue(result3);
+  }
+
+  function test_set_admin_role() public {
+    bool result = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), deployer);
+    assertTrue(result);
+
+    bytes32 adminRole = mock.getRoleAdmin(TEST_ROLE);
+    assertEq(adminRole, mock.DEFAULT_ADMIN_ROLE());
+
+    address newDao = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    vm.expectRevert(GovernanceErrors.OnlyMystikoDAO.selector);
+    vm.prank(newDao);
+    mock.setAdminRole();
+
+    vm.prank(deployer);
+    daoRegistry.transferOwnerToDAO(newDao);
+    bool result2 = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), newDao);
+    assertFalse(result2);
+
+    vm.prank(newDao);
+    mock.setAdminRole();
+    bool result3 = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), newDao);
+    assertTrue(result3);
+    bool result4 = mock.hasRole(mock.DEFAULT_ADMIN_ROLE(), deployer);
+    assertTrue(result4);
+
+    vm.prank(newDao);
+    mock.grantRole(TEST_ROLE, newDao);
+    assertTrue(mock.hasRole(TEST_ROLE, newDao));
   }
 }
