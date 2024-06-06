@@ -20,7 +20,7 @@ contract MystikoGovernor is
   GovernorVotesQuorumFraction,
   GovernorTimelockControl
 {
-  uint256 public constant TOKEN_TOTAL_SUPPLY = 1000 * 1000 * 1000 * (10 ** 18);
+  uint256 public constant TOKEN_TOTAL_SUPPLY = 1000_000_000e18;
   constructor(
     IVotes _voteToken,
     TimelockController _timelock

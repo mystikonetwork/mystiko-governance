@@ -18,14 +18,16 @@ contract MystikoGovernorTest is Test, Random {
   MystikoTimelockController public controller;
 
   function _delegateVote(address account, uint256 amount) private {
+    uint256 balanceBefore = vXZK.balanceOf(account);
+
     XZK.transfer(account, amount);
     vm.prank(account);
     XZK.approve(address(vXZK), amount);
     vm.prank(account);
     vXZK.depositFor(account, amount);
 
-    uint256 balance = vXZK.balanceOf(account);
-    assertEq(balance, amount);
+    uint256 balanceAfter = vXZK.balanceOf(account);
+    assertEq(balanceAfter, amount + balanceBefore);
     vm.prank(account);
     vXZK.delegate(account);
     vm.warp(block.timestamp + 1);
@@ -101,7 +103,7 @@ contract MystikoGovernorTest is Test, Random {
 
   function test_propose() public {
     address proposer = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
-    address voter = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    address voter = address(uint160(uint256(keccak256(abi.encodePacked(_random() + 1)))));
     address[] memory targets = new address[](1);
     targets[0] = address(governor);
     uint256[] memory values = new uint256[](1);
@@ -123,7 +125,7 @@ contract MystikoGovernorTest is Test, Random {
     vm.prank(proposer);
     governor.propose(targets, values, calldatas, description);
 
-    _delegateVote(proposer, proposalThreshold);
+    _delegateVote(proposer, 1 * proposalThreshold);
     vm.prank(proposer);
     uint256 proposeId = governor.propose(targets, values, calldatas, description);
 
@@ -136,9 +138,17 @@ contract MystikoGovernorTest is Test, Random {
     vm.expectRevert(encodedError);
     _castVote(proposer, proposeId, GovernorCountingSimple.VoteType.For);
 
+    _delegateVote(voter, 3 * proposalThreshold);
+
     vm.warp(block.timestamp + 1 days + 1);
     vm.roll(block.number + 1);
+    _castVote(voter, proposeId, GovernorCountingSimple.VoteType.For);
     _castVote(proposer, proposeId, GovernorCountingSimple.VoteType.For);
+
+    (uint256 againstVotes, uint256 forVotes, uint256 abstainVotes) = governor.proposalVotes(proposeId);
+    assertEq(againstVotes, 0);
+    assertEq(abstainVotes, 0);
+    assertEq(forVotes, 4 * proposalThreshold);
 
     encodedError = abi.encodeWithSelector(
       IGovernor.GovernorUnexpectedProposalState.selector,
@@ -159,15 +169,18 @@ contract MystikoGovernorTest is Test, Random {
     vm.expectRevert(encodedError);
     governor.queue(targets, values, calldatas, keccak256(bytes(description)));
 
-    _delegateVote(voter, 4 * 10_000_000e18);
-    _castVote(voter, proposeId, GovernorCountingSimple.VoteType.For);
+    uint32 currentState1 = uint32(governor.state(proposeId));
+    assertEq(currentState1, 1);
+
+    uint256 quorumVotes = governor.quorum(block.timestamp);
+    assertEq(quorumVotes, 4 * proposalThreshold);
 
     vm.warp(block.timestamp + 7 days + 1);
     vm.roll(block.number + 1);
-    governor.queue(targets, values, calldatas, keccak256(bytes(description)));
 
     bool needsQueuing = governor.proposalNeedsQueuing(proposeId);
     assertTrue(needsQueuing);
+    governor.queue(targets, values, calldatas, keccak256(bytes(description)));
 
     vm.expectRevert();
     governor.execute(targets, values, calldatas, keccak256(bytes(description)));
