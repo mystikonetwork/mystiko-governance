@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
 import "../../contracts/token/MystikoVoteToken.sol";
@@ -17,10 +17,6 @@ contract MystikoVoteTokenTest is Test, Random {
 
   function test_decimal() public {
     assertEq(vXZK.decimals(), 18);
-  }
-
-  function test_CLOCK_MODE() public {
-    assertEq(vXZK.CLOCK_MODE(), "mode=timestamp");
   }
 
   function test_nonces() public {

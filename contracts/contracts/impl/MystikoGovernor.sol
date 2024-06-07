@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
+import {MystikoGovernorQuorum} from "./MystikoGovernorQuorum.sol";
 import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
 import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
 import {GovernorPreventLateQuorum} from "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
 import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import {GovernorVotesQuorumFraction} from "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import {GovernorTimelockControl} from "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
@@ -17,18 +17,21 @@ contract MystikoGovernor is
   GovernorPreventLateQuorum,
   GovernorCountingSimple,
   GovernorVotes,
-  GovernorVotesQuorumFraction,
+  MystikoGovernorQuorum,
   GovernorTimelockControl
 {
   constructor(
     IVotes _voteToken,
-    TimelockController _timelock
+    TimelockController _timelock,
+    uint48 _votingDelay,
+    uint32 _votingPeriod,
+    uint48 _voteExtension
   )
     Governor("MystikoGovernor")
-    GovernorSettings(1 days, 1 weeks, 10_000_000e18)
-    GovernorPreventLateQuorum(1 days)
+    GovernorSettings(_votingDelay, _votingPeriod, 10_000_000e18)
+    GovernorPreventLateQuorum(_voteExtension)
     GovernorVotes(_voteToken)
-    GovernorVotesQuorumFraction(4)
+    MystikoGovernorQuorum(40_000_000e18)
     GovernorTimelockControl(_timelock)
   {}
 

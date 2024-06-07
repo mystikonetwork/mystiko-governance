@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
 import "forge-std/Script.sol";
 import "../../contracts/impl/MystikoGovernorRegistry.sol";
@@ -29,7 +29,7 @@ contract DeployVoteToken is Script {
 contract DeployTimelock is Script {
   function run() external {
     vm.startBroadcast();
-    MystikoTimelockController timelock = new MystikoTimelockController(5 minutes);
+    MystikoTimelockController timelock = new MystikoTimelockController(2 minutes);
     vm.stopBroadcast();
   }
 }
@@ -42,8 +42,23 @@ contract DeployGovernor is Script {
     vm.startBroadcast();
     MystikoGovernor governor = new MystikoGovernor(
       MystikoVoteToken(voteToken),
-      MystikoTimelockController(timelock)
+      MystikoTimelockController(timelock),
+      2 minutes,
+      10 minutes,
+      2 minutes
     );
+    MystikoTimelockController(timelock).grantGovernorRole(address(governor));
+    vm.stopBroadcast();
+  }
+}
+
+contract SetTimelockRole is Script {
+  function run() external {
+    address payable timelock = payable(vm.envAddress("TIMELOCK_ADDRESS"));
+    address governor = vm.envAddress("GOVERNOR_ADDRESS");
+
+    vm.startBroadcast();
+    MystikoTimelockController(timelock).grantGovernorRole(governor);
     vm.stopBroadcast();
   }
 }

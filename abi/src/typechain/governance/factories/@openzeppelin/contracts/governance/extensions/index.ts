@@ -6,4 +6,3 @@ export { GovernorPreventLateQuorum__factory } from './GovernorPreventLateQuorum_
 export { GovernorSettings__factory } from './GovernorSettings__factory';
 export { GovernorTimelockControl__factory } from './GovernorTimelockControl__factory';
 export { GovernorVotes__factory } from './GovernorVotes__factory';
-export { GovernorVotesQuorumFraction__factory } from './GovernorVotesQuorumFraction__factory';
