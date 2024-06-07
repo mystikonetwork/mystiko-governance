@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
+import {MystikoGovernorQuorum} from "./MystikoGovernorQuorum.sol";
 import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
 import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
 import {GovernorPreventLateQuorum} from "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
 import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import {GovernorVotesQuorumFraction} from "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import {GovernorTimelockControl} from "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
@@ -17,10 +17,9 @@ contract MystikoGovernor is
   GovernorPreventLateQuorum,
   GovernorCountingSimple,
   GovernorVotes,
-  GovernorVotesQuorumFraction,
+  MystikoGovernorQuorum,
   GovernorTimelockControl
 {
-  uint256 public constant TOKEN_TOTAL_SUPPLY = 1000_000_000e18;
   constructor(
     IVotes _voteToken,
     TimelockController _timelock,
@@ -32,7 +31,7 @@ contract MystikoGovernor is
     GovernorSettings(_votingDelay, _votingPeriod, 10_000_000e18)
     GovernorPreventLateQuorum(_voteExtension)
     GovernorVotes(_voteToken)
-    GovernorVotesQuorumFraction(4)
+    MystikoGovernorQuorum(40_000_000e18)
     GovernorTimelockControl(_timelock)
   {}
 
@@ -107,11 +106,5 @@ contract MystikoGovernor is
 
   function _executor() internal view override(Governor, GovernorTimelockControl) returns (address) {
     return super._executor();
-  }
-
-  function quorum(
-    uint256 timepoint
-  ) public view override(Governor, GovernorVotesQuorumFraction) returns (uint256) {
-    return (TOKEN_TOTAL_SUPPLY * super.quorumNumerator(timepoint)) / super.quorumDenominator();
   }
 }

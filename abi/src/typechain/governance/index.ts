@@ -98,6 +98,8 @@ export type { GovernanceErrors } from './contracts/GovernanceErrors';
 export { GovernanceErrors__factory } from './factories/contracts/GovernanceErrors__factory';
 export type { MystikoGovernor } from './contracts/impl/MystikoGovernor';
 export { MystikoGovernor__factory } from './factories/contracts/impl/MystikoGovernor__factory';
+export type { MystikoGovernorQuorum } from './contracts/impl/MystikoGovernorQuorum';
+export { MystikoGovernorQuorum__factory } from './factories/contracts/impl/MystikoGovernorQuorum__factory';
 export type { MystikoGovernorRegistry } from './contracts/impl/MystikoGovernorRegistry';
 export { MystikoGovernorRegistry__factory } from './factories/contracts/impl/MystikoGovernorRegistry__factory';
 export type { MystikoTimelockController } from './contracts/impl/MystikoTimelockController';

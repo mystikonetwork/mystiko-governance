@@ -2,5 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export { MystikoGovernor__factory } from './MystikoGovernor__factory';
+export { MystikoGovernorQuorum__factory } from './MystikoGovernorQuorum__factory';
 export { MystikoGovernorRegistry__factory } from './MystikoGovernorRegistry__factory';
 export { MystikoTimelockController__factory } from './MystikoTimelockController__factory';
