@@ -20,8 +20,6 @@ export type { GovernorTimelockControl } from './@openzeppelin/contracts/governan
 export { GovernorTimelockControl__factory } from './factories/@openzeppelin/contracts/governance/extensions/GovernorTimelockControl__factory';
 export type { GovernorVotes } from './@openzeppelin/contracts/governance/extensions/GovernorVotes';
 export { GovernorVotes__factory } from './factories/@openzeppelin/contracts/governance/extensions/GovernorVotes__factory';
-export type { GovernorVotesQuorumFraction } from './@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction';
-export { GovernorVotesQuorumFraction__factory } from './factories/@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction__factory';
 export type { Governor } from './@openzeppelin/contracts/governance/Governor';
 export { Governor__factory } from './factories/@openzeppelin/contracts/governance/Governor__factory';
 export type { IGovernor } from './@openzeppelin/contracts/governance/IGovernor';
