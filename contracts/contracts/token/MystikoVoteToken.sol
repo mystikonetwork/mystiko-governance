@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
 import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
@@ -16,7 +16,6 @@ contract MystikoVoteToken is ERC20, ERC20Permit, ERC20Votes, ERC20Wrapper {
     return uint48(block.timestamp);
   }
 
-  // solhint-disable-next-line func-name-mixedcase
   function CLOCK_MODE() public pure override returns (string memory) {
     return "mode=timestamp";
   }

@@ -20,7 +20,8 @@
       {
         "ignoreConstructors": true
       }
-    ]
+    ],
+    "func-name-mixedcase": "off"
   },
   "plugins": [
     "prettier"

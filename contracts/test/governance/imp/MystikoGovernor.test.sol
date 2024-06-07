@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -18,14 +18,16 @@ contract MystikoGovernorTest is Test, Random {
   MystikoTimelockController public controller;
 
   function _delegateVote(address account, uint256 amount) private {
+    uint256 balanceBefore = vXZK.balanceOf(account);
+
     XZK.transfer(account, amount);
     vm.prank(account);
     XZK.approve(address(vXZK), amount);
     vm.prank(account);
     vXZK.depositFor(account, amount);
 
-    uint256 balance = vXZK.balanceOf(account);
-    assertEq(balance, amount);
+    uint256 balanceAfter = vXZK.balanceOf(account);
+    assertEq(balanceAfter, amount + balanceBefore);
     vm.prank(account);
     vXZK.delegate(account);
     vm.warp(block.timestamp + 1);
@@ -50,8 +52,8 @@ contract MystikoGovernorTest is Test, Random {
   function setUp() public {
     XZK = new MockMystikoToken();
     vXZK = new MystikoVoteToken(IERC20(XZK));
-    controller = new MystikoTimelockController(10);
-    governor = new MystikoGovernor(vXZK, controller);
+    controller = new MystikoTimelockController(4 hours);
+    governor = new MystikoGovernor(vXZK, controller, 1 days, 7 days, 1 days);
     controller.grantGovernorRole(address(governor));
   }
 
@@ -80,7 +82,11 @@ contract MystikoGovernorTest is Test, Random {
   }
 
   function test_voting_period() public {
-    assertEq(governor.votingPeriod(), 1 weeks);
+    assertEq(governor.votingPeriod(), 7 days);
+  }
+
+  function test_voting_extension() public {
+    assertEq(governor.lateQuorumVoteExtension(), 1 days);
   }
 
   function test_proposal_threshold() public {
@@ -111,8 +117,6 @@ contract MystikoGovernorTest is Test, Random {
     string memory description = "";
     uint256 proposalThreshold = 10_000_000e18;
 
-    assertEq(governor.votingDelay(), 1 days);
-
     bytes memory encodedError = abi.encodeWithSelector(
       IGovernor.GovernorInsufficientProposerVotes.selector,
       proposer,
@@ -127,6 +131,8 @@ contract MystikoGovernorTest is Test, Random {
     vm.prank(proposer);
     uint256 proposeId = governor.propose(targets, values, calldatas, description);
 
+    vm.warp(block.timestamp + 1 days - 1);
+    vm.roll(block.number + 1);
     encodedError = abi.encodeWithSelector(
       IGovernor.GovernorUnexpectedProposalState.selector,
       proposeId,
@@ -136,9 +142,17 @@ contract MystikoGovernorTest is Test, Random {
     vm.expectRevert(encodedError);
     _castVote(proposer, proposeId, GovernorCountingSimple.VoteType.For);
 
-    vm.warp(block.timestamp + 1 days + 1);
+    _delegateVote(voter, 3 * proposalThreshold);
+
+    vm.warp(block.timestamp + 1);
     vm.roll(block.number + 1);
+    _castVote(voter, proposeId, GovernorCountingSimple.VoteType.For);
     _castVote(proposer, proposeId, GovernorCountingSimple.VoteType.For);
+
+    (uint256 againstVotes, uint256 forVotes, uint256 abstainVotes) = governor.proposalVotes(proposeId);
+    assertEq(againstVotes, 0);
+    assertEq(abstainVotes, 0);
+    assertEq(forVotes, 4 * proposalThreshold);
 
     encodedError = abi.encodeWithSelector(
       IGovernor.GovernorUnexpectedProposalState.selector,
@@ -159,20 +173,35 @@ contract MystikoGovernorTest is Test, Random {
     vm.expectRevert(encodedError);
     governor.queue(targets, values, calldatas, keccak256(bytes(description)));
 
-    _delegateVote(voter, 4 * 10_000_000e18);
-    _castVote(voter, proposeId, GovernorCountingSimple.VoteType.For);
+    uint32 currentState1 = uint32(governor.state(proposeId));
+    assertEq(currentState1, 1);
 
-    vm.warp(block.timestamp + 7 days + 1);
-    vm.roll(block.number + 1);
-    governor.queue(targets, values, calldatas, keccak256(bytes(description)));
+    uint256 quorumVotes = governor.quorum(block.timestamp);
+    assertEq(quorumVotes, 4 * proposalThreshold);
 
     bool needsQueuing = governor.proposalNeedsQueuing(proposeId);
     assertTrue(needsQueuing);
 
+    vm.warp(block.timestamp + 7 days - 1);
+    vm.roll(block.number + 1);
+
+    vm.expectRevert(encodedError);
+    governor.queue(targets, values, calldatas, keccak256(bytes(description)));
+
+    vm.warp(block.timestamp + 1);
+    vm.roll(block.number + 1);
+    governor.queue(targets, values, calldatas, keccak256(bytes(description)));
+
     vm.expectRevert();
     governor.execute(targets, values, calldatas, keccak256(bytes(description)));
 
-    vm.warp(block.timestamp + 1 days + 1);
+    vm.warp(block.timestamp + 4 hours - 1);
+    vm.roll(block.number + 1);
+    vm.expectRevert();
+    governor.execute(targets, values, calldatas, keccak256(bytes(description)));
+    assertEq(governor.votingDelay(), 1 days);
+
+    vm.warp(block.timestamp + 1);
     vm.roll(block.number + 1);
     governor.execute(targets, values, calldatas, keccak256(bytes(description)));
     assertEq(governor.votingDelay(), 4 days);
