@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.26;
 
 import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
 import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
@@ -23,11 +23,14 @@ contract MystikoGovernor is
   uint256 public constant TOKEN_TOTAL_SUPPLY = 1000_000_000e18;
   constructor(
     IVotes _voteToken,
-    TimelockController _timelock
+    TimelockController _timelock,
+    uint48 _votingDelay,
+    uint32 _votingPeriod,
+    uint48 _voteExtension
   )
     Governor("MystikoGovernor")
-    GovernorSettings(1 days, 1 weeks, 10_000_000e18)
-    GovernorPreventLateQuorum(1 days)
+    GovernorSettings(_votingDelay, _votingPeriod, 10_000_000e18)
+    GovernorPreventLateQuorum(_voteExtension)
     GovernorVotes(_voteToken)
     GovernorVotesQuorumFraction(4)
     GovernorTimelockControl(_timelock)

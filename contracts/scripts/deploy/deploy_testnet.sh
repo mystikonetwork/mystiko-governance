@@ -24,6 +24,3 @@ forge script scripts/deploy/Deploy.s.sol:$target_contract \
  --private-key $TESTNET_PRIVATE_KEY \
  --broadcast \
  -vvvvv
-
-##
-##forge verify-contract --chain-id 11155111 -e xxxx --constructor-args $(cast abi-encode "constructor(address)" 0x932161e47821c6F5AE69ef329aAC84be1E547e53)  0x2C497C5f28A8C52082dDf8806F3e85052152bAeD MystikoVoteToken --watch
