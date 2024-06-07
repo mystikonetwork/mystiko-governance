@@ -19,7 +19,7 @@ else
 fi
 
 # Deploy the contract using Foundry
-forge script scripts/deploy/Deploy.testnet.s.sol:$target_contract \
+forge script scripts/deploy/Set.s.sol:$target_contract \
  --rpc-url $RPC_URL \
  --private-key $TESTNET_PRIVATE_KEY \
  --broadcast \
