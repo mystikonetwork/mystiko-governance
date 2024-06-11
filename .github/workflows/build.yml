@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.PACKAGES_TOKEN }}
           submodules: recursive
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
       - run: echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
@@ -35,18 +35,18 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-      - name: Run Install
+      - name: Install dependencies
         run: yarn install
-      - name: Run BuILD
+      - name: Build
         run: lerna run build
-      - name: Run Lint
+      - name: Lint
         run: lerna run lint
-      - name: Run Test
+      - name: Test
         run: lerna run test
-      - name: Run Coverage
+      - name: Coverage
         run: lerna run coverage
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
