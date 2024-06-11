@@ -17,55 +17,62 @@ jobs:
         with:
           token: ${{ secrets.PACKAGES_TOKEN }}
           submodules: recursive
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
-      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+
+      - name: Setup Registry
+        run: |
+          echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Make env
-        run: echo "" >> .env
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
+
+      - name: Install Lerna
+        run: npm install -g lerna
+
       - name: Install dependencies
         run: yarn install
+
       - name: Build
         run: lerna run build
+
       - name: Lint
         run: lerna run lint
+
       - name: Test
         run: lerna run test
+
       - name: Coverage
         run: lerna run coverage
+
       - name: Upload Coverage
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
+
       - name: Check Generated Files
-        run: git diff
-#        run: git diff --quiet || (echo "some generated files are not included in repo" && exit 1)
-#      - name: Telegram Failure Notification
-#        uses: appleboy/telegram-action@master
-#        if: failure()
-#        with:
-#          message: ❗ Build failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions) because of ${{ github.actor }}
-#          format: markdown
-#          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-#          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-#      - name: Telegram Success Notification
-#        uses: appleboy/telegram-action@master
-#        if: success()
-#        with:
-#          message: Build succeeded for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
-#          format: markdown
-#          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-#          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: git diff --quiet || (echo "some generated files are not included in repo" && exit 1)
+
+      - name: Telegram Failure Notification
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          message: ❗ Build failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions) because of ${{ github.actor }}
+          format: markdown
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      - name: Telegram Success Notification
+        uses: appleboy/telegram-action@master
+        if: success()
+        with:
+          message: Build succeeded for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
+          format: markdown
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
