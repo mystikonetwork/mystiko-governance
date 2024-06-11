@@ -1,0 +1,70 @@
+{
+  "name": "@mystikonetwork/contracts-governance",
+  "version": "0.3.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "/contracts/**/*.sol"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mystikonetwork/mystiko-governance",
+    "directory": "packages/contracts"
+  },
+  "author": "Mystiko Network",
+  "license": "MIT",
+  "scripts": {
+    "forge:install": "forge install foundry-rs/forge-std Openzeppelin/openzeppelin-contracts@v5.0.0",
+    "build": "yarn build:contract && yarn build:abi",
+    "build:contract": "hardhat compile",
+    "build:abi": "cd ../abi && yarn generate",
+    "clean": "hardhat clean",
+    "test": "yarn test:forge",
+    "test:forge": "forge test -vvv --lib-paths=../../node_modules --lib-paths=../../foundry",
+    "coverage": "forge coverage --lib-paths=../../node_modules --lib-paths=../../foundry --report lcov",
+    "prettier": "yarn prettier:fix",
+    "prettier:check": "prettier --plugin=prettier-plugin-solidity --check \"./**/*.{ts,sol}\" --config .prettierrc",
+    "prettier:fix": "prettier --plugin=prettier-plugin-solidity --write \"./**/*.{ts,sol}\" --config .prettierrc",
+    "lint": "yarn lint:sol",
+    "lint:ts": "eslint --ext .js,.ts .",
+    "lint:sol": "solhint \"contracts/**/*.sol\""
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "1",
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@nomicfoundation/hardhat-foundry": "^1.1.1",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@openzeppelin/contracts": "5.0.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/mocha": ">=9.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "chai": "4",
+    "dotenv": "^10.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.1.1",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "5",
+    "hardhat": "^2.19.4",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "prettier": "3.2.4",
+    "prettier-plugin-solidity": "^1.3.1",
+    "solhint": "^4.5.2",
+    "solhint-plugin-prettier": "^0.1.0",
+    "solidity-coverage": "^0.8.6",
+    "ts-node": ">=8.0.0",
+    "typechain": "^8.3.2",
+    "typescript": "5.1.6"
+  }
+}

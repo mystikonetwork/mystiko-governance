@@ -13,40 +13,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.PACKAGES_TOKEN }}
           submodules: recursive
-      - uses: actions/setup-node@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
-      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+
+      - name: Setup Registry
+        run: |
+          echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Make env
-        run: echo "" >> .env
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn coverage
+
+      - name: Install Lerna
+        run: npm install -g lerna
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: lerna run build
+
+      - name: Lint
+        run: lerna run lint
+
+      - name: Test
+        run: lerna run test
+
+      - name: Coverage
+        run: lerna run coverage
+
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          files: ./contracts/lcov.info
-      - run: git diff --quiet || (echo "some generated files are not included in repo" && exit 1)
+
+      - name: Check Generated Files
+        run: git diff --quiet || (echo "some generated files are not included in repo" && exit 1)
+
       - name: Telegram Failure Notification
         uses: appleboy/telegram-action@master
         if: failure()
