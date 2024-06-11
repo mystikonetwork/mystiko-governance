@@ -1,0 +1,35 @@
+{
+  "name": "@mystikonetwork/contracts-abi-governance",
+  "version": "0.3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mystikonetwork/mystiko-governance",
+    "directory": "packages/abi"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "build"
+  ],
+  "author": "Mystiko Network",
+  "license": "MIT",
+  "scripts": {
+    "prettier": "yarn prettier:check",
+    "prettier:check": "prettier --check \"./**/*.{js,ts}\" --config .prettierrc",
+    "prettier:fix": "prettier --write \"./**/*.{js,ts}\" --config .prettierrc",
+    "generate": "yarn generate:governance",
+    "generate:governance": "rm -rf src/typechain/governance && typechain --target ethers-v5 --out-dir src/typechain/governance '../contracts/artifacts/!(build-info)/**/+([a-zA-Z0-9_]).json' && yarn prettier:fix",
+    "build": "rm -rf build && yarn build:contracts && yarn build:cjs && yarn build:esm",
+    "build:cjs": "tsc -p ./tsconfig.json",
+    "build:esm": "tsc -p ./tsconfig.esm.json",
+    "build:contracts": "cd ../contracts && yarn build"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@typechain/ethers-v5": "^11.1.2",
+    "prettier": "3.2.4",
+    "typechain": "^8.3.2",
+    "typescript": "5.1.6"
+  }
+}
