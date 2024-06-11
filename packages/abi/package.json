@@ -26,6 +26,7 @@
     "build:contracts": "cd ../contracts && yarn build"
   },
   "devDependencies": {
+    "@mystikonetwork/contracts-governance": "^0.3.0",
     "@tsconfig/recommended": "^1.0.1",
     "@typechain/ethers-v5": "^11.1.2",
     "prettier": "3.2.4",

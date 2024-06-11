@@ -14,14 +14,27 @@ const config: HardhatUserConfig = {
     hardhat: {},
     localhost: { timeout: 600000 },
   },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+  },
   solidity: {
     version: '0.8.26',
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200,
+        runs: 800,
+        details: {
+          yul: true,
+        },
       },
     },
+  },
+  contractSizer: {
+    alphaSort: true,
+    runOnCompile: false,
+    disambiguatePaths: false,
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS === 'true' ? true : false,
@@ -29,11 +42,6 @@ const config: HardhatUserConfig = {
     showTimeSpent: true,
     noColors: true,
     outputFile: 'reports/gas/summary.txt',
-  },
-  contractSizer: {
-    alphaSort: true,
-    runOnCompile: false,
-    disambiguatePaths: false,
   },
   mocha: {
     timeout: 600000,

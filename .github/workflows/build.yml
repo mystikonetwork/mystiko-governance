@@ -36,10 +36,10 @@ jobs:
           node-version: 18
           cache: yarn
       - run: yarn install
-      - run: yarn build
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn coverage
+      - run: lerna run build
+      - run: lerna run lint
+      - run: lerna run test
+      - run: lerna run coverage
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:

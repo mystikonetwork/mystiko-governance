@@ -41,13 +41,11 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
           cp $HOME/.npmrc $GITHUB_WORKSPACE/${{ env.WORK_ABI_PATH }}/.npmrc
       - name: Install dependencies
-        run: |
-          yarn install
+        run: yarn install
       - name: Build
-        run: |
-          yarn build
+        run: lerna run build
       - name: Publish
-        run: yarn npm publish
+        run: lerna publish from-package --yes
         working-directory: ${{ env.WORK_ABI_PATH }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
