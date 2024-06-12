@@ -20,12 +20,12 @@ contract SetTimelockRole is Script {
 }
 
 contract TransferRegistryDao is Script {
-    function run() external {
-        address registryAddress = vm.envAddress("DAO_REGISTRY_ADDRESS");
-        address  timelock = vm.envAddress("TIMELOCK_ADDRESS");
+  function run() external {
+    address registryAddress = vm.envAddress("DAO_REGISTRY_ADDRESS");
+    address timelock = vm.envAddress("TIMELOCK_ADDRESS");
 
-        vm.startBroadcast();
-        MystikoGovernorRegistry(registryAddress).transferOwnerToDAO(timelock);
-        vm.stopBroadcast();
-    }
+    vm.startBroadcast();
+    MystikoGovernorRegistry(registryAddress).transferOwnerToDAO(timelock);
+    vm.stopBroadcast();
+  }
 }

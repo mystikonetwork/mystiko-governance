@@ -38,6 +38,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
     'hasVoted(uint256,address)': FunctionFragment;
     'hashProposal(address[],uint256[],bytes[],bytes32)': FunctionFragment;
     'lateQuorumVoteExtension()': FunctionFragment;
+    'minQuorum()': FunctionFragment;
+    'minQuorum(uint256)': FunctionFragment;
     'name()': FunctionFragment;
     'nonces(address)': FunctionFragment;
     'onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)': FunctionFragment;
@@ -52,8 +54,10 @@ export interface MystikoGovernorInterface extends utils.Interface {
     'proposalVotes(uint256)': FunctionFragment;
     'propose(address[],uint256[],bytes[],string)': FunctionFragment;
     'queue(address[],uint256[],bytes[],bytes32)': FunctionFragment;
-    'quorum()': FunctionFragment;
     'quorum(uint256)': FunctionFragment;
+    'quorumDenominator()': FunctionFragment;
+    'quorumNumerator(uint256)': FunctionFragment;
+    'quorumNumerator()': FunctionFragment;
     'relay(address,uint256,bytes)': FunctionFragment;
     'setLateQuorumVoteExtension(uint48)': FunctionFragment;
     'setProposalThreshold(uint256)': FunctionFragment;
@@ -63,7 +67,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
     'supportsInterface(bytes4)': FunctionFragment;
     'timelock()': FunctionFragment;
     'token()': FunctionFragment;
-    'updateQuorum(uint256)': FunctionFragment;
+    'updateMinQuorum(uint256)': FunctionFragment;
+    'updateQuorumNumerator(uint256)': FunctionFragment;
     'updateTimelock(address)': FunctionFragment;
     'version()': FunctionFragment;
     'votingDelay()': FunctionFragment;
@@ -90,6 +95,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
       | 'hasVoted'
       | 'hashProposal'
       | 'lateQuorumVoteExtension'
+      | 'minQuorum()'
+      | 'minQuorum(uint256)'
       | 'name'
       | 'nonces'
       | 'onERC1155BatchReceived'
@@ -104,8 +111,10 @@ export interface MystikoGovernorInterface extends utils.Interface {
       | 'proposalVotes'
       | 'propose'
       | 'queue'
-      | 'quorum()'
-      | 'quorum(uint256)'
+      | 'quorum'
+      | 'quorumDenominator'
+      | 'quorumNumerator(uint256)'
+      | 'quorumNumerator()'
       | 'relay'
       | 'setLateQuorumVoteExtension'
       | 'setProposalThreshold'
@@ -115,7 +124,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
       | 'supportsInterface'
       | 'timelock'
       | 'token'
-      | 'updateQuorum'
+      | 'updateMinQuorum'
+      | 'updateQuorumNumerator'
       | 'updateTimelock'
       | 'version'
       | 'votingDelay'
@@ -164,6 +174,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
     values: [string[], BigNumberish[], BytesLike[], BytesLike],
   ): string;
   encodeFunctionData(functionFragment: 'lateQuorumVoteExtension', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'minQuorum()', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'minQuorum(uint256)', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'name', values?: undefined): string;
   encodeFunctionData(functionFragment: 'nonces', values: [string]): string;
   encodeFunctionData(
@@ -193,8 +205,10 @@ export interface MystikoGovernorInterface extends utils.Interface {
     functionFragment: 'queue',
     values: [string[], BigNumberish[], BytesLike[], BytesLike],
   ): string;
-  encodeFunctionData(functionFragment: 'quorum()', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'quorum(uint256)', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'quorum', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'quorumDenominator', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'quorumNumerator(uint256)', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'quorumNumerator()', values?: undefined): string;
   encodeFunctionData(functionFragment: 'relay', values: [string, BigNumberish, BytesLike]): string;
   encodeFunctionData(functionFragment: 'setLateQuorumVoteExtension', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'setProposalThreshold', values: [BigNumberish]): string;
@@ -204,7 +218,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'supportsInterface', values: [BytesLike]): string;
   encodeFunctionData(functionFragment: 'timelock', values?: undefined): string;
   encodeFunctionData(functionFragment: 'token', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'updateQuorum', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'updateMinQuorum', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'updateQuorumNumerator', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'updateTimelock', values: [string]): string;
   encodeFunctionData(functionFragment: 'version', values?: undefined): string;
   encodeFunctionData(functionFragment: 'votingDelay', values?: undefined): string;
@@ -228,6 +243,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'hasVoted', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hashProposal', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'lateQuorumVoteExtension', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'minQuorum()', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'minQuorum(uint256)', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'nonces', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'onERC1155BatchReceived', data: BytesLike): Result;
@@ -242,8 +259,10 @@ export interface MystikoGovernorInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'proposalVotes', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'propose', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'queue', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'quorum()', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'quorum(uint256)', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'quorum', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'quorumDenominator', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'quorumNumerator(uint256)', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'quorumNumerator()', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'relay', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'setLateQuorumVoteExtension', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'setProposalThreshold', data: BytesLike): Result;
@@ -253,7 +272,8 @@ export interface MystikoGovernorInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'supportsInterface', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'timelock', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'token', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'updateQuorum', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'updateMinQuorum', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'updateQuorumNumerator', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'updateTimelock', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'version', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'votingDelay', data: BytesLike): Result;
@@ -262,13 +282,14 @@ export interface MystikoGovernorInterface extends utils.Interface {
   events: {
     'EIP712DomainChanged()': EventFragment;
     'LateQuorumVoteExtensionSet(uint64,uint64)': EventFragment;
+    'MinQuorumUpdated(uint256,uint256)': EventFragment;
     'ProposalCanceled(uint256)': EventFragment;
     'ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)': EventFragment;
     'ProposalExecuted(uint256)': EventFragment;
     'ProposalExtended(uint256,uint64)': EventFragment;
     'ProposalQueued(uint256,uint256)': EventFragment;
     'ProposalThresholdSet(uint256,uint256)': EventFragment;
-    'QuorumUpdated(uint256,uint256)': EventFragment;
+    'QuorumNumeratorUpdated(uint256,uint256)': EventFragment;
     'TimelockChange(address,address)': EventFragment;
     'VoteCast(address,uint256,uint8,uint256,string)': EventFragment;
     'VoteCastWithParams(address,uint256,uint8,uint256,string,bytes)': EventFragment;
@@ -278,13 +299,14 @@ export interface MystikoGovernorInterface extends utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: 'EIP712DomainChanged'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'LateQuorumVoteExtensionSet'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'MinQuorumUpdated'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalCanceled'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalCreated'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalExecuted'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalExtended'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalQueued'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalThresholdSet'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'QuorumUpdated'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'QuorumNumeratorUpdated'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'TimelockChange'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'VoteCast'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'VoteCastWithParams'): EventFragment;
@@ -307,6 +329,14 @@ export type LateQuorumVoteExtensionSetEvent = TypedEvent<
 >;
 
 export type LateQuorumVoteExtensionSetEventFilter = TypedEventFilter<LateQuorumVoteExtensionSetEvent>;
+
+export interface MinQuorumUpdatedEventObject {
+  oldMinQuorum: BigNumber;
+  newMinQuorum: BigNumber;
+}
+export type MinQuorumUpdatedEvent = TypedEvent<[BigNumber, BigNumber], MinQuorumUpdatedEventObject>;
+
+export type MinQuorumUpdatedEventFilter = TypedEventFilter<MinQuorumUpdatedEvent>;
 
 export interface ProposalCanceledEventObject {
   proposalId: BigNumber;
@@ -364,13 +394,16 @@ export type ProposalThresholdSetEvent = TypedEvent<[BigNumber, BigNumber], Propo
 
 export type ProposalThresholdSetEventFilter = TypedEventFilter<ProposalThresholdSetEvent>;
 
-export interface QuorumUpdatedEventObject {
-  oldQuorum: BigNumber;
-  newQuorum: BigNumber;
+export interface QuorumNumeratorUpdatedEventObject {
+  oldQuorumNumerator: BigNumber;
+  newQuorumNumerator: BigNumber;
 }
-export type QuorumUpdatedEvent = TypedEvent<[BigNumber, BigNumber], QuorumUpdatedEventObject>;
+export type QuorumNumeratorUpdatedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  QuorumNumeratorUpdatedEventObject
+>;
 
-export type QuorumUpdatedEventFilter = TypedEventFilter<QuorumUpdatedEvent>;
+export type QuorumNumeratorUpdatedEventFilter = TypedEventFilter<QuorumNumeratorUpdatedEvent>;
 
 export interface TimelockChangeEventObject {
   oldTimelock: string;
@@ -543,6 +576,10 @@ export interface MystikoGovernor extends BaseContract {
 
     lateQuorumVoteExtension(overrides?: CallOverrides): Promise<[number]>;
 
+    'minQuorum()'(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+
     name(overrides?: CallOverrides): Promise<[string]>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -612,9 +649,13 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    'quorum()'(overrides?: CallOverrides): Promise<[BigNumber]>;
+    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    'quorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    quorumDenominator(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    'quorumNumerator()'(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     relay(
       target: string,
@@ -651,8 +692,13 @@ export interface MystikoGovernor extends BaseContract {
 
     token(overrides?: CallOverrides): Promise<[string]>;
 
-    updateQuorum(
-      newQuorum: BigNumberish,
+    updateMinQuorum(
+      newMinQuorum: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<ContractTransaction>;
+
+    updateQuorumNumerator(
+      newQuorumNumerator: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
@@ -766,6 +812,10 @@ export interface MystikoGovernor extends BaseContract {
 
   lateQuorumVoteExtension(overrides?: CallOverrides): Promise<number>;
 
+  'minQuorum()'(overrides?: CallOverrides): Promise<BigNumber>;
+
+  'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   name(overrides?: CallOverrides): Promise<string>;
 
   nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -835,9 +885,13 @@ export interface MystikoGovernor extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  'quorum()'(overrides?: CallOverrides): Promise<BigNumber>;
+  quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-  'quorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  quorumDenominator(overrides?: CallOverrides): Promise<BigNumber>;
+
+  'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+  'quorumNumerator()'(overrides?: CallOverrides): Promise<BigNumber>;
 
   relay(
     target: string,
@@ -874,8 +928,13 @@ export interface MystikoGovernor extends BaseContract {
 
   token(overrides?: CallOverrides): Promise<string>;
 
-  updateQuorum(
-    newQuorum: BigNumberish,
+  updateMinQuorum(
+    newMinQuorum: BigNumberish,
+    overrides?: Overrides & { from?: string },
+  ): Promise<ContractTransaction>;
+
+  updateQuorumNumerator(
+    newQuorumNumerator: BigNumberish,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
@@ -985,6 +1044,10 @@ export interface MystikoGovernor extends BaseContract {
 
     lateQuorumVoteExtension(overrides?: CallOverrides): Promise<number>;
 
+    'minQuorum()'(overrides?: CallOverrides): Promise<BigNumber>;
+
+    'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<string>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1054,9 +1117,13 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
-    'quorum()'(overrides?: CallOverrides): Promise<BigNumber>;
+    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    'quorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    quorumDenominator(overrides?: CallOverrides): Promise<BigNumber>;
+
+    'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    'quorumNumerator()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     relay(target: string, value: BigNumberish, data: BytesLike, overrides?: CallOverrides): Promise<void>;
 
@@ -1076,7 +1143,9 @@ export interface MystikoGovernor extends BaseContract {
 
     token(overrides?: CallOverrides): Promise<string>;
 
-    updateQuorum(newQuorum: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    updateMinQuorum(newMinQuorum: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    updateQuorumNumerator(newQuorumNumerator: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     updateTimelock(newTimelock: string, overrides?: CallOverrides): Promise<void>;
 
@@ -1099,6 +1168,12 @@ export interface MystikoGovernor extends BaseContract {
       oldVoteExtension?: null,
       newVoteExtension?: null,
     ): LateQuorumVoteExtensionSetEventFilter;
+
+    'MinQuorumUpdated(uint256,uint256)'(
+      oldMinQuorum?: null,
+      newMinQuorum?: null,
+    ): MinQuorumUpdatedEventFilter;
+    MinQuorumUpdated(oldMinQuorum?: null, newMinQuorum?: null): MinQuorumUpdatedEventFilter;
 
     'ProposalCanceled(uint256)'(proposalId?: null): ProposalCanceledEventFilter;
     ProposalCanceled(proposalId?: null): ProposalCanceledEventFilter;
@@ -1147,8 +1222,14 @@ export interface MystikoGovernor extends BaseContract {
       newProposalThreshold?: null,
     ): ProposalThresholdSetEventFilter;
 
-    'QuorumUpdated(uint256,uint256)'(oldQuorum?: null, newQuorum?: null): QuorumUpdatedEventFilter;
-    QuorumUpdated(oldQuorum?: null, newQuorum?: null): QuorumUpdatedEventFilter;
+    'QuorumNumeratorUpdated(uint256,uint256)'(
+      oldQuorumNumerator?: null,
+      newQuorumNumerator?: null,
+    ): QuorumNumeratorUpdatedEventFilter;
+    QuorumNumeratorUpdated(
+      oldQuorumNumerator?: null,
+      newQuorumNumerator?: null,
+    ): QuorumNumeratorUpdatedEventFilter;
 
     'TimelockChange(address,address)'(oldTimelock?: null, newTimelock?: null): TimelockChangeEventFilter;
     TimelockChange(oldTimelock?: null, newTimelock?: null): TimelockChangeEventFilter;
@@ -1287,6 +1368,10 @@ export interface MystikoGovernor extends BaseContract {
 
     lateQuorumVoteExtension(overrides?: CallOverrides): Promise<BigNumber>;
 
+    'minQuorum()'(overrides?: CallOverrides): Promise<BigNumber>;
+
+    'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1347,9 +1432,13 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-    'quorum()'(overrides?: CallOverrides): Promise<BigNumber>;
+    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    'quorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    quorumDenominator(overrides?: CallOverrides): Promise<BigNumber>;
+
+    'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    'quorumNumerator()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     relay(
       target: string,
@@ -1386,7 +1475,15 @@ export interface MystikoGovernor extends BaseContract {
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
-    updateQuorum(newQuorum: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
+    updateMinQuorum(
+      newMinQuorum: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<BigNumber>;
+
+    updateQuorumNumerator(
+      newQuorumNumerator: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<BigNumber>;
 
     updateTimelock(newTimelock: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
@@ -1494,6 +1591,10 @@ export interface MystikoGovernor extends BaseContract {
 
     lateQuorumVoteExtension(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    'minQuorum()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     nonces(owner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1554,9 +1655,16 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    'quorum()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    'quorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    quorumDenominator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    'quorumNumerator(uint256)'(
+      timepoint: BigNumberish,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>;
+
+    'quorumNumerator()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     relay(
       target: string,
@@ -1593,8 +1701,13 @@ export interface MystikoGovernor extends BaseContract {
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    updateQuorum(
-      newQuorum: BigNumberish,
+    updateMinQuorum(
+      newMinQuorum: BigNumberish,
+      overrides?: Overrides & { from?: string },
+    ): Promise<PopulatedTransaction>;
+
+    updateQuorumNumerator(
+      newQuorumNumerator: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 

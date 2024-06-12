@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import {MystikoGovernorQuorum} from "./MystikoGovernorQuorum.sol";
+import {MystikoGovernorMinQuorum} from "./MystikoGovernorMinQuorum.sol";
 import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
 import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
 import {GovernorPreventLateQuorum} from "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
 import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
+import {GovernorVotesQuorumFraction} from "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import {GovernorTimelockControl} from "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
 import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
+import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract MystikoGovernor is
   Governor,
@@ -17,7 +19,8 @@ contract MystikoGovernor is
   GovernorPreventLateQuorum,
   GovernorCountingSimple,
   GovernorVotes,
-  MystikoGovernorQuorum,
+  MystikoGovernorMinQuorum,
+  GovernorVotesQuorumFraction,
   GovernorTimelockControl
 {
   constructor(
@@ -28,10 +31,11 @@ contract MystikoGovernor is
     uint48 _voteExtension
   )
     Governor("MystikoGovernor")
-    GovernorSettings(_votingDelay, _votingPeriod, 10_000_000e18)
+    GovernorSettings(_votingDelay, _votingPeriod, 5_000_000e18)
     GovernorPreventLateQuorum(_voteExtension)
     GovernorVotes(_voteToken)
-    MystikoGovernorQuorum(40_000_000e18)
+    MystikoGovernorMinQuorum(10_000_000e18)
+    GovernorVotesQuorumFraction(15)
     GovernorTimelockControl(_timelock)
   {}
 
@@ -61,6 +65,14 @@ contract MystikoGovernor is
     uint256 _proposalId
   ) public view virtual override(Governor, GovernorPreventLateQuorum) returns (uint256) {
     return super.proposalDeadline(_proposalId);
+  }
+
+  function quorum(
+    uint256 _timepoint
+  ) public view virtual override(Governor, GovernorVotesQuorumFraction) returns (uint256) {
+    uint256 superQuorum = super.quorum(_timepoint);
+    uint256 minimumQuorum = minQuorum(_timepoint);
+    return Math.max(superQuorum, minimumQuorum);
   }
 
   function state(
