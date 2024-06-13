@@ -16,7 +16,7 @@ contract MystikoGovernorTest is Test, Random {
   MystikoVoteToken public vXZK;
   MystikoGovernor public governor;
   MystikoTimelockController public controller;
-  uint256 public PROPOSAL_THRESHOLD = 10_000_000e18;
+  uint256 public PROPOSAL_THRESHOLD = 1_000_000e18;
 
   function _delegateVote(address account, uint256 amount) private {
     uint256 balanceBefore = vXZK.balanceOf(account);

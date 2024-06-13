@@ -31,10 +31,10 @@ contract MystikoGovernor is
     uint48 _voteExtension
   )
     Governor("MystikoGovernor")
-    GovernorSettings(_votingDelay, _votingPeriod, 5_000_000e18)
+    GovernorSettings(_votingDelay, _votingPeriod, 1_000_000e18)
     GovernorPreventLateQuorum(_voteExtension)
     GovernorVotes(_voteToken)
-    MystikoGovernorMinQuorum(10_000_000e18)
+    MystikoGovernorMinQuorum(2_000_000e18)
     GovernorVotesQuorumFraction(15)
     GovernorTimelockControl(_timelock)
   {}
