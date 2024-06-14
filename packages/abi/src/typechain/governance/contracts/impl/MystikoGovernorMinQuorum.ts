@@ -18,7 +18,7 @@ import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from '../../common';
 
-export interface MystikoGovernorInterface extends utils.Interface {
+export interface MystikoGovernorMinQuorumInterface extends utils.Interface {
   functions: {
     'BALLOT_TYPEHASH()': FunctionFragment;
     'CLOCK_MODE()': FunctionFragment;
@@ -37,7 +37,6 @@ export interface MystikoGovernorInterface extends utils.Interface {
     'getVotesWithParams(address,uint256,bytes)': FunctionFragment;
     'hasVoted(uint256,address)': FunctionFragment;
     'hashProposal(address[],uint256[],bytes[],bytes32)': FunctionFragment;
-    'lateQuorumVoteExtension()': FunctionFragment;
     'minQuorum()': FunctionFragment;
     'minQuorum(uint256)': FunctionFragment;
     'name()': FunctionFragment;
@@ -51,25 +50,14 @@ export interface MystikoGovernorInterface extends utils.Interface {
     'proposalProposer(uint256)': FunctionFragment;
     'proposalSnapshot(uint256)': FunctionFragment;
     'proposalThreshold()': FunctionFragment;
-    'proposalVotes(uint256)': FunctionFragment;
     'propose(address[],uint256[],bytes[],string)': FunctionFragment;
     'queue(address[],uint256[],bytes[],bytes32)': FunctionFragment;
     'quorum(uint256)': FunctionFragment;
-    'quorumDenominator()': FunctionFragment;
-    'quorumNumerator(uint256)': FunctionFragment;
-    'quorumNumerator()': FunctionFragment;
     'relay(address,uint256,bytes)': FunctionFragment;
-    'setLateQuorumVoteExtension(uint48)': FunctionFragment;
-    'setProposalThreshold(uint256)': FunctionFragment;
-    'setVotingDelay(uint48)': FunctionFragment;
-    'setVotingPeriod(uint32)': FunctionFragment;
     'state(uint256)': FunctionFragment;
     'supportsInterface(bytes4)': FunctionFragment;
-    'timelock()': FunctionFragment;
     'token()': FunctionFragment;
     'updateMinQuorum(uint256)': FunctionFragment;
-    'updateQuorumNumerator(uint256)': FunctionFragment;
-    'updateTimelock(address)': FunctionFragment;
     'version()': FunctionFragment;
     'votingDelay()': FunctionFragment;
     'votingPeriod()': FunctionFragment;
@@ -94,7 +82,6 @@ export interface MystikoGovernorInterface extends utils.Interface {
       | 'getVotesWithParams'
       | 'hasVoted'
       | 'hashProposal'
-      | 'lateQuorumVoteExtension'
       | 'minQuorum()'
       | 'minQuorum(uint256)'
       | 'name'
@@ -108,25 +95,14 @@ export interface MystikoGovernorInterface extends utils.Interface {
       | 'proposalProposer'
       | 'proposalSnapshot'
       | 'proposalThreshold'
-      | 'proposalVotes'
       | 'propose'
       | 'queue'
       | 'quorum'
-      | 'quorumDenominator'
-      | 'quorumNumerator(uint256)'
-      | 'quorumNumerator()'
       | 'relay'
-      | 'setLateQuorumVoteExtension'
-      | 'setProposalThreshold'
-      | 'setVotingDelay'
-      | 'setVotingPeriod'
       | 'state'
       | 'supportsInterface'
-      | 'timelock'
       | 'token'
       | 'updateMinQuorum'
-      | 'updateQuorumNumerator'
-      | 'updateTimelock'
       | 'version'
       | 'votingDelay'
       | 'votingPeriod',
@@ -173,7 +149,6 @@ export interface MystikoGovernorInterface extends utils.Interface {
     functionFragment: 'hashProposal',
     values: [string[], BigNumberish[], BytesLike[], BytesLike],
   ): string;
-  encodeFunctionData(functionFragment: 'lateQuorumVoteExtension', values?: undefined): string;
   encodeFunctionData(functionFragment: 'minQuorum()', values?: undefined): string;
   encodeFunctionData(functionFragment: 'minQuorum(uint256)', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'name', values?: undefined): string;
@@ -196,7 +171,6 @@ export interface MystikoGovernorInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'proposalProposer', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'proposalSnapshot', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'proposalThreshold', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'proposalVotes', values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: 'propose',
     values: [string[], BigNumberish[], BytesLike[], string],
@@ -206,21 +180,11 @@ export interface MystikoGovernorInterface extends utils.Interface {
     values: [string[], BigNumberish[], BytesLike[], BytesLike],
   ): string;
   encodeFunctionData(functionFragment: 'quorum', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'quorumDenominator', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'quorumNumerator(uint256)', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'quorumNumerator()', values?: undefined): string;
   encodeFunctionData(functionFragment: 'relay', values: [string, BigNumberish, BytesLike]): string;
-  encodeFunctionData(functionFragment: 'setLateQuorumVoteExtension', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'setProposalThreshold', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'setVotingDelay', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'setVotingPeriod', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'state', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'supportsInterface', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'timelock', values?: undefined): string;
   encodeFunctionData(functionFragment: 'token', values?: undefined): string;
   encodeFunctionData(functionFragment: 'updateMinQuorum', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'updateQuorumNumerator', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'updateTimelock', values: [string]): string;
   encodeFunctionData(functionFragment: 'version', values?: undefined): string;
   encodeFunctionData(functionFragment: 'votingDelay', values?: undefined): string;
   encodeFunctionData(functionFragment: 'votingPeriod', values?: undefined): string;
@@ -242,7 +206,6 @@ export interface MystikoGovernorInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'getVotesWithParams', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hasVoted', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'hashProposal', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'lateQuorumVoteExtension', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minQuorum()', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'minQuorum(uint256)', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
@@ -256,79 +219,43 @@ export interface MystikoGovernorInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'proposalProposer', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'proposalSnapshot', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'proposalThreshold', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'proposalVotes', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'propose', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'queue', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'quorum', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'quorumDenominator', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'quorumNumerator(uint256)', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'quorumNumerator()', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'relay', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setLateQuorumVoteExtension', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setProposalThreshold', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setVotingDelay', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setVotingPeriod', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'state', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'supportsInterface', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'timelock', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'token', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'updateMinQuorum', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'updateQuorumNumerator', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'updateTimelock', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'version', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'votingDelay', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'votingPeriod', data: BytesLike): Result;
 
   events: {
     'EIP712DomainChanged()': EventFragment;
-    'LateQuorumVoteExtensionSet(uint64,uint64)': EventFragment;
     'MinQuorumUpdated(uint256,uint256)': EventFragment;
     'ProposalCanceled(uint256)': EventFragment;
     'ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)': EventFragment;
     'ProposalExecuted(uint256)': EventFragment;
-    'ProposalExtended(uint256,uint64)': EventFragment;
     'ProposalQueued(uint256,uint256)': EventFragment;
-    'ProposalThresholdSet(uint256,uint256)': EventFragment;
-    'QuorumNumeratorUpdated(uint256,uint256)': EventFragment;
-    'TimelockChange(address,address)': EventFragment;
     'VoteCast(address,uint256,uint8,uint256,string)': EventFragment;
     'VoteCastWithParams(address,uint256,uint8,uint256,string,bytes)': EventFragment;
-    'VotingDelaySet(uint256,uint256)': EventFragment;
-    'VotingPeriodSet(uint256,uint256)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'EIP712DomainChanged'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'LateQuorumVoteExtensionSet'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'MinQuorumUpdated'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalCanceled'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalCreated'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalExecuted'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ProposalExtended'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'ProposalQueued'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ProposalThresholdSet'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'QuorumNumeratorUpdated'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'TimelockChange'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'VoteCast'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'VoteCastWithParams'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'VotingDelaySet'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'VotingPeriodSet'): EventFragment;
 }
 
 export interface EIP712DomainChangedEventObject {}
 export type EIP712DomainChangedEvent = TypedEvent<[], EIP712DomainChangedEventObject>;
 
 export type EIP712DomainChangedEventFilter = TypedEventFilter<EIP712DomainChangedEvent>;
-
-export interface LateQuorumVoteExtensionSetEventObject {
-  oldVoteExtension: BigNumber;
-  newVoteExtension: BigNumber;
-}
-export type LateQuorumVoteExtensionSetEvent = TypedEvent<
-  [BigNumber, BigNumber],
-  LateQuorumVoteExtensionSetEventObject
->;
-
-export type LateQuorumVoteExtensionSetEventFilter = TypedEventFilter<LateQuorumVoteExtensionSetEvent>;
 
 export interface MinQuorumUpdatedEventObject {
   oldMinQuorum: BigNumber;
@@ -370,14 +297,6 @@ export type ProposalExecutedEvent = TypedEvent<[BigNumber], ProposalExecutedEven
 
 export type ProposalExecutedEventFilter = TypedEventFilter<ProposalExecutedEvent>;
 
-export interface ProposalExtendedEventObject {
-  proposalId: BigNumber;
-  extendedDeadline: BigNumber;
-}
-export type ProposalExtendedEvent = TypedEvent<[BigNumber, BigNumber], ProposalExtendedEventObject>;
-
-export type ProposalExtendedEventFilter = TypedEventFilter<ProposalExtendedEvent>;
-
 export interface ProposalQueuedEventObject {
   proposalId: BigNumber;
   etaSeconds: BigNumber;
@@ -385,33 +304,6 @@ export interface ProposalQueuedEventObject {
 export type ProposalQueuedEvent = TypedEvent<[BigNumber, BigNumber], ProposalQueuedEventObject>;
 
 export type ProposalQueuedEventFilter = TypedEventFilter<ProposalQueuedEvent>;
-
-export interface ProposalThresholdSetEventObject {
-  oldProposalThreshold: BigNumber;
-  newProposalThreshold: BigNumber;
-}
-export type ProposalThresholdSetEvent = TypedEvent<[BigNumber, BigNumber], ProposalThresholdSetEventObject>;
-
-export type ProposalThresholdSetEventFilter = TypedEventFilter<ProposalThresholdSetEvent>;
-
-export interface QuorumNumeratorUpdatedEventObject {
-  oldQuorumNumerator: BigNumber;
-  newQuorumNumerator: BigNumber;
-}
-export type QuorumNumeratorUpdatedEvent = TypedEvent<
-  [BigNumber, BigNumber],
-  QuorumNumeratorUpdatedEventObject
->;
-
-export type QuorumNumeratorUpdatedEventFilter = TypedEventFilter<QuorumNumeratorUpdatedEvent>;
-
-export interface TimelockChangeEventObject {
-  oldTimelock: string;
-  newTimelock: string;
-}
-export type TimelockChangeEvent = TypedEvent<[string, string], TimelockChangeEventObject>;
-
-export type TimelockChangeEventFilter = TypedEventFilter<TimelockChangeEvent>;
 
 export interface VoteCastEventObject {
   voter: string;
@@ -439,28 +331,12 @@ export type VoteCastWithParamsEvent = TypedEvent<
 
 export type VoteCastWithParamsEventFilter = TypedEventFilter<VoteCastWithParamsEvent>;
 
-export interface VotingDelaySetEventObject {
-  oldVotingDelay: BigNumber;
-  newVotingDelay: BigNumber;
-}
-export type VotingDelaySetEvent = TypedEvent<[BigNumber, BigNumber], VotingDelaySetEventObject>;
-
-export type VotingDelaySetEventFilter = TypedEventFilter<VotingDelaySetEvent>;
-
-export interface VotingPeriodSetEventObject {
-  oldVotingPeriod: BigNumber;
-  newVotingPeriod: BigNumber;
-}
-export type VotingPeriodSetEvent = TypedEvent<[BigNumber, BigNumber], VotingPeriodSetEventObject>;
-
-export type VotingPeriodSetEventFilter = TypedEventFilter<VotingPeriodSetEvent>;
-
-export interface MystikoGovernor extends BaseContract {
+export interface MystikoGovernorMinQuorum extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MystikoGovernorInterface;
+  interface: MystikoGovernorMinQuorumInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -574,8 +450,6 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<[BigNumber]>;
 
-    lateQuorumVoteExtension(overrides?: CallOverrides): Promise<[number]>;
-
     'minQuorum()'(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -610,28 +484,17 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    proposalDeadline(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    proposalDeadline(proposalId: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     proposalEta(proposalId: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    proposalNeedsQueuing(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<[boolean]>;
+    proposalNeedsQueuing(arg0: BigNumberish, overrides?: CallOverrides): Promise<[boolean]>;
 
     proposalProposer(proposalId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
     proposalSnapshot(proposalId: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     proposalThreshold(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    proposalVotes(
-      proposalId: BigNumberish,
-      overrides?: CallOverrides,
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        againstVotes: BigNumber;
-        forVotes: BigNumber;
-        abstainVotes: BigNumber;
-      }
-    >;
 
     propose(
       targets: string[],
@@ -649,13 +512,7 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    quorumDenominator(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    'quorumNumerator()'(overrides?: CallOverrides): Promise<[BigNumber]>;
+    quorum(timepoint: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     relay(
       target: string,
@@ -664,46 +521,14 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: PayableOverrides & { from?: string },
     ): Promise<ContractTransaction>;
 
-    setLateQuorumVoteExtension(
-      newVoteExtension: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    setProposalThreshold(
-      newProposalThreshold: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    setVotingDelay(
-      newVotingDelay: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    setVotingPeriod(
-      newVotingPeriod: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    state(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<[number]>;
+    state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<[number]>;
 
     supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
-
-    timelock(overrides?: CallOverrides): Promise<[string]>;
 
     token(overrides?: CallOverrides): Promise<[string]>;
 
     updateMinQuorum(
       newMinQuorum: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    updateQuorumNumerator(
-      newQuorumNumerator: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<ContractTransaction>;
-
-    updateTimelock(
-      newTimelock: string,
       overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
@@ -810,8 +635,6 @@ export interface MystikoGovernor extends BaseContract {
     overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
-  lateQuorumVoteExtension(overrides?: CallOverrides): Promise<number>;
-
   'minQuorum()'(overrides?: CallOverrides): Promise<BigNumber>;
 
   'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -846,28 +669,17 @@ export interface MystikoGovernor extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  proposalDeadline(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  proposalDeadline(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   proposalEta(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-  proposalNeedsQueuing(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+  proposalNeedsQueuing(arg0: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
   proposalProposer(proposalId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   proposalSnapshot(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   proposalThreshold(overrides?: CallOverrides): Promise<BigNumber>;
-
-  proposalVotes(
-    proposalId: BigNumberish,
-    overrides?: CallOverrides,
-  ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
-      againstVotes: BigNumber;
-      forVotes: BigNumber;
-      abstainVotes: BigNumber;
-    }
-  >;
 
   propose(
     targets: string[],
@@ -885,13 +697,7 @@ export interface MystikoGovernor extends BaseContract {
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-  quorumDenominator(overrides?: CallOverrides): Promise<BigNumber>;
-
-  'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-  'quorumNumerator()'(overrides?: CallOverrides): Promise<BigNumber>;
+  quorum(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   relay(
     target: string,
@@ -900,46 +706,14 @@ export interface MystikoGovernor extends BaseContract {
     overrides?: PayableOverrides & { from?: string },
   ): Promise<ContractTransaction>;
 
-  setLateQuorumVoteExtension(
-    newVoteExtension: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
-
-  setProposalThreshold(
-    newProposalThreshold: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
-
-  setVotingDelay(
-    newVotingDelay: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
-
-  setVotingPeriod(
-    newVotingPeriod: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
-
-  state(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<number>;
+  state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
   supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
-
-  timelock(overrides?: CallOverrides): Promise<string>;
 
   token(overrides?: CallOverrides): Promise<string>;
 
   updateMinQuorum(
     newMinQuorum: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
-
-  updateQuorumNumerator(
-    newQuorumNumerator: BigNumberish,
-    overrides?: Overrides & { from?: string },
-  ): Promise<ContractTransaction>;
-
-  updateTimelock(
-    newTimelock: string,
     overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
@@ -1042,8 +816,6 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
-    lateQuorumVoteExtension(overrides?: CallOverrides): Promise<number>;
-
     'minQuorum()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1078,28 +850,17 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<string>;
 
-    proposalDeadline(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    proposalDeadline(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     proposalEta(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    proposalNeedsQueuing(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+    proposalNeedsQueuing(arg0: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     proposalProposer(proposalId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     proposalSnapshot(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     proposalThreshold(overrides?: CallOverrides): Promise<BigNumber>;
-
-    proposalVotes(
-      proposalId: BigNumberish,
-      overrides?: CallOverrides,
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        againstVotes: BigNumber;
-        forVotes: BigNumber;
-        abstainVotes: BigNumber;
-      }
-    >;
 
     propose(
       targets: string[],
@@ -1117,37 +878,17 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
-    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    quorumDenominator(overrides?: CallOverrides): Promise<BigNumber>;
-
-    'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    'quorumNumerator()'(overrides?: CallOverrides): Promise<BigNumber>;
+    quorum(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     relay(target: string, value: BigNumberish, data: BytesLike, overrides?: CallOverrides): Promise<void>;
 
-    setLateQuorumVoteExtension(newVoteExtension: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    setProposalThreshold(newProposalThreshold: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    setVotingDelay(newVotingDelay: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    setVotingPeriod(newVotingPeriod: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    state(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<number>;
+    state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
     supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
-
-    timelock(overrides?: CallOverrides): Promise<string>;
 
     token(overrides?: CallOverrides): Promise<string>;
 
     updateMinQuorum(newMinQuorum: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    updateQuorumNumerator(newQuorumNumerator: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    updateTimelock(newTimelock: string, overrides?: CallOverrides): Promise<void>;
 
     version(overrides?: CallOverrides): Promise<string>;
 
@@ -1159,15 +900,6 @@ export interface MystikoGovernor extends BaseContract {
   filters: {
     'EIP712DomainChanged()'(): EIP712DomainChangedEventFilter;
     EIP712DomainChanged(): EIP712DomainChangedEventFilter;
-
-    'LateQuorumVoteExtensionSet(uint64,uint64)'(
-      oldVoteExtension?: null,
-      newVoteExtension?: null,
-    ): LateQuorumVoteExtensionSetEventFilter;
-    LateQuorumVoteExtensionSet(
-      oldVoteExtension?: null,
-      newVoteExtension?: null,
-    ): LateQuorumVoteExtensionSetEventFilter;
 
     'MinQuorumUpdated(uint256,uint256)'(
       oldMinQuorum?: null,
@@ -1204,35 +936,8 @@ export interface MystikoGovernor extends BaseContract {
     'ProposalExecuted(uint256)'(proposalId?: null): ProposalExecutedEventFilter;
     ProposalExecuted(proposalId?: null): ProposalExecutedEventFilter;
 
-    'ProposalExtended(uint256,uint64)'(
-      proposalId?: BigNumberish | null,
-      extendedDeadline?: null,
-    ): ProposalExtendedEventFilter;
-    ProposalExtended(proposalId?: BigNumberish | null, extendedDeadline?: null): ProposalExtendedEventFilter;
-
     'ProposalQueued(uint256,uint256)'(proposalId?: null, etaSeconds?: null): ProposalQueuedEventFilter;
     ProposalQueued(proposalId?: null, etaSeconds?: null): ProposalQueuedEventFilter;
-
-    'ProposalThresholdSet(uint256,uint256)'(
-      oldProposalThreshold?: null,
-      newProposalThreshold?: null,
-    ): ProposalThresholdSetEventFilter;
-    ProposalThresholdSet(
-      oldProposalThreshold?: null,
-      newProposalThreshold?: null,
-    ): ProposalThresholdSetEventFilter;
-
-    'QuorumNumeratorUpdated(uint256,uint256)'(
-      oldQuorumNumerator?: null,
-      newQuorumNumerator?: null,
-    ): QuorumNumeratorUpdatedEventFilter;
-    QuorumNumeratorUpdated(
-      oldQuorumNumerator?: null,
-      newQuorumNumerator?: null,
-    ): QuorumNumeratorUpdatedEventFilter;
-
-    'TimelockChange(address,address)'(oldTimelock?: null, newTimelock?: null): TimelockChangeEventFilter;
-    TimelockChange(oldTimelock?: null, newTimelock?: null): TimelockChangeEventFilter;
 
     'VoteCast(address,uint256,uint8,uint256,string)'(
       voter?: string | null,
@@ -1265,18 +970,6 @@ export interface MystikoGovernor extends BaseContract {
       reason?: null,
       params?: null,
     ): VoteCastWithParamsEventFilter;
-
-    'VotingDelaySet(uint256,uint256)'(
-      oldVotingDelay?: null,
-      newVotingDelay?: null,
-    ): VotingDelaySetEventFilter;
-    VotingDelaySet(oldVotingDelay?: null, newVotingDelay?: null): VotingDelaySetEventFilter;
-
-    'VotingPeriodSet(uint256,uint256)'(
-      oldVotingPeriod?: null,
-      newVotingPeriod?: null,
-    ): VotingPeriodSetEventFilter;
-    VotingPeriodSet(oldVotingPeriod?: null, newVotingPeriod?: null): VotingPeriodSetEventFilter;
   };
 
   estimateGas: {
@@ -1366,8 +1059,6 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
-    lateQuorumVoteExtension(overrides?: CallOverrides): Promise<BigNumber>;
-
     'minQuorum()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1402,19 +1093,17 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-    proposalDeadline(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    proposalDeadline(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     proposalEta(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    proposalNeedsQueuing(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    proposalNeedsQueuing(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     proposalProposer(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     proposalSnapshot(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     proposalThreshold(overrides?: CallOverrides): Promise<BigNumber>;
-
-    proposalVotes(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     propose(
       targets: string[],
@@ -1432,13 +1121,7 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
-    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    quorumDenominator(overrides?: CallOverrides): Promise<BigNumber>;
-
-    'quorumNumerator(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-    'quorumNumerator()'(overrides?: CallOverrides): Promise<BigNumber>;
+    quorum(timepoint: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     relay(
       target: string,
@@ -1447,31 +1130,9 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: PayableOverrides & { from?: string },
     ): Promise<BigNumber>;
 
-    setLateQuorumVoteExtension(
-      newVoteExtension: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
-
-    setProposalThreshold(
-      newProposalThreshold: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
-
-    setVotingDelay(
-      newVotingDelay: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
-
-    setVotingPeriod(
-      newVotingPeriod: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
-
-    state(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
-
-    timelock(overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1479,13 +1140,6 @@ export interface MystikoGovernor extends BaseContract {
       newMinQuorum: BigNumberish,
       overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
-
-    updateQuorumNumerator(
-      newQuorumNumerator: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<BigNumber>;
-
-    updateTimelock(newTimelock: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     version(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1589,8 +1243,6 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
-    lateQuorumVoteExtension(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     'minQuorum()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     'minQuorum(uint256)'(timepoint: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1625,19 +1277,17 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    proposalDeadline(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    proposalDeadline(proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     proposalEta(proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    proposalNeedsQueuing(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    proposalNeedsQueuing(arg0: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     proposalProposer(proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     proposalSnapshot(proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     proposalThreshold(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    proposalVotes(proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     propose(
       targets: string[],
@@ -1655,16 +1305,7 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    quorum(_timepoint: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    quorumDenominator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    'quorumNumerator(uint256)'(
-      timepoint: BigNumberish,
-      overrides?: CallOverrides,
-    ): Promise<PopulatedTransaction>;
-
-    'quorumNumerator()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    quorum(timepoint: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     relay(
       target: string,
@@ -1673,46 +1314,14 @@ export interface MystikoGovernor extends BaseContract {
       overrides?: PayableOverrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
-    setLateQuorumVoteExtension(
-      newVoteExtension: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    setProposalThreshold(
-      newProposalThreshold: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    setVotingDelay(
-      newVotingDelay: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    setVotingPeriod(
-      newVotingPeriod: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    state(_proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    state(proposalId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    timelock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     updateMinQuorum(
       newMinQuorum: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    updateQuorumNumerator(
-      newQuorumNumerator: BigNumberish,
-      overrides?: Overrides & { from?: string },
-    ): Promise<PopulatedTransaction>;
-
-    updateTimelock(
-      newTimelock: string,
       overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 

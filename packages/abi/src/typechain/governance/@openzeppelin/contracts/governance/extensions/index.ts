@@ -6,3 +6,4 @@ export type { GovernorPreventLateQuorum } from './GovernorPreventLateQuorum';
 export type { GovernorSettings } from './GovernorSettings';
 export type { GovernorTimelockControl } from './GovernorTimelockControl';
 export type { GovernorVotes } from './GovernorVotes';
+export type { GovernorVotesQuorumFraction } from './GovernorVotesQuorumFraction';

@@ -5,8 +5,8 @@ import {TimelockController} from "@openzeppelin/contracts/governance/TimelockCon
 
 contract MystikoTimelockController is TimelockController {
   constructor(
-    uint256 _minDelay
-  ) TimelockController(_minDelay, new address[](0), new address[](0), msg.sender) {}
+    uint256 _minimumDelay
+  ) TimelockController(_minimumDelay, new address[](0), new address[](0), msg.sender) {}
 
   function grantGovernorRole(address _governor) external onlyRole(DEFAULT_ADMIN_ROLE) {
     super.grantRole(PROPOSER_ROLE, _governor);

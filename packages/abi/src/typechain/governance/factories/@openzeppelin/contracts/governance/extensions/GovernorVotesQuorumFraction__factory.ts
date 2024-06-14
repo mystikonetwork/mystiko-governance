@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import type {
-  MystikoGovernorQuorum,
-  MystikoGovernorQuorumInterface,
-} from '../../../contracts/impl/MystikoGovernorQuorum';
+  GovernorVotesQuorumFraction,
+  GovernorVotesQuorumFractionInterface,
+} from '../../../../../@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction';
 
 const _abi = [
   {
@@ -87,6 +87,22 @@ const _abi = [
       },
     ],
     name: 'GovernorInvalidProposalLength',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'quorumNumerator',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'quorumDenominator',
+        type: 'uint256',
+      },
+    ],
+    name: 'GovernorInvalidQuorumFraction',
     type: 'error',
   },
   {
@@ -373,17 +389,17 @@ const _abi = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'oldQuorum',
+        name: 'oldQuorumNumerator',
         type: 'uint256',
       },
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'newQuorum',
+        name: 'newQuorumNumerator',
         type: 'uint256',
       },
     ],
-    name: 'QuorumUpdated',
+    name: 'QuorumNumeratorUpdated',
     type: 'event',
   },
   {
@@ -1239,8 +1255,27 @@ const _abi = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'timepoint',
+        type: 'uint256',
+      },
+    ],
     name: 'quorum',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'quorumDenominator',
     outputs: [
       {
         internalType: 'uint256',
@@ -1259,7 +1294,20 @@ const _abi = [
         type: 'uint256',
       },
     ],
-    name: 'quorum',
+    name: 'quorumNumerator',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'quorumNumerator',
     outputs: [
       {
         internalType: 'uint256',
@@ -1348,11 +1396,11 @@ const _abi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'newQuorum',
+        name: 'newQuorumNumerator',
         type: 'uint256',
       },
     ],
-    name: 'updateQuorum',
+    name: 'updateQuorumNumerator',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1402,12 +1450,12 @@ const _abi = [
   },
 ] as const;
 
-export class MystikoGovernorQuorum__factory {
+export class GovernorVotesQuorumFraction__factory {
   static readonly abi = _abi;
-  static createInterface(): MystikoGovernorQuorumInterface {
-    return new utils.Interface(_abi) as MystikoGovernorQuorumInterface;
+  static createInterface(): GovernorVotesQuorumFractionInterface {
+    return new utils.Interface(_abi) as GovernorVotesQuorumFractionInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): MystikoGovernorQuorum {
-    return new Contract(address, _abi, signerOrProvider) as MystikoGovernorQuorum;
+  static connect(address: string, signerOrProvider: Signer | Provider): GovernorVotesQuorumFraction {
+    return new Contract(address, _abi, signerOrProvider) as GovernorVotesQuorumFraction;
   }
 }

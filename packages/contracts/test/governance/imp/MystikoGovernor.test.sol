@@ -90,16 +90,20 @@ contract MystikoGovernorTest is Test, Random {
   }
 
   function test_proposal_threshold() public {
-    assertEq(governor.proposalThreshold(), 10_000_000e18);
+    assertEq(governor.proposalThreshold(), 1_000_000e18);
   }
 
   function test_quorum() public {
-    assertEq(governor.quorum(), 40_000_000e18);
+    vm.warp(block.timestamp + 1);
+    vm.roll(block.number + 1);
 
-    vm.expectRevert();
-    vm.prank(address(governor));
-    governor.updateQuorum(50_000_000e18);
-    assertEq(governor.quorum(), 40_000_000e18);
+    assertEq(governor.minQuorum(), 2_000_000e18);
+    assertEq(governor.quorum(block.timestamp - 1), 2_000_000e18);
+    assertEq(governor.quorumNumerator(), 15);
+
+    address voter = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
+    _delegateVote(voter, 100_000_000e18);
+    assertEq(governor.quorum(block.timestamp - 1), (100_000_000e18 * 15) / 100);
   }
 
   function test_set_voting_delay() public {
@@ -122,9 +126,9 @@ contract MystikoGovernorTest is Test, Random {
     uint256[] memory values = new uint256[](1);
     values[0] = 0;
     bytes[] memory calldatas = new bytes[](1);
-    calldatas[0] = abi.encodeWithSignature("updateQuorum(uint256)", 50_000_000e18);
+    calldatas[0] = abi.encodeWithSignature("updateMinQuorum(uint256)", 50_000_000e18);
     string memory description = "";
-    uint256 proposalThreshold = 10_000_000e18;
+    uint256 proposalThreshold = 1_000_000e18;
 
     bytes memory encodedError = abi.encodeWithSelector(
       IGovernor.GovernorInsufficientProposerVotes.selector,
@@ -185,8 +189,8 @@ contract MystikoGovernorTest is Test, Random {
     uint32 currentState1 = uint32(governor.state(proposeId));
     assertEq(currentState1, 1);
 
-    uint256 quorumVotes = governor.quorum(block.timestamp);
-    assertEq(quorumVotes, 4 * proposalThreshold);
+    uint256 quorumVotes = governor.quorum(block.timestamp - 1);
+    assertEq(quorumVotes, 2_000_000e18);
 
     bool needsQueuing = governor.proposalNeedsQueuing(proposeId);
     assertTrue(needsQueuing);
@@ -213,7 +217,11 @@ contract MystikoGovernorTest is Test, Random {
     vm.warp(block.timestamp + 1);
     vm.roll(block.number + 1);
     governor.execute(targets, values, calldatas, keccak256(bytes(description)));
-    assertEq(governor.quorum(), 50_000_000e18);
+
+    vm.warp(block.timestamp + 1);
+    vm.roll(block.number + 1);
+    assertEq(governor.minQuorum(), 50_000_000e18);
+    assertEq(governor.quorum(block.timestamp - 1), 50_000_000e18);
   }
 
   function test_cancel_propose() public {
@@ -225,7 +233,7 @@ contract MystikoGovernorTest is Test, Random {
     bytes[] memory calldatas = new bytes[](1);
     calldatas[0] = abi.encodeWithSignature("setVotingDelay(uint48)", 4 days);
     string memory description = "test cancel propose";
-    uint256 proposalThreshold = 10_000_000e18;
+    uint256 proposalThreshold = 1_000_000e18;
 
     _delegateVote(proposer, proposalThreshold);
     vm.prank(proposer);

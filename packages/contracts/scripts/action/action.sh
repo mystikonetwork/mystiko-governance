@@ -20,7 +20,7 @@ else
 fi
 echo $1 $2 $3
 # Deploy the contract using Foundry
-forge script scripts/test/$target_action.s.sol:$target_contract \
+forge script scripts/action/$target_action.s.sol:$target_contract \
  --rpc-url $RPC_URL \
  --private-key $TESTNET_PRIVATE_KEY \
  --broadcast \

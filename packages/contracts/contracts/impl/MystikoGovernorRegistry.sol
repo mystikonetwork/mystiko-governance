@@ -38,6 +38,7 @@ contract MystikoGovernorRegistry {
   }
 
   function setMystikoDAO(address _newDao) external onlyDAO {
+    if (dao == _newDao) revert GovernanceErrors.NotChanged();
     dao = _newDao;
     daoMap[_newDao] = true;
     emit MystikoDAOChanged(_newDao);
