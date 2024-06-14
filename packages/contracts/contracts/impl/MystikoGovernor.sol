@@ -28,11 +28,11 @@ contract MystikoGovernor is
     TimelockController _timelock,
     uint48 _votingDelay,
     uint32 _votingPeriod,
-    uint48 _voteExtension
+    uint48 _voteExtensionDelay
   )
     Governor("MystikoGovernor")
     GovernorSettings(_votingDelay, _votingPeriod, 1_000_000e18)
-    GovernorPreventLateQuorum(_voteExtension)
+    GovernorPreventLateQuorum(_voteExtensionDelay)
     GovernorVotes(_voteToken)
     MystikoGovernorMinQuorum(2_000_000e18)
     GovernorVotesQuorumFraction(15)
