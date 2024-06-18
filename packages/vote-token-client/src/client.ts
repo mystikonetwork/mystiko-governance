@@ -20,15 +20,10 @@ export class Client {
 
   constructor(chainId: number = 1) {
     this.config = new Config(chainId);
-    this.provider = new providers.JsonRpcProvider(this.config.providers[0]);
-    this.xzkInstance = this.config.xzkContractInstance(this.provider);
-    this.vXZkInstance = this.config.vXZkContractInstance(this.provider);
-    this.initProvider();
-  }
-
-  private initProvider() {
     const factory = new DefaultProviderFactory();
     this.provider = factory.createProvider(this.config.providers);
+    this.xzkInstance = this.config.xzkContractInstance(this.provider);
+    this.vXZkInstance = this.config.vXZkContractInstance(this.provider);
   }
 
   public xzkBalance(account: string): Promise<number> {

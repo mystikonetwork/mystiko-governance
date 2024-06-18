@@ -13,9 +13,9 @@ import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract QueryRegistry is Script {
   function run() external {
     vm.startBroadcast();
-      address registry = vm.envAddress("DAO_REGISTRY_ADDRESS");
-      address dao = MystikoGovernorRegistry(registry).dao();
-      console.log("DAO: ", dao);
-      vm.stopBroadcast();
+    address registry = vm.envAddress("DAO_REGISTRY_ADDRESS");
+    address dao = MystikoGovernorRegistry(registry).dao();
+    console.log("DAO: ", dao);
+    vm.stopBroadcast();
   }
 }
