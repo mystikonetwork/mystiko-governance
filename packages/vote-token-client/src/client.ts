@@ -1,13 +1,14 @@
 import { ERC20, MystikoVoteToken } from '@mystikonetwork/contracts-abi-governance';
 import {
-  toBN,
+  DefaultProviderFactory,
   fromDecimals,
+  toBN,
   toDecimals,
   waitTransactionHash,
-  DefaultProviderFactory,
 } from '@mystikonetwork/utils';
 import { PopulatedTransaction, providers } from 'ethers';
 import { Config } from './config';
+import { createErrorPromise, MystikoGovernanceErrorCode } from './error';
 
 export class Client {
   private readonly config: Config;
@@ -29,13 +30,15 @@ export class Client {
   public xzkBalance(account: string): Promise<number> {
     return this.xzkInstance
       .balanceOf(account)
-      .then((balance) => fromDecimals(toBN(balance.toString()), this.config.tokenDecimals));
+      .then((balance) => fromDecimals(toBN(balance.toString()), this.config.tokenDecimals))
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   public vXZkBalance(account: string): Promise<number> {
     return this.vXZkInstance
       .balanceOf(account)
-      .then((balance) => fromDecimals(toBN(balance.toString()), this.config.tokenDecimals));
+      .then((balance) => fromDecimals(toBN(balance.toString()), this.config.tokenDecimals))
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   public approve(account: string, amount: number): Promise<PopulatedTransaction> {
@@ -47,9 +50,7 @@ export class Client {
           amountBN.toString(),
         );
       })
-      .catch((error) => {
-        throw error;
-      });
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   public deposit(account: string, target: string, amount: number): Promise<PopulatedTransaction> {
@@ -58,9 +59,7 @@ export class Client {
         const amountBN = toDecimals(amount, this.config.tokenDecimals);
         return this.vXZkInstance.populateTransaction.depositFor(target, amountBN.toString());
       })
-      .catch((error) => {
-        throw error;
-      });
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   public withdraw(account: string, target: string, amount: number): Promise<PopulatedTransaction> {
@@ -69,9 +68,7 @@ export class Client {
         const amountBN = toDecimals(amount, this.config.tokenDecimals);
         return this.vXZkInstance.populateTransaction.withdrawTo(target, amountBN.toString());
       })
-      .catch((error) => {
-        throw error;
-      });
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   public confirm(
@@ -79,51 +76,51 @@ export class Client {
     confirmations: number = 5,
     timeout: number = 60000,
   ): Promise<providers.TransactionReceipt> {
-    return waitTransactionHash(this.provider, txHash, confirmations, timeout);
+    return waitTransactionHash(this.provider, txHash, confirmations, timeout).catch((error) =>
+      createErrorPromise(error.toString()),
+    );
   }
 
   private xzkAllowance(account: string): Promise<number> {
     return this.xzkInstance
       .allowance(account, this.config.vXZkContractAddress)
-      .then((allowance) => fromDecimals(toBN(allowance.toString()), this.config.tokenDecimals));
+      .then((allowance) => fromDecimals(toBN(allowance.toString()), this.config.tokenDecimals))
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   private checkVXZKBalance(account: string, amount: number): Promise<void> {
-    return this.vXZkBalance(account).then(
-      (balance) => {
+    return this.vXZkBalance(account)
+      .then((balance) => {
         if (balance < amount) {
-          throw new Error('Insufficient balance');
+          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
         }
-      },
-      (error) => {
-        throw error;
-      },
-    );
+        return Promise.resolve();
+      })
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   private checkXZKBalance(account: string, amount: number): Promise<void> {
-    return this.xzkBalance(account).then(
-      (balance) => {
+    return this.xzkBalance(account)
+      .then((balance) => {
         if (balance < amount) {
-          throw new Error('Insufficient balance');
+          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
         }
-      },
-      (error) => {
-        throw error;
-      },
-    );
+        return Promise.resolve();
+      })
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   private checkApprove(account: string, amount: number): Promise<void> {
-    return this.xzkAllowance(account).then(
-      (allowance) => {
+    return this.xzkAllowance(account)
+      .then((allowance) => {
         if (allowance < amount) {
-          throw new Error('Insufficient approve amount');
+          return createErrorPromise(
+            'Insufficient approve amount',
+            MystikoGovernanceErrorCode.APPROVE_AMOUNT_ERROR,
+          );
         }
-      },
-      (error) => {
-        throw error;
-      },
-    );
+        return Promise.resolve();
+      })
+      .catch((error) => createErrorPromise(error.toString()));
   }
 }
