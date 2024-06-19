@@ -58,7 +58,7 @@ contract MystikoGovernorTest is Test, Random {
     controller.grantGovernorRole(address(governor));
   }
 
-  function vote_one_round(uint32 pass, uint32 against,  bool bSuccess) public {
+  function vote_one_round(uint32 pass, uint32 against, bool bSuccess) public {
     address proposer = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     address voter = address(uint160(uint256(keccak256(abi.encodePacked(_random())))));
     address[] memory targets = new address[](1);
@@ -66,7 +66,7 @@ contract MystikoGovernorTest is Test, Random {
     uint256[] memory values = new uint256[](1);
     values[0] = 0;
     bytes[] memory calldatas = new bytes[](1);
-    calldatas[0] = abi.encodeWithSignature("updateQuorumNumerator(uint256)", 15+pass);
+    calldatas[0] = abi.encodeWithSignature("updateQuorumNumerator(uint256)", 15 + pass);
     string memory description = string(abi.encodePacked(_random()));
 
     _delegateVote(proposer, pass * PROPOSAL_THRESHOLD);
@@ -98,7 +98,7 @@ contract MystikoGovernorTest is Test, Random {
 
       uint32 currentState1 = uint32(governor.state(proposeId));
       assertEq(currentState1, uint32(IGovernor.ProposalState.Executed));
-      assertEq(governor.quorumNumerator(), 15+pass);
+      assertEq(governor.quorumNumerator(), 15 + pass);
     } else {
       uint32 currentState1 = uint32(governor.state(proposeId));
       assertEq(currentState1, uint32(IGovernor.ProposalState.Defeated));

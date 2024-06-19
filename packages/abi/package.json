@@ -1,6 +1,6 @@
 {
   "name": "@mystikonetwork/contracts-abi-governance",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/mystikonetwork/mystiko-governance",
@@ -9,6 +9,9 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
+  "types": "build/cjs/index.d.ts",
   "files": [
     "build"
   ],
@@ -26,11 +29,16 @@
     "build:contracts": "cd ../contracts && yarn build"
   },
   "devDependencies": {
-    "@mystikonetwork/contracts-governance": "^0.3.0",
+    "@mystikonetwork/contracts-governance": "^0.3.2",
     "@tsconfig/recommended": "^1.0.1",
     "@typechain/ethers-v5": "^11.1.2",
     "prettier": "3.2.4",
     "typechain": "^8.3.2",
     "typescript": "5.1.6"
+  },
+  "dependencies": {
+    "@ethersproject/abi": "^5.5.3",
+    "@ethersproject/providers": "^5.5.3",
+    "ethers": "^5.5.3"
   }
 }
