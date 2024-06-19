@@ -2,24 +2,33 @@ import * as dotenv from 'dotenv';
 import { expect, test } from '@jest/globals';
 import { ethers } from 'ethers';
 import { Client } from '../src';
+import voteTokenClient from '../src/client';
 
 dotenv.config();
 
 test('test balance ', async () => {
-  const client = new Client(11155111, 'https://rpc.xxx.io/');
+  const client = new Client();
+  client.initialize({
+    chainId: 11155111,
+    scanApiBaseUrl: 'https://rpc.xxx.io/',
+  });
   const account = '0xb1a0f47558E8De7C70bd7Ffd3b1099Eadc0B3c0D';
   expect(client).toBeInstanceOf(Client);
   await client.xzkBalance(account).then((balance) => {
-    expect(balance).toEqual(123);
+    expect(balance).toEqual(113);
   });
   await client.vXZkBalance(account).then((balance) => {
-    expect(balance).toEqual(100);
+    expect(balance).toEqual(110);
   });
 });
 
 test('test deposit and withdraw meet error', async () => {
-  const client = new Client(11155111, 'https://rpc.xxx.io/');
-  const amount = 1000000000;
+  const client = new Client();
+  client.initialize({
+    chainId: 11155111,
+    scanApiBaseUrl: 'https://rpc.xxx.io/',
+  });
+  const amount = 12345000000;
   const privateKey = process.env.TESTER_PRIVATE_KEY;
   if (!privateKey) {
     throw new Error('TESTER_PRIVATE_KEY is not defined');
@@ -38,7 +47,11 @@ test('test deposit and withdraw meet error', async () => {
 });
 
 test('test deposit and withdraw', async () => {
-  const client = new Client(11155111, 'https://rpc.xxx.io/');
+  const client = new Client();
+  client.initialize({
+    chainId: 11155111,
+    scanApiBaseUrl: 'https://rpc.xxx.io/',
+  });
   const amount = 10;
   const privateKey = process.env.TESTER_PRIVATE_KEY;
   if (!privateKey) {
@@ -69,17 +82,16 @@ test('test deposit and withdraw', async () => {
 });
 
 test('test cost', async () => {
-  const client = new Client();
-
-  const txApproveCost = await client.approveCostInUSD();
+  voteTokenClient.initialize();
+  const txApproveCost = await voteTokenClient.approveCostInUSD();
   expect(txApproveCost).toBeGreaterThan(0.01);
 
-  const txDepositCost = await client.depositCostInUSD();
+  const txDepositCost = await voteTokenClient.depositCostInUSD();
   expect(txDepositCost).toBeGreaterThan(0.01);
 
-  const txWithdrawCost = await client.withdrawCostInUSD();
+  const txWithdrawCost = await voteTokenClient.withdrawCostInUSD();
   expect(txWithdrawCost).toBeGreaterThan(0.01);
 
-  const txApproveCost2 = await client.approveCostInUSD();
+  const txApproveCost2 = await voteTokenClient.approveCostInUSD();
   expect(txApproveCost2).toBeGreaterThan(0.01);
 });

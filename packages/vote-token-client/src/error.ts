@@ -1,7 +1,8 @@
 export enum MystikoGovernanceErrorCode {
   UNKNOWN_ERROR = 0,
-  BALANCE_ERROR = 1,
-  APPROVE_AMOUNT_ERROR = 2,
+  NOT_INITIALIZED_ERROR = 1,
+  BALANCE_ERROR = 2,
+  APPROVE_AMOUNT_ERROR = 3,
 }
 
 export class MystikoGovernanceError extends Error {

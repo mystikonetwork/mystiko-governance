@@ -11,18 +11,25 @@ import { PopulatedTransaction, providers } from 'ethers';
 import { Config } from './config';
 import { createErrorPromise, MystikoGovernanceErrorCode } from './error';
 
+export interface InitOptions {
+  chainId?: number;
+  scanApiBaseUrl?: string;
+}
+
 export class Client {
-  private readonly config: Config;
+  private config?: Config;
 
-  private readonly xzkInstance: ERC20;
+  private xzkInstance?: ERC20;
 
-  private readonly vXZkInstance: MystikoVoteToken;
+  private vXZkInstance?: MystikoVoteToken;
 
-  private fetcher: ScanApiEtherFetcher;
+  private fetcher?: ScanApiEtherFetcher;
 
-  public provider: providers.Provider;
+  public provider?: providers.Provider;
 
-  constructor(chainId: number = 1, scanApiBaseUrl?: string) {
+  initialize(options?: InitOptions): void {
+    const chainId = options?.chainId || 1;
+    const scanApiBaseUrl = options?.scanApiBaseUrl;
     this.config = new Config(chainId);
     const factory = new DefaultProviderFactory();
     this.provider = factory.createProvider(this.config.providers);
@@ -32,20 +39,36 @@ export class Client {
   }
 
   public xzkBalance(account: string): Promise<number> {
+    if (!this.xzkInstance || !this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { decimals } = this.config;
     return this.xzkInstance
       .balanceOf(account)
-      .then((balance) => fromDecimals(toBN(balance.toString()), this.config.decimals))
+      .then((balance) => fromDecimals(toBN(balance.toString()), decimals))
       .catch((error) => createErrorPromise(error.toString()));
   }
 
   public vXZkBalance(account: string): Promise<number> {
+    if (!this.vXZkInstance || !this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { decimals } = this.config;
     return this.vXZkInstance
       .balanceOf(account)
-      .then((balance) => fromDecimals(toBN(balance.toString()), this.config.decimals))
+      .then((balance) => fromDecimals(toBN(balance.toString()), decimals))
       .catch((error) => createErrorPromise(error.toString()));
   }
 
   public approve(account: string, amount: number): Promise<PopulatedTransaction | undefined> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { decimals } = this.config;
+    const { vXZkContract } = this.config;
     return this.xzkAllowance(account)
       .then((allowance: number) => {
         if (allowance >= amount) {
@@ -53,40 +76,78 @@ export class Client {
         }
 
         return this.checkXZKBalance(account, amount).then(() => {
-          const amountBN = toDecimals(amount, this.config.decimals);
-          return this.xzkInstance.populateTransaction.approve(this.config.vXZkContract, amountBN.toString());
+          if (!this.xzkInstance) {
+            return createErrorPromise(
+              'Client not initialized',
+              MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR,
+            );
+          }
+          const amountBN = toDecimals(amount, decimals);
+          return this.xzkInstance.populateTransaction.approve(vXZkContract, amountBN.toString());
         });
       })
       .catch((error) => createErrorPromise(error.toString()));
   }
 
   public approveCostInUSD(): Promise<number> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
     return this.calcCostInUSD(this.config.approveGas).catch((error) => createErrorPromise(error.toString()));
   }
 
   public deposit(account: string, target: string, amount: number): Promise<PopulatedTransaction> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { decimals } = this.config;
     return this.checkApprove(account, amount)
       .then(() => {
-        const amountBN = toDecimals(amount, this.config.decimals);
+        if (!this.vXZkInstance) {
+          return createErrorPromise(
+            'Client not initialized',
+            MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR,
+          );
+        }
+        const amountBN = toDecimals(amount, decimals);
         return this.vXZkInstance.populateTransaction.depositFor(target, amountBN.toString());
       })
       .catch((error) => createErrorPromise(error.toString()));
   }
 
   public depositCostInUSD(): Promise<number> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
     return this.calcCostInUSD(this.config.depositGas).catch((error) => createErrorPromise(error.toString()));
   }
 
   public withdraw(account: string, target: string, amount: number): Promise<PopulatedTransaction> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { decimals } = this.config;
     return this.checkXZKBalance(account, amount)
       .then(() => {
-        const amountBN = toDecimals(amount, this.config.decimals);
+        if (!this.vXZkInstance) {
+          return createErrorPromise(
+            'Client not initialized',
+            MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR,
+          );
+        }
+        const amountBN = toDecimals(amount, decimals);
         return this.vXZkInstance.populateTransaction.withdrawTo(target, amountBN.toString());
       })
       .catch((error) => createErrorPromise(error.toString()));
   }
 
   public withdrawCostInUSD(): Promise<number> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
     return this.calcCostInUSD(this.config.withdrawGas).catch((error) => createErrorPromise(error.toString()));
   }
 
@@ -95,15 +156,25 @@ export class Client {
     confirmations: number = 5,
     timeout: number = 60000,
   ): Promise<providers.TransactionReceipt> {
+    if (!this.provider) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
     return waitTransactionHash(this.provider, txHash, confirmations, timeout).catch((error) =>
       createErrorPromise(error.toString()),
     );
   }
 
   private xzkAllowance(account: string): Promise<number> {
+    if (!this.xzkInstance || !this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { decimals } = this.config;
+    const { vXZkContract } = this.config;
     return this.xzkInstance
-      .allowance(account, this.config.vXZkContract)
-      .then((allowance) => fromDecimals(toBN(allowance.toString()), this.config.decimals))
+      .allowance(account, vXZkContract)
+      .then((allowance) => fromDecimals(toBN(allowance.toString()), decimals))
       .catch((error) => createErrorPromise(error.toString()));
   }
 
@@ -150,17 +221,26 @@ export class Client {
   }
 
   private calcCostInUSD(gas: number): Promise<number> {
-    return this.getEthPrice().then((ethPrice) =>
-      this.provider.getGasPrice().then((gasPrice) => {
+    return this.getEthPrice().then((ethPrice) => {
+      if (!this.provider) {
+        return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+      }
+      return this.provider.getGasPrice().then((gasPrice) => {
         const costGas = toBN(gasPrice.toString()).mul(toBN(gas.toString()));
         const costEth = fromDecimals(costGas, 18);
         const costUSD = costEth * ethPrice;
         return parseFloat(costUSD.toFixed(2));
-      }),
-    );
+      });
+    });
   }
 
   private getEthPrice(): Promise<number> {
+    if (!this.fetcher) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
     return this.fetcher.getEthPriceInUSD();
   }
 }
+
+const voteTokenClient = new Client();
+export default voteTokenClient;
