@@ -1,9 +1,10 @@
 import { test, expect } from '@jest/globals';
-import { Client } from '../src';
+import voteTokenClient, {Client} from "../src";
 
 test('test balance', () => {
-  const client = new Client();
-  expect(client).toBeInstanceOf(Client);
-
-  expect(client.confirm('0x123')).rejects.toThrowError();
+  expect(voteTokenClient).toBeInstanceOf(Client);
+  expect(voteTokenClient.confirm('0x123')).rejects.toThrowError();
+  voteTokenClient.initialize();
+  voteTokenClient.initialize();
+  expect(voteTokenClient.confirm('0x123')).rejects.toThrowError();
 });

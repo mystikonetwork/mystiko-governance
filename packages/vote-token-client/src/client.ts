@@ -27,7 +27,13 @@ export class Client {
 
   public provider?: providers.Provider;
 
+  private isInitialized: boolean = false;
+
   initialize(options?: InitOptions): void {
+    if (this.isInitialized) {
+      return;
+    }
+
     const chainId = options?.chainId || 1;
     const scanApiBaseUrl = options?.scanApiBaseUrl;
     this.config = new Config(chainId);
@@ -36,6 +42,7 @@ export class Client {
     this.fetcher = this.initScanApiFetcher(chainId, scanApiBaseUrl);
     this.xzkInstance = this.config.xzkContractInstance(this.provider);
     this.vXZkInstance = this.config.vXZkContractInstance(this.provider);
+    this.isInitialized = true;
   }
 
   public xzkBalance(account: string): Promise<number> {

@@ -10,7 +10,6 @@ test('test balance ', async () => {
   const client = new Client();
   client.initialize({
     chainId: 11155111,
-    scanApiBaseUrl: 'https://rpc.xxx.io/',
   });
   const account = '0xb1a0f47558E8De7C70bd7Ffd3b1099Eadc0B3c0D';
   expect(client).toBeInstanceOf(Client);
@@ -26,7 +25,6 @@ test('test deposit and withdraw meet error', async () => {
   const client = new Client();
   client.initialize({
     chainId: 11155111,
-    scanApiBaseUrl: 'https://rpc.xxx.io/',
   });
   const amount = 12345000000;
   const privateKey = process.env.TESTER_PRIVATE_KEY;
@@ -50,7 +48,6 @@ test('test deposit and withdraw', async () => {
   const client = new Client();
   client.initialize({
     chainId: 11155111,
-    scanApiBaseUrl: 'https://rpc.xxx.io/',
   });
   const amount = 10;
   const privateKey = process.env.TESTER_PRIVATE_KEY;
@@ -83,6 +80,8 @@ test('test deposit and withdraw', async () => {
 
 test('test cost', async () => {
   voteTokenClient.initialize();
+  voteTokenClient.initialize();
+
   const txApproveCost = await voteTokenClient.approveCostInUSD();
   expect(txApproveCost).toBeGreaterThan(0.01);
 
