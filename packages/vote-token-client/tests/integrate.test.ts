@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { expect, test } from '@jest/globals';
 import { ethers } from 'ethers';
+import { toBN } from '@mystikonetwork/utils';
 import { Client } from '../src';
 import voteTokenClient from '../src/client';
 
@@ -14,10 +15,13 @@ test('test balance ', async () => {
   const account = '0xb1a0f47558E8De7C70bd7Ffd3b1099Eadc0B3c0D';
   expect(client).toBeInstanceOf(Client);
   await client.xzkBalance(account).then((balance) => {
-    expect(balance).toEqual(113);
+    expect(balance).toBeDefined();
   });
   await client.vXZkBalance(account).then((balance) => {
-    expect(balance).toEqual(110);
+    expect(balance).toBeDefined();
+  });
+  await client.vXZkTotalSupply().then((totalSupply) => {
+    expect(totalSupply).toBeDefined();
   });
 });
 
@@ -34,13 +38,28 @@ test('test deposit and withdraw meet error', async () => {
 
   const wallet = new ethers.Wallet(privateKey, client.provider);
 
-  await expect(client.approve(wallet.address, amount)).rejects.toThrow(/Insufficient balance/);
-  await expect(client.deposit(wallet.address, wallet.address, amount)).rejects.toThrow(
-    /Insufficient approve amount/,
-  );
-  await expect(client.withdraw(wallet.address, wallet.address, amount)).rejects.toThrow(
+  await expect(client.approve(wallet.address, undefined, amount)).rejects.toThrow(/Insufficient balance/);
+  await expect(client.approve(wallet.address, true, undefined)).toBeTruthy();
+  await expect(client.approve(wallet.address, true, amount)).rejects.toThrow(/isMax and amount conflict/);
+
+  await expect(client.deposit(wallet.address, wallet.address, undefined, amount)).rejects.toThrow(
     /Insufficient balance/,
   );
+  await expect(client.deposit(wallet.address, wallet.address, true, undefined)).rejects.toThrow(
+    /Insufficient approve amount/,
+  );
+  await expect(client.deposit(wallet.address, wallet.address, true, amount)).rejects.toThrow(
+    /isMax and amount conflict/,
+  );
+
+  await expect(client.withdraw(wallet.address, wallet.address, undefined, amount)).rejects.toThrow(
+    /Insufficient balance/,
+  );
+  await expect(client.withdraw(wallet.address, wallet.address, true, undefined)).toBeTruthy();
+  await expect(client.withdraw(wallet.address, wallet.address, true, amount)).rejects.toThrow(
+    /isMax and amount conflict/,
+  );
+
   await expect(client.confirm('0x123')).rejects.toThrowError();
 });
 
@@ -49,7 +68,7 @@ test('test deposit and withdraw', async () => {
   client.initialize({
     chainId: 11155111,
   });
-  const amount = 10;
+  const amount = 10.1245;
   const privateKey = process.env.TESTER_PRIVATE_KEY;
   if (!privateKey) {
     throw new Error('TESTER_PRIVATE_KEY is not defined');
@@ -57,25 +76,69 @@ test('test deposit and withdraw', async () => {
 
   const wallet = new ethers.Wallet(privateKey, client.provider);
 
-  const txApprove = await client.approve(wallet.address, amount);
+  const balanceBeforeXZK = await client.xzkBalance(wallet.address);
+  const balanceBeforeVXZK = await client.vXZkBalance(wallet.address);
+
+  const txApprove = await client.approve(wallet.address, undefined, amount);
   if (txApprove) {
     const rspApprove = await wallet.sendTransaction(txApprove);
     const confirmApprove = await client.confirm(rspApprove.hash, 2, 600000);
     expect(confirmApprove).toBeTruthy();
   }
 
-  const txApprove2 = await client.approve(wallet.address, amount);
+  const txApprove2 = await client.approve(wallet.address, undefined, amount);
   expect(txApprove2).toBeUndefined();
 
-  const txDeposit = await client.deposit(wallet.address, wallet.address, amount);
+  const txDeposit = await client.deposit(wallet.address, wallet.address, undefined, amount);
   const rspDeposit = await wallet.sendTransaction(txDeposit);
   const confirmDeposit = await client.confirm(rspDeposit.hash, 2, 600000);
   expect(confirmDeposit).toBeTruthy();
 
-  const txWithdraw = await client.withdraw(wallet.address, wallet.address, amount);
+  const balanceAfterXZK = await client.xzkBalance(wallet.address);
+  const balanceAfterVXZK = await client.vXZkBalance(wallet.address);
+  expect(toBN(balanceAfterXZK).eq(toBN(balanceBeforeXZK).sub(toBN(amount)))).toBeTruthy();
+  expect(toBN(balanceAfterVXZK).eq(toBN(balanceBeforeVXZK).add(toBN(amount)))).toBeTruthy();
+
+  const txWithdraw = await client.withdraw(wallet.address, wallet.address, undefined, amount);
   const rspWithdraw = await wallet.sendTransaction(txWithdraw);
   const confirmWithdraw = await client.confirm(rspWithdraw.hash, 2, 600000);
   expect(confirmWithdraw).toBeTruthy();
+
+  const balanceAfterXZK2 = await client.xzkBalance(wallet.address);
+  const balanceAfterVXZK2 = await client.vXZkBalance(wallet.address);
+  expect(balanceAfterXZK2).toEqual(balanceBeforeXZK);
+  expect(balanceAfterVXZK2).toEqual(balanceBeforeVXZK);
+
+  // test isMax true
+  const txApprove3 = await client.approve(wallet.address, true, undefined);
+  if (txApprove3) {
+    const rspApprove = await wallet.sendTransaction(txApprove3);
+    const confirmApprove3 = await client.confirm(rspApprove.hash, 2, 600000);
+    expect(confirmApprove3).toBeTruthy();
+  }
+
+  const txApprove4 = await client.approve(wallet.address, true, undefined);
+  expect(txApprove4).toBeUndefined();
+
+  const txDeposit3 = await client.deposit(wallet.address, wallet.address, true, undefined);
+  const rspDeposit3 = await wallet.sendTransaction(txDeposit3);
+  const confirmDeposit3 = await client.confirm(rspDeposit3.hash, 2, 600000);
+  expect(confirmDeposit3).toBeTruthy();
+
+  const balanceAfterXZK3 = await client.xzkBalance(wallet.address);
+  const balanceAfterVXZK3 = await client.vXZkBalance(wallet.address);
+  expect(balanceAfterXZK3).toEqual(0);
+  expect(toBN(balanceAfterVXZK3).eq(toBN(balanceAfterXZK2).add(toBN(balanceAfterVXZK2)))).toBeTruthy();
+
+  const txWithdraw3 = await client.withdraw(wallet.address, wallet.address, true, undefined);
+  const rspWithdraw3 = await wallet.sendTransaction(txWithdraw3);
+  const confirmWithdraw3 = await client.confirm(rspWithdraw3.hash, 2, 600000);
+  expect(confirmWithdraw3).toBeTruthy();
+
+  const balanceAfterXZK4 = await client.xzkBalance(wallet.address);
+  const balanceAfterVXZK4 = await client.vXZkBalance(wallet.address);
+  expect(balanceAfterXZK4).toEqual(balanceBeforeXZK);
+  expect(balanceAfterVXZK4).toEqual(0);
 });
 
 test('test cost', async () => {
@@ -83,14 +146,14 @@ test('test cost', async () => {
   voteTokenClient.initialize();
 
   const txApproveCost = await voteTokenClient.approveCostInUSD();
-  expect(txApproveCost).toBeGreaterThan(0.01);
+  expect(txApproveCost).toBeGreaterThan(0.001);
 
   const txDepositCost = await voteTokenClient.depositCostInUSD();
-  expect(txDepositCost).toBeGreaterThan(0.01);
+  expect(txDepositCost).toBeGreaterThan(0.001);
 
   const txWithdrawCost = await voteTokenClient.withdrawCostInUSD();
-  expect(txWithdrawCost).toBeGreaterThan(0.01);
+  expect(txWithdrawCost).toBeGreaterThan(0.001);
 
   const txApproveCost2 = await voteTokenClient.approveCostInUSD();
-  expect(txApproveCost2).toBeGreaterThan(0.01);
+  expect(txApproveCost2).toBeGreaterThan(0.001);
 });

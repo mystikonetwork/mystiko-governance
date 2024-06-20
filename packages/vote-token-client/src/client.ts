@@ -8,6 +8,7 @@ import {
 } from '@mystikonetwork/utils';
 import { ScanApiEtherFetcherFactory, ScanApiEtherFetcher } from '@mystikonetwork/ether-fetcher';
 import { PopulatedTransaction, providers } from 'ethers';
+import BN from 'bn.js';
 import { Config } from './config';
 import { createErrorPromise, MystikoGovernanceErrorCode } from './error';
 
@@ -46,81 +47,94 @@ export class Client {
   }
 
   public xzkBalance(account: string): Promise<number> {
-    if (!this.xzkInstance || !this.config) {
+    if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
     const { decimals } = this.config;
-    return this.xzkInstance
-      .balanceOf(account)
-      .then((balance) => fromDecimals(toBN(balance.toString()), decimals))
-      .catch((error) => createErrorPromise(error.toString()));
+    return this.queryXZKBalance(account).then((balance) => fromDecimals(balance, decimals));
   }
 
-  public vXZkBalance(account: string): Promise<number> {
+  public vXZkTotalSupply(): Promise<number> {
     if (!this.vXZkInstance || !this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
     const { decimals } = this.config;
     return this.vXZkInstance
-      .balanceOf(account)
-      .then((balance) => fromDecimals(toBN(balance.toString()), decimals))
+      .totalSupply()
+      .then((totalSupply) => fromDecimals(toBN(totalSupply.toString()), decimals))
       .catch((error) => createErrorPromise(error.toString()));
   }
 
-  public approve(account: string, amount: number): Promise<PopulatedTransaction | undefined> {
+  public vXZkBalance(account: string): Promise<number> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
     const { decimals } = this.config;
-    const { vXZkContract } = this.config;
-    return this.xzkAllowance(account)
-      .then((allowance: number) => {
-        if (allowance >= amount) {
-          return Promise.resolve(undefined);
-        }
+    return this.queryVXZKBalance(account).then((balance) => fromDecimals(balance, decimals));
+  }
 
-        return this.checkXZKBalance(account, amount).then(() => {
-          if (!this.xzkInstance) {
-            return createErrorPromise(
-              'Client not initialized',
-              MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR,
-            );
-          }
-          const amountBN = toDecimals(amount, decimals);
-          return this.xzkInstance.populateTransaction.approve(vXZkContract, amountBN.toString());
-        });
-      })
-      .catch((error) => createErrorPromise(error.toString()));
+  public approve(
+    account: string,
+    isMax?: boolean,
+    amount?: number,
+  ): Promise<PopulatedTransaction | undefined> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    if ((isMax && amount) || (!isMax && amount === undefined)) {
+      return createErrorPromise('isMax and amount conflict', MystikoGovernanceErrorCode.PARAMETER_ERROR);
+    }
+
+    const { decimals } = this.config;
+    return this.queryXZKBalance(account).then((balance) => {
+      if (amount !== undefined) {
+        const amountBN = toDecimals(amount, decimals);
+        if (amountBN.gt(balance)) {
+          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
+        }
+        return this.buildApproveTransaction(account, amountBN);
+      }
+
+      return this.buildApproveTransaction(account, balance);
+    });
   }
 
   public approveCostInUSD(): Promise<number> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
-    return this.calcCostInUSD(this.config.approveGas).catch((error) => createErrorPromise(error.toString()));
+    return this.calcCostInUSD(this.config.approveGas);
   }
 
-  public deposit(account: string, target: string, amount: number): Promise<PopulatedTransaction> {
+  public deposit(
+    account: string,
+    target: string,
+    isMax?: boolean,
+    amount?: number,
+  ): Promise<PopulatedTransaction> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
+    if ((isMax && amount) || (!isMax && amount === undefined)) {
+      return createErrorPromise('isMax and amount conflict', MystikoGovernanceErrorCode.PARAMETER_ERROR);
+    }
     const { decimals } = this.config;
-    return this.checkApprove(account, amount)
-      .then(() => {
-        if (!this.vXZkInstance) {
-          return createErrorPromise(
-            'Client not initialized',
-            MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR,
-          );
-        }
+    return this.queryXZKBalance(account).then((balance) => {
+      if (amount !== undefined) {
         const amountBN = toDecimals(amount, decimals);
-        return this.vXZkInstance.populateTransaction.depositFor(target, amountBN.toString());
-      })
-      .catch((error) => createErrorPromise(error.toString()));
+        if (amountBN.gt(balance)) {
+          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
+        }
+        return this.buildDepositTransaction(account, target, amountBN);
+      }
+
+      return this.buildDepositTransaction(account, target, balance);
+    });
   }
 
   public depositCostInUSD(): Promise<number> {
@@ -128,34 +142,47 @@ export class Client {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
-    return this.calcCostInUSD(this.config.depositGas).catch((error) => createErrorPromise(error.toString()));
+    return this.calcCostInUSD(this.config.depositGas);
   }
 
-  public withdraw(account: string, target: string, amount: number): Promise<PopulatedTransaction> {
-    if (!this.config) {
+  public withdraw(
+    account: string,
+    target: string,
+    isMax?: boolean,
+    amount?: number,
+  ): Promise<PopulatedTransaction> {
+    if (!this.config || !this.vXZkInstance) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
+    if ((isMax && amount) || (!isMax && amount === undefined)) {
+      return createErrorPromise('isMax and amount conflict', MystikoGovernanceErrorCode.PARAMETER_ERROR);
+    }
+
     const { decimals } = this.config;
-    return this.checkXZKBalance(account, amount)
-      .then(() => {
-        if (!this.vXZkInstance) {
-          return createErrorPromise(
-            'Client not initialized',
-            MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR,
-          );
-        }
+    const { vXZkInstance } = this;
+    return this.queryVXZKBalance(account).then((balance) => {
+      if (amount !== undefined) {
         const amountBN = toDecimals(amount, decimals);
-        return this.vXZkInstance.populateTransaction.withdrawTo(target, amountBN.toString());
-      })
-      .catch((error) => createErrorPromise(error.toString()));
+        if (amountBN.gt(balance)) {
+          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
+        }
+        return vXZkInstance.populateTransaction
+          .withdrawTo(target, amountBN.toString())
+          .catch((error) => createErrorPromise(error.toString()));
+      }
+
+      return vXZkInstance.populateTransaction
+        .withdrawTo(target, balance.toString())
+        .catch((error) => createErrorPromise(error.toString()));
+    });
   }
 
   public withdrawCostInUSD(): Promise<number> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
-    return this.calcCostInUSD(this.config.withdrawGas).catch((error) => createErrorPromise(error.toString()));
+    return this.calcCostInUSD(this.config.withdrawGas);
   }
 
   public confirm(
@@ -172,53 +199,85 @@ export class Client {
     );
   }
 
-  private xzkAllowance(account: string): Promise<number> {
+  private queryXZKBalance(account: string): Promise<BN> {
+    if (!this.xzkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.xzkInstance
+      .balanceOf(account)
+      .then((balance) => toBN(balance.toString()))
+      .catch((error) => createErrorPromise(error.toString()));
+  }
+
+  private queryVXZKBalance(account: string): Promise<BN> {
+    if (!this.vXZkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.vXZkInstance
+      .balanceOf(account)
+      .then((balance) => toBN(balance.toString()))
+      .catch((error) => createErrorPromise(error.toString()));
+  }
+
+  private xzkAllowance(account: string): Promise<BN> {
     if (!this.xzkInstance || !this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
-    const { decimals } = this.config;
     const { vXZkContract } = this.config;
     return this.xzkInstance
       .allowance(account, vXZkContract)
-      .then((allowance) => fromDecimals(toBN(allowance.toString()), decimals))
+      .then((allowance) => toBN(allowance.toString()))
       .catch((error) => createErrorPromise(error.toString()));
   }
 
-  private checkVXZKBalance(account: string, amount: number): Promise<void> {
-    return this.vXZkBalance(account)
-      .then((balance) => {
-        if (balance < amount) {
-          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
-        }
-        return Promise.resolve();
-      })
-      .catch((error) => createErrorPromise(error.toString()));
+  private checkApprove(account: string, amount: BN): Promise<void> {
+    return this.xzkAllowance(account).then((allowance) => {
+      if (allowance < amount) {
+        return createErrorPromise(
+          'Insufficient approve amount',
+          MystikoGovernanceErrorCode.APPROVE_AMOUNT_ERROR,
+        );
+      }
+      return Promise.resolve();
+    });
   }
 
-  private checkXZKBalance(account: string, amount: number): Promise<void> {
-    return this.xzkBalance(account)
-      .then((balance) => {
-        if (balance < amount) {
-          return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
-        }
-        return Promise.resolve();
-      })
-      .catch((error) => createErrorPromise(error.toString()));
+  private buildApproveTransaction(account: string, amount: BN): Promise<PopulatedTransaction | undefined> {
+    if (!this.xzkInstance || !this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { xzkInstance } = this;
+    const { vXZkContract } = this.config;
+
+    return this.xzkAllowance(account).then((allowance) => {
+      if (allowance.gte(amount)) {
+        return Promise.resolve(undefined);
+      }
+      return xzkInstance.populateTransaction
+        .approve(vXZkContract, amount.toString())
+        .catch((error) => createErrorPromise(error.toString()));
+    });
   }
 
-  private checkApprove(account: string, amount: number): Promise<void> {
-    return this.xzkAllowance(account)
-      .then((allowance) => {
-        if (allowance < amount) {
-          return createErrorPromise(
-            'Insufficient approve amount',
-            MystikoGovernanceErrorCode.APPROVE_AMOUNT_ERROR,
-          );
-        }
-        return Promise.resolve();
-      })
-      .catch((error) => createErrorPromise(error.toString()));
+  private buildDepositTransaction(
+    account: string,
+    target: string,
+    amount: BN,
+  ): Promise<PopulatedTransaction> {
+    if (!this.vXZkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    const { vXZkInstance } = this;
+    return this.checkApprove(account, amount).then(() =>
+      vXZkInstance.populateTransaction
+        .depositFor(target, amount.toString())
+        .catch((error) => createErrorPromise(error.toString())),
+    );
   }
 
   private initScanApiFetcher(chainId: number, scanApiBaseUrl?: string): ScanApiEtherFetcher {
@@ -232,12 +291,15 @@ export class Client {
       if (!this.provider) {
         return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
       }
-      return this.provider.getGasPrice().then((gasPrice) => {
-        const costGas = toBN(gasPrice.toString()).mul(toBN(gas.toString()));
-        const costEth = fromDecimals(costGas, 18);
-        const costUSD = costEth * ethPrice;
-        return parseFloat(costUSD.toFixed(2));
-      });
+      return this.provider
+        .getGasPrice()
+        .then((gasPrice) => {
+          const costGas = toBN(gasPrice.toString()).mul(toBN(gas.toString()));
+          const costEth = fromDecimals(costGas, 18);
+          const costUSD = costEth * ethPrice;
+          return parseFloat(costUSD.toFixed(3));
+        })
+        .catch((error) => createErrorPromise(error.toString()));
     });
   }
 
