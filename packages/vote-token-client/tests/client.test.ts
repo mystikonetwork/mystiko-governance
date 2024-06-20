@@ -1,5 +1,5 @@
 import { test, expect } from '@jest/globals';
-import voteTokenClient, {Client} from "../src";
+import voteTokenClient, { Client } from '../src';
 
 test('test balance', () => {
   expect(voteTokenClient).toBeInstanceOf(Client);
