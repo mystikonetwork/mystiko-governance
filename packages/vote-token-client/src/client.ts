@@ -28,10 +28,10 @@ export class Client {
 
   public provider?: providers.Provider;
 
-  private isInitialized: boolean = false;
+  private isInit: boolean = false;
 
   initialize(options?: InitOptions): void {
-    if (this.isInitialized) {
+    if (this.isInit) {
       return;
     }
 
@@ -43,7 +43,23 @@ export class Client {
     this.fetcher = this.initScanApiFetcher(chainId, scanApiBaseUrl);
     this.xzkInstance = this.config.xzkContractInstance(this.provider);
     this.vXZkInstance = this.config.vXZkContractInstance(this.provider);
-    this.isInitialized = true;
+    this.isInit = true;
+  }
+
+  public get isInitialized(): boolean {
+    return this.isInit;
+  }
+
+  public resetInitStatus(): void {
+    this.isInit = false;
+  }
+
+  public getChainId(): Promise<number> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return Promise.resolve(this.config.chainId);
   }
 
   public xzkBalance(account: string): Promise<number> {

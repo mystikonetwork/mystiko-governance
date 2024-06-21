@@ -3,6 +3,7 @@ import voteTokenClient, { Client } from '../src';
 
 test('test client not init', () => {
   expect(voteTokenClient).toBeInstanceOf(Client);
+  expect(voteTokenClient.getChainId()).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.xzkBalance('0x')).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.vXZkTotalSupply()).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.vXZkBalance('0x')).rejects.toThrow(/Client not initialized/);
@@ -30,4 +31,12 @@ test('test client not init', () => {
   expect(voteTokenClient.withdraw('0x', '0x', undefined, undefined)).rejects.toThrow(
     /isMax and amount conflict/,
   );
+
+  expect(voteTokenClient.isInitialized).toBe(true);
+  expect(voteTokenClient.getChainId()).resolves.toBe(1);
+  voteTokenClient.resetInitStatus();
+  expect(voteTokenClient.isInitialized).toBe(false);
+  voteTokenClient.initialize({ chainId: 11155111 });
+  expect(voteTokenClient.isInitialized).toBe(true);
+  expect(voteTokenClient.getChainId()).resolves.toBe(11155111);
 });
