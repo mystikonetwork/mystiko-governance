@@ -62,6 +62,22 @@ export class Client {
     return Promise.resolve(this.config.chainId);
   }
 
+  public xzkContractAddress(): Promise<string> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return Promise.resolve(this.config.xzkContract);
+  }
+
+  public vXZkContractAddress(): Promise<string> {
+    if (!this.config) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return Promise.resolve(this.config.vXZkContract);
+  }
+
   public xzkBalance(account: string): Promise<number> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
