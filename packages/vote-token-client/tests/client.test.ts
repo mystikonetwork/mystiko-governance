@@ -39,4 +39,6 @@ test('test client not init', () => {
   voteTokenClient.initialize({ chainId: 11155111 });
   expect(voteTokenClient.isInitialized).toBe(true);
   expect(voteTokenClient.getChainId()).resolves.toBe(11155111);
+  expect(voteTokenClient.xzkContractAddress()).resolves.toBe('0x932161e47821c6F5AE69ef329aAC84be1E547e53');
+  expect(voteTokenClient.vXZkContractAddress()).resolves.toBe('0xE662feEF4Bb1f25e5eBb4F9f157d37A921Af1587');
 });
