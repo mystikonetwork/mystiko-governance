@@ -8,7 +8,6 @@ test('test client not init', () => {
   expect(voteTokenClient.vXZkTotalSupply()).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.vXZkBalance('0x')).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.approve('0x', undefined, undefined)).rejects.toThrow(/Client not initialized/);
-  expect(voteTokenClient.approveCostInUSD()).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.deposit('0x', '0x', undefined, undefined)).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.depositCostInUSD()).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.withdraw('0x', '0x', undefined, undefined)).rejects.toThrow(
