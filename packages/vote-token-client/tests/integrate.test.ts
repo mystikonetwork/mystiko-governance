@@ -148,15 +148,9 @@ test('test cost', async () => {
   voteTokenClient.initialize();
   voteTokenClient.initialize();
 
-  const txApproveCost = await voteTokenClient.approveCostInUSD();
-  expect(txApproveCost).toBeGreaterThan(0.001);
-
   const txDepositCost = await voteTokenClient.depositCostInUSD();
   expect(txDepositCost).toBeGreaterThan(0.001);
 
   const txWithdrawCost = await voteTokenClient.withdrawCostInUSD();
   expect(txWithdrawCost).toBeGreaterThan(0.001);
-
-  const txApproveCost2 = await voteTokenClient.approveCostInUSD();
-  expect(txApproveCost2).toBeGreaterThan(0.001);
 });

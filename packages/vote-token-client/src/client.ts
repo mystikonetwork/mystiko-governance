@@ -135,13 +135,6 @@ export class Client {
     });
   }
 
-  public approveCostInUSD(): Promise<number> {
-    if (!this.config) {
-      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
-    }
-    return this.calcCostInUSD(this.config.approveGas);
-  }
-
   public deposit(
     account: string,
     target: string,
@@ -174,7 +167,7 @@ export class Client {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
 
-    return this.calcCostInUSD(this.config.depositGas);
+    return this.calcCostInUSD(this.config.depositGas + this.config.approveGas);
   }
 
   public withdraw(
