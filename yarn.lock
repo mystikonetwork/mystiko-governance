@@ -1146,12 +1146,12 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
-"@mystikonetwork/ether-fetcher@^0.3.6":
-  version "0.3.6"
-  resolved "https://npm.pkg.github.com/download/@mystikonetwork/ether-fetcher/0.3.6/f12ca17723f19ee96d7606b41809daf78b640bce#f12ca17723f19ee96d7606b41809daf78b640bce"
-  integrity sha512-N499Y5EogQvyAOyQsrMTTCx0tPdlV49wwa1dnlEV2u2GqLtiqu/TSEW7T5AM/ZlEEadyMMIs8UgbHAAGIARb3g==
+"@mystikonetwork/ether-fetcher@^0.3.7":
+  version "0.3.7"
+  resolved "https://npm.pkg.github.com/download/@mystikonetwork/ether-fetcher/0.3.7/aad97d7d30993795f612faeafdce6894efce3a9b#aad97d7d30993795f612faeafdce6894efce3a9b"
+  integrity sha512-t6h4+GNGf0TlvKLfQgW1SIOCYAvqhNeDapp/sMkbUafVJwyFcNFIweyqRxseMhF2ISx/QcpEU6QExRFlUQX+Fg==
   dependencies:
-    "@mystikonetwork/utils" "^0.3.6"
+    "@mystikonetwork/utils" "^0.3.7"
     axios "^0.27.2"
     bn.js "^5.2.0"
     config "^3.3.7"
@@ -1166,10 +1166,10 @@
   resolved "https://npm.pkg.github.com/download/@mystikonetwork/fastfile/0.0.21/069a0d0d6a28a3f002fe97519456bbbd14880f9c"
   integrity sha512-o9vr4WoWEGord8+6ADBSulLO9arM2z0R5bOKj+GGPOFY/Zm8bg7alqRfuTvcxzll9TTk/rv7gDM4GnbBHhvyMA==
 
-"@mystikonetwork/utils@^0.3.6":
-  version "0.3.6"
-  resolved "https://npm.pkg.github.com/download/@mystikonetwork/utils/0.3.6/739add75fd08f2559ebdf387a7890638fb356e94#739add75fd08f2559ebdf387a7890638fb356e94"
-  integrity sha512-7e16YqjdjIjVeanbdcpIBYco2MMcjltrBlbawj7hD/U8efclTAc4ef7IBZur/7VBm5wFsFMWXKs3RZPa4SY9tw==
+"@mystikonetwork/utils@^0.3.7":
+  version "0.3.7"
+  resolved "https://npm.pkg.github.com/download/@mystikonetwork/utils/0.3.7/e6787d86d549f3fee09486993ef7560a27926098#e6787d86d549f3fee09486993ef7560a27926098"
+  integrity sha512-HCREXoCwSoorywHkAerxrZeE9FzQuoMp/zYWfbjRyxOnAU85rq8+VhUBa0lb89zjVHCwHBlUyBi7/BD9Na8C7g==
   dependencies:
     "@mystikonetwork/fastfile" "^0.0.21"
     axios "^0.27.2"

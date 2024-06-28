@@ -7,7 +7,7 @@ import {
   waitTransactionHash,
 } from '@mystikonetwork/utils';
 import { ScanApiEtherFetcherFactory, ScanApiEtherFetcher } from '@mystikonetwork/ether-fetcher';
-import { PopulatedTransaction, providers } from 'ethers';
+import { BigNumber, PopulatedTransaction, providers } from 'ethers';
 import BN from 'bn.js';
 import { Config } from './config';
 import { createErrorPromise, MystikoGovernanceErrorCode } from './error';
@@ -316,8 +316,7 @@ export class Client {
       if (!this.provider) {
         return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
       }
-      return this.provider
-        .getGasPrice()
+      return this.getGasPrice()
         .then((gasPrice) => {
           const costGas = toBN(gasPrice.toString()).mul(toBN(gas.toString()));
           const costEth = fromDecimals(costGas, 18);
@@ -333,6 +332,19 @@ export class Client {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
     }
     return this.fetcher.getEthPriceInUSD();
+  }
+
+  private getGasPrice(): Promise<BigNumber> {
+    if (!this.fetcher) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.fetcher.getGasPrice().catch(() => {
+      if (!this.provider) {
+        return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+      }
+      return this.provider.getGasPrice();
+    });
   }
 }
 
