@@ -24,8 +24,11 @@ export class Config {
       xzkContract: '0xe8fC52b1bb3a40fd8889C0f8f75879676310dDf0',
       vXZkContract: '0x16aFFA80C65Fd7003d40B24eDb96f77b38dDC96A',
       providers: [
-        'https://eth-mainnet.nodereal.io/v1/1659dfb40aa24bbb8153a677b98064d7',
         'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+        'https://eth-mainnet.public.blastapi.io',
+        'https://ethereum-rpc.publicnode.com',
+        'https://eth.drpc.org',
+        'https://rpc.ankr.com/eth',
         'https://rpc.flashbots.net',
       ],
       approveGas: 46371,
