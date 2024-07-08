@@ -1,10 +1,10 @@
 {
-  "name": "@mystikonetwork/vote-token-client",
+  "name": "@mystikonetwork/vote-token-snapshot",
   "version": "0.3.10",
   "repository": {
     "type": "git",
     "url": "https://github.com/mystikonetwork/mystiko-governance",
-    "directory": "packages/vote-token-client"
+    "directory": "packages/vote-token-snapshot"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -25,8 +25,7 @@
     "build:cjs": "tsc -p ./tsconfig.json",
     "build:esm": "tsc -p ./tsconfig.esm.json",
     "lint": "eslint --ext .js,.ts .",
-    "test": "jest --forceExit --coverage ./tests/client.test.ts",
-    "integrate": "jest --forceExit ./tests/integrate.test.ts"
+    "test": "jest --forceExit --coverage ./tests/snapshot.test.ts"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
@@ -51,10 +50,8 @@
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
-    "@mystikonetwork/contracts-abi-governance": "^0.3.10",
-    "@mystikonetwork/utils": "^0.3.7",
-    "@mystikonetwork/ether-fetcher": "^0.3.7",
     "bn.js": "^5.2.0",
-    "ethers": "^5.5.3"
+    "axios": "^0.27.2",
+    "fzstd": "^0.1.0"
   }
 }

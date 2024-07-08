@@ -1,5 +1,5 @@
 {
-  "extends": "solhint:recommended",
+  "extends": ["solhint:recommended"],
   "rules": {
     "prettier/prettier": [
       "error",
@@ -23,7 +23,5 @@
     ],
     "func-name-mixedcase": "off"
   },
-  "plugins": [
-    "prettier"
-  ]
+  "plugins": ["prettier"]
 }
