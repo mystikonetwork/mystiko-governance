@@ -26,7 +26,6 @@
     "prettier": "yarn prettier:fix",
     "prettier:check": "prettier --plugin=prettier-plugin-solidity --check \"./**/*.{ts,sol}\" --config .prettierrc",
     "prettier:fix": "prettier --plugin=prettier-plugin-solidity --write \"./**/*.{ts,sol}\" --config .prettierrc",
-    "lint": "yarn lint:sol",
     "lint:ts": "eslint --ext .js,.ts .",
     "lint:sol": "solhint \"contracts/**/*.sol\""
   },
