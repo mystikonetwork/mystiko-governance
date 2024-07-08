@@ -3,7 +3,7 @@ import voteTokenSnapshot from '../src';
 
 test('test snapshot index', async () => {
   voteTokenSnapshot.initialize();
-  const snapshots = await voteTokenSnapshot.listSnapshotIndexs();
+  const snapshots = await voteTokenSnapshot.listSnapshotIndexes();
   expect(snapshots).toBeDefined();
   expect(snapshots.length).toBeGreaterThan(0);
   expect(snapshots[0].blockHeight).toBe(20206222);
@@ -14,7 +14,7 @@ test('test snapshot index', async () => {
 
 test('test latest snapshot data', async () => {
   voteTokenSnapshot.initialize();
-  const latestSnapshotData = await voteTokenSnapshot.latestSnapshotData();
+  const latestSnapshotData = await voteTokenSnapshot.snapshotData();
   expect(latestSnapshotData).toBeDefined();
   expect(latestSnapshotData.blockHeight).toBeGreaterThan(20206222);
   expect(latestSnapshotData.timestamp).toBeGreaterThan(1719771251);

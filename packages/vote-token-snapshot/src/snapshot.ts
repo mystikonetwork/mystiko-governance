@@ -35,7 +35,7 @@ export class Snapshot {
     this.config = new Config(chainId);
   }
 
-  public listSnapshotIndexs(): Promise<SnapshotIndex[]> {
+  public listSnapshotIndexes(): Promise<SnapshotIndex[]> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoSnapshotErrorCode.NOT_INITIALIZED_ERROR);
     }
@@ -53,23 +53,7 @@ export class Snapshot {
     });
   }
 
-  public latestSnapshotData(): Promise<SnapshotData> {
-    if (!this.config) {
-      return createErrorPromise('Client not initialized', MystikoSnapshotErrorCode.NOT_INITIALIZED_ERROR);
-    }
-
-    const url = `${this.config.url}/${this.pathSchema.snapshotLatestDataPath(
-      this.config.chainId,
-      this.config.vXZkContract,
-    )}`;
-
-    return axios.get(url, { responseType: 'arraybuffer' }).then((response) => {
-      const data = this.fromBinary(response.data);
-      return Promise.resolve(data);
-    });
-  }
-
-  public snapshotData(blockHeight: number): Promise<SnapshotData> {
+  public snapshotData(blockHeight?: number): Promise<SnapshotData> {
     if (!this.config) {
       return createErrorPromise('Client not initialized', MystikoSnapshotErrorCode.NOT_INITIALIZED_ERROR);
     }
