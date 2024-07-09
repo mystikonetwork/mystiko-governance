@@ -1,6 +1,6 @@
 {
   "name": "@mystikonetwork/vote-token-snapshot",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "repository": {
     "type": "git",
     "url": "https://github.com/mystikonetwork/mystiko-governance",
