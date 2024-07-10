@@ -15,7 +15,7 @@ export interface SnapshotIndex {
 
 export interface SnapshotAccountData {
   account: string;
-  amount: string;
+  amount: number;
 }
 
 export interface SnapshotData {
@@ -74,6 +74,7 @@ export class Snapshot {
       const decoder = new TextDecoder('utf-8');
       const jsonString = decoder.decode(decompressedData);
       const jsonObject = JSON.parse(jsonString) as SnapshotData;
+      jsonObject.holders.sort((a, b) => b.amount - a.amount);
       return Promise.resolve(jsonObject);
     } catch (error) {
       return createErrorPromise('Decompression error', MystikoSnapshotErrorCode.DecompressionError);
