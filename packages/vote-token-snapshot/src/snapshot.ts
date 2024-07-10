@@ -15,7 +15,7 @@ export interface SnapshotIndex {
 
 export interface SnapshotAccountData {
   account: string;
-  amount: string;
+  amount: number;
 }
 
 export interface SnapshotData {
@@ -45,12 +45,14 @@ export class Snapshot {
       this.config.vXZkContract,
     )}`;
 
-    return axios.get(url, { responseType: 'json' }).then((response) => {
-      const sortedData = response.data.snapshots.sort(
-        (a: SnapshotIndex, b: SnapshotIndex) => a.blockHeight - b.blockHeight,
-      );
-      return sortedData;
-    });
+    return axios.get(url, { responseType: 'json' }).then((response) =>
+      response.data.snapshots
+        .sort((a: any, b: any) => a.block_height - b.block_height)
+        .map((snapshot: any) => ({
+          blockHeight: snapshot.block_height,
+          timestamp: snapshot.timestamp,
+        })),
+    );
   }
 
   public snapshotData(blockHeight?: number): Promise<SnapshotData> {
@@ -63,18 +65,20 @@ export class Snapshot {
       blockHeight,
     )}`;
 
-    return axios.get(url, { responseType: 'arraybuffer' }).then((response) => {
-      const data = this.fromBinary(response.data);
-      return Promise.resolve(data);
-    });
+    return axios.get(url, { responseType: 'arraybuffer' }).then((response) => this.fromBinary(response.data));
   }
 
-  private fromBinary(data: Buffer): SnapshotData {
-    const decompressedData = fzstd.decompress(data);
-    const decoder = new TextDecoder('utf-8');
-    const jsonString = decoder.decode(decompressedData);
-    const jsonObject = JSON.parse(jsonString) as SnapshotData;
-    return jsonObject;
+  private fromBinary(data: Buffer): Promise<SnapshotData> {
+    try {
+      const decompressedData = fzstd.decompress(new Uint8Array(data));
+      const decoder = new TextDecoder('utf-8');
+      const jsonString = decoder.decode(decompressedData);
+      const jsonObject = JSON.parse(jsonString) as SnapshotData;
+      jsonObject.holders.sort((a, b) => b.amount - a.amount);
+      return Promise.resolve(jsonObject);
+    } catch (error) {
+      return createErrorPromise('Decompression error', MystikoSnapshotErrorCode.DecompressionError);
+    }
   }
 }
 

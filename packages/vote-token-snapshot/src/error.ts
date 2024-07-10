@@ -1,6 +1,7 @@
 export enum MystikoSnapshotErrorCode {
   UNKNOWN_ERROR = 0,
   NOT_INITIALIZED_ERROR = 1,
+  DecompressionError = 2,
 }
 
 export class MystikoSnapshotError extends Error {

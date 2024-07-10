@@ -20,6 +20,9 @@ test('test latest snapshot data', async () => {
   expect(latestSnapshotData.timestamp).toBeGreaterThan(1719771251);
   expect(latestSnapshotData.total).toBeGreaterThan(100);
   expect(latestSnapshotData.holders.length).toBe(latestSnapshotData.total);
+  expect(latestSnapshotData.holders[0].account).toBeDefined();
+  expect(latestSnapshotData.holders[0].amount).toBeGreaterThan(1);
+  expect(latestSnapshotData.holders[0].amount).toBeGreaterThan(latestSnapshotData.holders[1].amount);
 });
 
 test('test  snapshot data', async () => {
@@ -30,6 +33,9 @@ test('test  snapshot data', async () => {
   expect(latestSnapshotData.timestamp).toBe(1719771251);
   expect(latestSnapshotData.total).toBeGreaterThan(20);
   expect(latestSnapshotData.holders.length).toBe(latestSnapshotData.total);
+  expect(latestSnapshotData.holders[0].account).toBeDefined();
+  expect(latestSnapshotData.holders[0].amount).toBeGreaterThan(1);
+  expect(latestSnapshotData.holders[0].amount).toBeGreaterThan(latestSnapshotData.holders[1].amount);
 
   const latestSnapshotData2 = await voteTokenSnapshot.snapshotData(20214242);
   expect(latestSnapshotData2).toBeDefined();
@@ -37,4 +43,7 @@ test('test  snapshot data', async () => {
   expect(latestSnapshotData2.timestamp).toBe(1719867911);
   expect(latestSnapshotData2.total).toBeGreaterThan(20);
   expect(latestSnapshotData2.holders.length).toBe(latestSnapshotData2.total);
+  expect(latestSnapshotData2.holders[0].account).toBeDefined();
+  expect(latestSnapshotData2.holders[0].amount).toBeGreaterThan(1);
+  expect(latestSnapshotData2.holders[0].amount).toBeGreaterThan(latestSnapshotData2.holders[1].amount);
 });
