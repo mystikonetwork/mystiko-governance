@@ -50,7 +50,6 @@
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
-    "@mystikonetwork/vote-token-snapshot": "file:.yalc/@mystikonetwork/vote-token-snapshot",
     "axios": "^0.27.2",
     "bn.js": "^5.2.0",
     "fzstd": "^0.1.0"
