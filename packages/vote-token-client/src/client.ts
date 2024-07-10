@@ -234,6 +234,14 @@ export class Client {
       .catch((error) => createErrorPromise(error.toString()));
   }
 
+  public delegates(account: string): Promise<string> {
+    if (!this.config || !this.vXZkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.vXZkInstance.delegates(account).catch((error) => createErrorPromise(error.toString()));
+  }
+
   private queryXZKBalance(account: string): Promise<BN> {
     if (!this.xzkInstance) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
