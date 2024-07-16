@@ -8,25 +8,27 @@ import {ERC20Wrapper} from "lib/openzeppelin-contracts/contracts/token/ERC20/ext
 import {Nonces} from "lib/openzeppelin-contracts/contracts/utils/Nonces.sol";
 
 contract MystikoVoteToken is ERC20, ERC20Permit, ERC20Votes, ERC20Wrapper {
-    constructor(IERC20 _xzk) ERC20("Mystiko Vote Token", "vXZK") ERC20Permit("Mystiko Vote Token") ERC20Wrapper(_xzk) {}
+  constructor(
+    IERC20 _xzk
+  ) ERC20("Mystiko Vote Token", "vXZK") ERC20Permit("Mystiko Vote Token") ERC20Wrapper(_xzk) {}
 
-    function clock() public view override returns (uint48) {
-        return uint48(block.timestamp);
-    }
+  function clock() public view override returns (uint48) {
+    return uint48(block.timestamp);
+  }
 
-    function CLOCK_MODE() public pure override returns (string memory) {
-        return "mode=timestamp";
-    }
+  function CLOCK_MODE() public pure override returns (string memory) {
+    return "mode=timestamp";
+  }
 
-    function decimals() public view override(ERC20, ERC20Wrapper) returns (uint8) {
-        return super.decimals();
-    }
+  function decimals() public view override(ERC20, ERC20Wrapper) returns (uint8) {
+    return super.decimals();
+  }
 
-    function nonces(address _owner) public view virtual override(ERC20Permit, Nonces) returns (uint256) {
-        return super.nonces(_owner);
-    }
+  function nonces(address _owner) public view virtual override(ERC20Permit, Nonces) returns (uint256) {
+    return super.nonces(_owner);
+  }
 
-    function _update(address _from, address _to, uint256 _amount) internal override(ERC20, ERC20Votes) {
-        super._update(_from, _to, _amount);
-    }
+  function _update(address _from, address _to, uint256 _amount) internal override(ERC20, ERC20Votes) {
+    super._update(_from, _to, _amount);
+  }
 }

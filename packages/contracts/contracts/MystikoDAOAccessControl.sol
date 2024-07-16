@@ -6,31 +6,31 @@ import {MystikoGovernorRegistry} from "./impl/MystikoGovernorRegistry.sol";
 import {AccessControl} from "lib/openzeppelin-contracts/contracts/access/AccessControl.sol";
 
 abstract contract MystikoDAOAccessControl is AccessControl {
-    MystikoGovernorRegistry public daoRegistry;
+  MystikoGovernorRegistry public daoRegistry;
 
-    constructor(address _daoRegistry) {
-        if (_daoRegistry == address(0)) revert GovernanceErrors.InvalidMystikoRegistryAddress();
-        daoRegistry = MystikoGovernorRegistry(_daoRegistry);
-    }
+  constructor(address _daoRegistry) {
+    if (_daoRegistry == address(0)) revert GovernanceErrors.InvalidMystikoRegistryAddress();
+    daoRegistry = MystikoGovernorRegistry(_daoRegistry);
+  }
 
-    modifier onlyMystikoDAO() {
-        if (daoRegistry.dao() != msg.sender) revert GovernanceErrors.OnlyMystikoDAO();
-        _;
-    }
+  modifier onlyMystikoDAO() {
+    if (daoRegistry.dao() != msg.sender) revert GovernanceErrors.OnlyMystikoDAO();
+    _;
+  }
 
-    modifier onlyHasRole(bytes32 _role, address _account) {
-        if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
-        _;
-    }
+  modifier onlyHasRole(bytes32 _role, address _account) {
+    if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
+    _;
+  }
 
-    modifier onlyHasRoleOrOpen(bytes32 _role, address _account) {
-        if (!hasRole(_role, address(0))) {
-            if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
-        }
-        _;
+  modifier onlyHasRoleOrOpen(bytes32 _role, address _account) {
+    if (!hasRole(_role, address(0))) {
+      if (!hasRole(_role, _account)) revert GovernanceErrors.UnauthorizedRole();
     }
+    _;
+  }
 
-    function setAdminRole() public onlyMystikoDAO {
-        _grantRole(DEFAULT_ADMIN_ROLE, daoRegistry.dao());
-    }
+  function setAdminRole() public onlyMystikoDAO {
+    _grantRole(DEFAULT_ADMIN_ROLE, daoRegistry.dao());
+  }
 }
