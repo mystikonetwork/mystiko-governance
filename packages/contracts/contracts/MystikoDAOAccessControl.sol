@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
 import {GovernanceErrors} from "./GovernanceErrors.sol";
 import {MystikoGovernorRegistry} from "./impl/MystikoGovernorRegistry.sol";
@@ -9,6 +9,7 @@ abstract contract MystikoDAOAccessControl is AccessControl {
     MystikoGovernorRegistry public daoRegistry;
 
     constructor(address _daoRegistry) {
+        if (_daoRegistry == address(0)) revert GovernanceErrors.InvalidMystikoRegistryAddress();
         daoRegistry = MystikoGovernorRegistry(_daoRegistry);
     }
 

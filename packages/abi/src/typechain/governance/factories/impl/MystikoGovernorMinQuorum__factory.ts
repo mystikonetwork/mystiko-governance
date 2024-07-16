@@ -265,13 +265,13 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'oldMinQuorum',
         type: 'uint256',
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'newMinQuorum',
         type: 'uint256',

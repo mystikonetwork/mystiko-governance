@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
 import {GovernanceErrors} from "../GovernanceErrors.sol";
 
@@ -32,12 +32,14 @@ contract MystikoGovernorRegistry {
     }
 
     function transferOwnerToDAO(address _newDao) external onlyBeforeDaoInitialized {
+        if (_newDao == address(0)) revert GovernanceErrors.InvalidMystikoDAOAddress();
         dao = _newDao;
         daoMap[_newDao] = true;
         emit MystikoDAOChanged(_newDao);
     }
 
     function setMystikoDAO(address _newDao) external onlyDAO {
+        if (_newDao == address(0)) revert GovernanceErrors.InvalidMystikoDAOAddress();
         if (dao == _newDao) revert GovernanceErrors.NotChanged();
         dao = _newDao;
         daoMap[_newDao] = true;

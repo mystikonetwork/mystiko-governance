@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
 import {MystikoGovernorMinQuorum} from "./MystikoGovernorMinQuorum.sol";
 import {Governor} from "lib/openzeppelin-contracts/contracts/governance/Governor.sol";
