@@ -2,9 +2,9 @@
 pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {IGovernor} from "@openzeppelin/contracts/governance/IGovernor.sol";
-import {DoubleEndedQueue} from "@openzeppelin/contracts/utils/structs/DoubleEndedQueue.sol";
+import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
+import {IGovernor} from "lib/openzeppelin-contracts/contracts/governance/IGovernor.sol";
+import {DoubleEndedQueue} from "lib/openzeppelin-contracts/contracts/utils/structs/DoubleEndedQueue.sol";
 import "../../utils/Random.sol";
 import "../../../contracts/impl/MystikoGovernor.sol";
 import "../../../contracts/impl/MystikoTimelockController.sol";

@@ -1170,10 +1170,13 @@ export interface MystikoGovernor extends BaseContract {
     ): LateQuorumVoteExtensionSetEventFilter;
 
     'MinQuorumUpdated(uint256,uint256)'(
-      oldMinQuorum?: null,
-      newMinQuorum?: null,
+      oldMinQuorum?: BigNumberish | null,
+      newMinQuorum?: BigNumberish | null,
     ): MinQuorumUpdatedEventFilter;
-    MinQuorumUpdated(oldMinQuorum?: null, newMinQuorum?: null): MinQuorumUpdatedEventFilter;
+    MinQuorumUpdated(
+      oldMinQuorum?: BigNumberish | null,
+      newMinQuorum?: BigNumberish | null,
+    ): MinQuorumUpdatedEventFilter;
 
     'ProposalCanceled(uint256)'(proposalId?: null): ProposalCanceledEventFilter;
     ProposalCanceled(proposalId?: null): ProposalCanceledEventFilter;

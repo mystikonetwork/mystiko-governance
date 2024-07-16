@@ -8,7 +8,7 @@ import "../../contracts/token/MystikoVoteToken.sol";
 import "../../contracts/impl/MystikoTimelockController.sol";
 import "../../contracts/impl/MystikoGovernor.sol";
 import "../../test/mock/MockMystikoToken.sol";
-import {IERC20, ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IERC20, ERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
 
 contract QueryRegistry is Script {
   function run() external {

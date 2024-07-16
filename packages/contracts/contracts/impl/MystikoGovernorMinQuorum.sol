@@ -1,15 +1,15 @@
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
-import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
-import {Checkpoints} from "@openzeppelin/contracts/utils/structs/Checkpoints.sol";
+import {GovernorVotes} from "lib/openzeppelin-contracts/contracts/governance/extensions/GovernorVotes.sol";
+import {SafeCast} from "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol";
+import {Checkpoints} from "lib/openzeppelin-contracts/contracts/utils/structs/Checkpoints.sol";
 
 abstract contract MystikoGovernorMinQuorum is GovernorVotes {
   using Checkpoints for Checkpoints.Trace208;
 
   Checkpoints.Trace208 private _minQuorumHistory;
 
-  event MinQuorumUpdated(uint256 oldMinQuorum, uint256 newMinQuorum);
+  event MinQuorumUpdated(uint256 indexed oldMinQuorum, uint256 indexed newMinQuorum);
 
   constructor(uint256 minQuorumValue) {
     _updateMinQuorum(minQuorumValue);
