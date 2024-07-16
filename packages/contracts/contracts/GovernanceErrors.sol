@@ -2,10 +2,10 @@
 pragma solidity ^0.8.26;
 
 library GovernanceErrors {
-  error NotChanged();
-  error OnlyMystikoDAO();
-  error InvalidMystikoDAOAddress();
-  error OnlyDeployer();
-  error OnlyBeforeDaoInitialized();
-  error UnauthorizedRole();
+    error NotChanged();
+    error OnlyMystikoDAO();
+    error InvalidMystikoDAOAddress();
+    error OnlyDeployer();
+    error OnlyBeforeDaoInitialized();
+    error UnauthorizedRole();
 }
