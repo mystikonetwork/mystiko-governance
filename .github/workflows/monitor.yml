@@ -40,7 +40,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '-1' }}
         with:
-          message: ❗ Warning Mystiko Governor Proposal has been created
+          message: ❗ Warning Mystiko Governor Proposal has been created [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
           format: markdown
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
