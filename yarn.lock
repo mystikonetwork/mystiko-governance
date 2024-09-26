@@ -1141,6 +1141,21 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
+"@mystikonetwork/ether-fetcher@^0.3.7":
+  version "0.3.7"
+  resolved "https://npm.pkg.github.com/download/@mystikonetwork/ether-fetcher/0.3.7/aad97d7d30993795f612faeafdce6894efce3a9b#aad97d7d30993795f612faeafdce6894efce3a9b"
+  integrity sha512-t6h4+GNGf0TlvKLfQgW1SIOCYAvqhNeDapp/sMkbUafVJwyFcNFIweyqRxseMhF2ISx/QcpEU6QExRFlUQX+Fg==
+  dependencies:
+    "@mystikonetwork/utils" "^0.3.7"
+    axios "^0.27.2"
+    bn.js "^5.2.0"
+    config "^3.3.7"
+    dotenv "^16.0.0"
+    ethers "^5.5.3"
+    loglevel "^1.8.0"
+    loglevel-plugin-prefix "^0.8.4"
+    pako "^2.0.4"
+
 "@mystikonetwork/fastfile@^0.0.21":
   version "0.0.21"
   resolved "https://npm.pkg.github.com/download/@mystikonetwork/fastfile/0.0.21/069a0d0d6a28a3f002fe97519456bbbd14880f9c#069a0d0d6a28a3f002fe97519456bbbd14880f9c"
@@ -3788,6 +3803,13 @@ concat-stream@^1.5.1:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
+config@^3.3.7:
+  version "3.3.12"
+  resolved "https://registry.npmmirror.com/config/-/config-3.3.12.tgz#a10ae66efcc3e48c1879fbb657c86c4ef6c7b25e"
+  integrity sha512-Vmx389R/QVM3foxqBzXO8t2tUikYZP64Q6vQxGrsMpREeJc/aWRnPRERXWsYzOHAumx/AOoILWe6nU3ZJL+6Sw==
+  dependencies:
+    json5 "^2.2.3"
+
 confusing-browser-globals@^1.0.10:
   version "1.0.11"
   resolved "https://registry.npmmirror.com/confusing-browser-globals/-/confusing-browser-globals-1.0.11.tgz#ae40e9b57cdd3915408a2805ebd3a5585608dc81"
@@ -4310,6 +4332,11 @@ dotenv@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npmmirror.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
+
+dotenv@^16.0.0:
+  version "16.4.5"
+  resolved "https://registry.npmmirror.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 dotignore@~0.1.2:
   version "0.1.2"
