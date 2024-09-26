@@ -1,0 +1,66 @@
+name: monitor
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PACKAGES_TOKEN }}
+          lfs: true
+          submodules: recursive
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup Registry
+        run: |
+          echo "@mystikonetwork:registry=https://npm.pkg.github.com" >> $HOME/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> $HOME/.npmrc
+
+      - name: Install Dependencies
+        run: yarn install
+        working-directory: packages/monitor
+
+      - name: Monitor
+        run: |
+          yarn start
+          echo "GOVERNOR_MONITOR_EXIT_CODE=$?" >> $GITHUB_ENV
+        working-directory: packages/monitor
+
+      # Notify for proposal creation (exit code -1)
+      - name: Telegram Warning Notification
+        uses: appleboy/telegram-action@master
+        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '-1' }}
+        with:
+          message: ❗ Warning Mystiko Governor Proposal has been created
+          format: markdown
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      # Notify for monitor failure (exit code 1)
+      - name: Telegram Failure Notification
+        uses: appleboy/telegram-action@master
+        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '1' }}
+        with:
+          message: ❗ Run Mystiko Governor monitor failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
+          format: markdown
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      # Notify for success (exit code 0)
+      - name: Telegram Success Notification
+        uses: appleboy/telegram-action@master
+        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '0' }}
+        with:
+          message: ✅ No Mystiko Governor proposals have been created in the past two days
+          format: markdown
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
