@@ -1,6 +1,6 @@
 {
   "name": "@mystikonetwork/vote-token-client",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "repository": {
     "type": "git",
     "url": "https://github.com/mystikonetwork/mystiko-governance",
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
-    "@mystikonetwork/contracts-abi-governance": "^0.3.13",
+    "@mystikonetwork/contracts-abi-governance": "^0.3.14",
     "@mystikonetwork/utils": "^0.3.7",
     "@mystikonetwork/ether-fetcher": "^0.3.7",
     "bn.js": "^5.2.0",
