@@ -27,6 +27,10 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
+      - name: Build
+        run: yarn build:cjs
+        working-directory: packages/abi
+
       - name: Monitor
         run: |
           yarn start
