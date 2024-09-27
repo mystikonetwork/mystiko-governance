@@ -3,6 +3,7 @@ name: monitor
 on:
   schedule:
     - cron: '0 */12 * * *'
+  workflow_dispatch:
 
 jobs:
   packages:
@@ -12,8 +13,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PACKAGES_TOKEN }}
-          lfs: true
-          submodules: recursive
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -27,7 +26,6 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install
-        working-directory: packages/monitor
 
       - name: Monitor
         run: |
