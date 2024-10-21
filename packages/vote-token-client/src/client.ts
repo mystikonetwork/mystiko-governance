@@ -242,6 +242,26 @@ export class Client {
     return this.vXZkInstance.delegates(account).catch((error) => createErrorPromise(error.toString()));
   }
 
+  public XZKTransfer(target: string, amount: number): Promise<PopulatedTransaction> {
+    if (!this.config || !this.xzkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.xzkInstance.populateTransaction
+      .transfer(target, toDecimals(amount, this.config.decimals).toString())
+      .catch((error) => createErrorPromise(error.toString()));
+  }
+
+  public vXZKTransfer(target: string, amount: number): Promise<PopulatedTransaction> {
+    if (!this.config || !this.vXZkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.vXZkInstance.populateTransaction
+      .transfer(target, toDecimals(amount, this.config.decimals).toString())
+      .catch((error) => createErrorPromise(error.toString()));
+  }
+
   private queryXZKBalance(account: string): Promise<BN> {
     if (!this.xzkInstance) {
       return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
