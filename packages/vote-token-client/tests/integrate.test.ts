@@ -144,6 +144,30 @@ test('test deposit and withdraw', async () => {
   expect(balanceAfterVXZK4).toEqual(0);
 });
 
+test('test transfer', async () => {
+  const client = new Client();
+  client.initialize({
+    chainId: 11155111,
+  });
+  const amount = 1;
+  const privateKey = process.env.TESTER_PRIVATE_KEY;
+  if (!privateKey) {
+    throw new Error('TESTER_PRIVATE_KEY is not defined');
+  }
+
+  const wallet = new ethers.Wallet(privateKey, client.provider);
+
+  const transferTx1 = await client.vXZKTransfer(wallet.address, amount);
+  const tx1 = await wallet.sendTransaction(transferTx1);
+  const confirm1 = await client.confirm(tx1.hash, 2, 600000);
+  expect(confirm1).toBeTruthy();
+
+  const transferTx2 = await client.vXZKTransfer(wallet.address, amount);
+  const tx2 = await wallet.sendTransaction(transferTx2);
+  const confirm2 = await client.confirm(tx2.hash, 2, 600000);
+  expect(confirm2).toBeTruthy();
+});
+
 test('test cost', async () => {
   voteTokenClient.initialize();
   voteTokenClient.initialize();
