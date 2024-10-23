@@ -15,6 +15,8 @@ test('test client not init', () => {
   );
   expect(voteTokenClient.withdrawCostInUSD()).rejects.toThrow(/Client not initialized/);
   expect(voteTokenClient.confirm('0x123')).rejects.toThrow(/Client not initialized/);
+  expect(voteTokenClient.XZKTransfer('0x123', 1)).rejects.toThrow(/Client not initialized/);
+  expect(voteTokenClient.vXZKTransfer('0x123', 1)).rejects.toThrow(/Client not initialized/);
   voteTokenClient.initialize();
   voteTokenClient.initialize();
   expect(voteTokenClient.approve('0x', true, 1)).rejects.toThrow(/isMax and amount conflict/);
