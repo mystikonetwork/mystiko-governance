@@ -33,8 +33,9 @@ jobs:
 
       - name: Monitor
         run: |
-          yarn start || true
-          echo "GOVERNOR_MONITOR_EXIT_CODE=$?" >> $GITHUB_ENV
+          exit_code=0
+          yarn start || exit_code=$?
+          echo "GOVERNOR_MONITOR_EXIT_CODE=$exit_code" >> $GITHUB_ENV
         working-directory: packages/monitor
 
       # Notify for proposal creation (exit code -1)
