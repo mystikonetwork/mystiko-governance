@@ -1,4 +1,4 @@
-import { DefaultProviderFactory } from '@mystikonetwork/utils';
+import { QuorumProviderFactory } from '@mystikonetwork/utils';
 import { Config } from './config';
 
 const args = process.argv.slice(2);
@@ -10,13 +10,13 @@ if (args.length > 0) {
 async function run(): Promise<number> {
   console.log(`Chain ID: ${chainId}`);
   const config = new Config(chainId);
-  const factory = new DefaultProviderFactory();
+  const factory = new QuorumProviderFactory();
   const providers = factory.createProvider(config.providers);
   const governor = config.governorInstance(providers);
 
   const currentBlockNumber = await providers.getBlockNumber();
-  const startBlock = currentBlockNumber - 20000;
-  const endBlock = currentBlockNumber - 100;
+  const startBlock = currentBlockNumber - 7200 - 80;
+  const endBlock = currentBlockNumber - 80;
   const filter = governor.filters.ProposalCreated();
   const events = await governor.queryFilter(filter, startBlock, endBlock);
   if (events.length > 0) {

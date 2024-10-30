@@ -15,7 +15,6 @@ export class Config {
       providers: [
         'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
         'https://eth-mainnet.public.blastapi.io',
-        'https://eth.drpc.org',
         'https://rpc.ankr.com/eth',
       ],
     },

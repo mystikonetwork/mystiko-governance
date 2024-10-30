@@ -33,8 +33,9 @@ jobs:
 
       - name: Monitor
         run: |
-          yarn start || true
-          echo "GOVERNOR_MONITOR_EXIT_CODE=$?" >> $GITHUB_ENV
+          exit_code=0
+          yarn start || exit_code=$?
+          echo "GOVERNOR_MONITOR_EXIT_CODE=$exit_code" >> $GITHUB_ENV
         working-directory: packages/monitor
 
       # Notify for proposal creation (exit code -1)
@@ -42,7 +43,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '1' }}
         with:
-          message: ❗ Warning Mystiko Governor Proposal has been created [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
+          message: ❗ Warning Mystiko Governor Proposal has been created
           format: markdown
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -52,17 +53,8 @@ jobs:
         uses: appleboy/telegram-action@master
         if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '2' }}
         with:
-          message: ❗ Run Mystiko Governor monitor failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
+          message: ❗ Run Mystiko Governor monitor failed
           format: markdown
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-      # Notify for success (exit code 0)
-      - name: Telegram Success Notification
-        uses: appleboy/telegram-action@master
-        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '0' }}
-        with:
-          message: ✅ No Mystiko Governor proposals have been created in the past two days
-          format: markdown
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
