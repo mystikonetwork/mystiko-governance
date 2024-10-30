@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  packages:
+  monitor:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +40,7 @@ jobs:
       # Notify for proposal creation (exit code -1)
       - name: Telegram Warning Notification
         uses: appleboy/telegram-action@master
-        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '-1' }}
+        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '1' }}
         with:
           message: ❗ Warning Mystiko Governor Proposal has been created [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
           format: markdown
@@ -50,7 +50,7 @@ jobs:
       # Notify for monitor failure (exit code 1)
       - name: Telegram Failure Notification
         uses: appleboy/telegram-action@master
-        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '1' }}
+        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '2' }}
         with:
           message: ❗ Run Mystiko Governor monitor failed for [${{ github.repository }}](https://github.com/${{ github.repository }}/actions)
           format: markdown

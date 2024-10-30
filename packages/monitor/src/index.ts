@@ -24,7 +24,7 @@ async function run(): Promise<number> {
       console.log('event args', event.args);
     });
     console.log('!!! Warning Proposal created');
-    return -1;
+    return 1;
   }
   console.log('No proposal created');
   return 0;
@@ -36,5 +36,5 @@ try {
   });
 } catch (e) {
   console.error('run meet error', e);
-  process.exit(1);
+  process.exit(2);
 }
