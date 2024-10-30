@@ -33,7 +33,7 @@ jobs:
 
       - name: Monitor
         run: |
-          yarn start
+          yarn start || true
           echo "GOVERNOR_MONITOR_EXIT_CODE=$?" >> $GITHUB_ENV
         working-directory: packages/monitor
 
