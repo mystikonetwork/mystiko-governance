@@ -12,11 +12,7 @@ export class Config {
     1: {
       chainId: 1,
       governorContract: '0x2a5eEf90F1aA36CaE2535349B522891A044EFCC1',
-      providers: [
-        'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-        'https://eth-mainnet.public.blastapi.io',
-        'https://rpc.ankr.com/eth',
-      ],
+      providers: [],
     },
     11155111: {
       chainId: 11155111,

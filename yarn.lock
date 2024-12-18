@@ -1141,6 +1141,19 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
+"@mystikonetwork/config@^0.10.8":
+  version "0.10.8"
+  resolved "https://npm.pkg.github.com/download/@mystikonetwork/config/0.10.8/f9db72b9c1b0e78afbab6d05ed0c3d587dec60bf#f9db72b9c1b0e78afbab6d05ed0c3d587dec60bf"
+  integrity sha512-pXisliOV7U2olbHUB2114JBE+9pfJ37/tyQmaOOjyg42DqgcJzhkLysFbII3yM1ThEU3AoN6u3wjjBkM/hodlQ==
+  dependencies:
+    "@mystikonetwork/utils" ">=0.3.4"
+    axios "^0.27.2"
+    bn.js "^5.2.0"
+    class-transformer "^0.5.1"
+    class-validator "^0.14.0"
+    ethers "^5.5.3"
+    reflect-metadata "^0.1.13"
+
 "@mystikonetwork/ether-fetcher@^0.3.7":
   version "0.3.7"
   resolved "https://npm.pkg.github.com/download/@mystikonetwork/ether-fetcher/0.3.7/aad97d7d30993795f612faeafdce6894efce3a9b#aad97d7d30993795f612faeafdce6894efce3a9b"
@@ -1160,6 +1173,20 @@
   version "0.0.21"
   resolved "https://npm.pkg.github.com/download/@mystikonetwork/fastfile/0.0.21/069a0d0d6a28a3f002fe97519456bbbd14880f9c#069a0d0d6a28a3f002fe97519456bbbd14880f9c"
   integrity sha512-o9vr4WoWEGord8+6ADBSulLO9arM2z0R5bOKj+GGPOFY/Zm8bg7alqRfuTvcxzll9TTk/rv7gDM4GnbBHhvyMA==
+
+"@mystikonetwork/utils@>=0.3.4":
+  version "0.3.8"
+  resolved "https://npm.pkg.github.com/download/@mystikonetwork/utils/0.3.8/0b52be4eed59589d330fc95e26668262f86054f1#0b52be4eed59589d330fc95e26668262f86054f1"
+  integrity sha512-wEm9ZH33DoXtXfWNsU8tvpp+b81ggvjWhwiIpANmtBEZ9uH6z+NltxIXvOLF/N7Dv6OCwtAmiIFu2VwpwP7qtQ==
+  dependencies:
+    "@mystikonetwork/fastfile" "^0.0.21"
+    axios "^0.27.2"
+    bn.js "^5.2.0"
+    ethers "^5.5.3"
+    js-sha512 "^0.9.0"
+    loglevel "^1.8.0"
+    loglevel-plugin-prefix "^0.8.4"
+    pako "^2.0.4"
 
 "@mystikonetwork/utils@^0.3.7":
   version "0.3.7"
@@ -1914,6 +1941,11 @@
   version "2.0.3"
   resolved "https://registry.npmmirror.com/@types/stack-utils/-/stack-utils-2.0.3.tgz#6209321eb2c1712a7e7466422b8cb1fc0d9dd5d8"
   integrity sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==
+
+"@types/validator@^13.11.8":
+  version "13.12.2"
+  resolved "https://registry.npmmirror.com/@types/validator/-/validator-13.12.2.tgz#760329e756e18a4aab82fc502b51ebdfebbe49f5"
+  integrity sha512-6SlHBzUW8Jhf3liqrGGXyTJSIFe4nqlJ5A5KaMZ2l/vbM3Wh3KSybots/wfWVzNLK4D1NZluDlSQIbIEPx6oyA==
 
 "@types/yargs-parser@*":
   version "21.0.3"
@@ -3635,6 +3667,11 @@ class-is@^1.1.0:
   resolved "https://registry.npmmirror.com/class-is/-/class-is-1.1.0.tgz#9d3c0fba0440d211d843cec3dedfa48055005825"
   integrity sha512-rhjH9AG1fvabIDoGRVH587413LPjTZgmDF9fOFCbFJQV4yuocX1mHxxvXI4g3cGwbVY9wAYIoKlg1N79frJKQw==
 
+class-transformer@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.npmmirror.com/class-transformer/-/class-transformer-0.5.1.tgz#24147d5dffd2a6cea930a3250a677addf96ab336"
+  integrity sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.npmmirror.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
@@ -3644,6 +3681,15 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+class-validator@^0.14.0:
+  version "0.14.1"
+  resolved "https://registry.npmmirror.com/class-validator/-/class-validator-0.14.1.tgz#ff2411ed8134e9d76acfeb14872884448be98110"
+  integrity sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ==
+  dependencies:
+    "@types/validator" "^13.11.8"
+    libphonenumber-js "^1.10.53"
+    validator "^13.9.0"
 
 clean-stack@^2.0.0:
   version "2.2.0"
@@ -7954,6 +8000,11 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libphonenumber-js@^1.10.53:
+  version "1.11.17"
+  resolved "https://registry.npmmirror.com/libphonenumber-js/-/libphonenumber-js-1.11.17.tgz#37ddbf16dc4dd45c723a150996c253c58dad034b"
+  integrity sha512-Jr6v8thd5qRlOlc6CslSTzGzzQW03uiscab7KHQZX1Dfo4R6n6FDhZ0Hri6/X7edLIDv9gl4VMZXhxTjLnl0VQ==
+
 lines-and-columns@^1.1.6:
   version "1.2.4"
   resolved "https://registry.npmmirror.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
@@ -9554,6 +9605,11 @@ reduce-flatten@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/reduce-flatten/-/reduce-flatten-2.0.0.tgz#734fd84e65f375d7ca4465c69798c25c9d10ae27"
   integrity sha512-EJ4UNY/U1t2P/2k6oqotuX2Cc3T6nxJwsM0N0asT7dhrtH1ltUxDn4NalSYmPE2rCkVpcf/X6R0wDwcFpzhd4w==
+
+reflect-metadata@^0.1.13:
+  version "0.1.14"
+  resolved "https://registry.npmmirror.com/reflect-metadata/-/reflect-metadata-0.1.14.tgz#24cf721fe60677146bb77eeb0e1f9dece3d65859"
+  integrity sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==
 
 regenerate@^1.2.1:
   version "1.4.2"
@@ -11297,6 +11353,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+validator@^13.9.0:
+  version "13.12.0"
+  resolved "https://registry.npmmirror.com/validator/-/validator-13.12.0.tgz#7d78e76ba85504da3fee4fd1922b385914d4b35f"
+  integrity sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==
 
 varint@^5.0.0:
   version "5.0.2"
