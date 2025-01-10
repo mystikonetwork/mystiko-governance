@@ -1,6 +1,6 @@
 {
   "name": "@mystikonetwork/governance-monitor",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "repository": {
     "type": "git",
     "url": "https://github.com/mystikonetwork/mystiko-governance",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@mystikonetwork/config": "^0.10.8",
-    "@mystikonetwork/contracts-abi-governance": "^0.3.15",
+    "@mystikonetwork/contracts-abi-governance": "^0.3.16",
     "@mystikonetwork/utils": "^0.3.7",
     "ethers": "^5.5.3"
   }
