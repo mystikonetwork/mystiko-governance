@@ -185,21 +185,16 @@ export class Client {
     }
 
     const { decimals } = this.config;
-    const { vXZkInstance } = this;
     return this.queryVXZKBalance(account).then((balance) => {
       if (amount !== undefined) {
         const amountBN = toDecimals(amount, decimals);
         if (amountBN.gt(balance)) {
           return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
         }
-        return vXZkInstance.populateTransaction
-          .withdrawTo(target, amountBN.toString())
-          .catch((error) => createErrorPromise(error.toString()));
+        return this.buildWithdrawTransaction(target, amountBN);
       }
 
-      return vXZkInstance.populateTransaction
-        .withdrawTo(target, balance.toString())
-        .catch((error) => createErrorPromise(error.toString()));
+      return this.buildWithdrawTransaction(target, balance);
     });
   }
 
@@ -336,11 +331,27 @@ export class Client {
     }
 
     const { vXZkInstance } = this;
-    return this.checkApprove(account, amount).then(() =>
-      vXZkInstance.populateTransaction
-        .depositFor(target, amount.toString())
-        .catch((error) => createErrorPromise(error.toString())),
-    );
+    return this.checkApprove(account, amount)
+      .then(() => vXZkInstance.populateTransaction.depositFor(target, amount.toString()))
+      .then((result) => {
+        result.gasLimit = BigNumber.from(120000);
+        return result;
+      })
+      .catch((error) => createErrorPromise(error.toString()));
+  }
+
+  private buildWithdrawTransaction(target: string, amount: BN): Promise<PopulatedTransaction> {
+    if (!this.vXZkInstance) {
+      return createErrorPromise('Client not initialized', MystikoGovernanceErrorCode.NOT_INITIALIZED_ERROR);
+    }
+
+    return this.vXZkInstance.populateTransaction
+      .withdrawTo(target, amount.toString())
+      .then((result) => {
+        result.gasLimit = BigNumber.from(130000);
+        return result;
+      })
+      .catch((error) => createErrorPromise(error.toString()));
   }
 
   private initScanApiFetcher(chainId: number, scanApiBaseUrl?: string): ScanApiEtherFetcher {
