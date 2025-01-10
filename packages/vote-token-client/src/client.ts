@@ -192,14 +192,10 @@ export class Client {
         if (amountBN.gt(balance)) {
           return createErrorPromise('Insufficient balance', MystikoGovernanceErrorCode.BALANCE_ERROR);
         }
-        return vXZkInstance.populateTransaction
-          .withdrawTo(target, amountBN.toString())
-          .catch((error) => createErrorPromise(error.toString()));
+        return this.buildWithdrawTransaction(target, amountBN);
       }
 
-      return vXZkInstance.populateTransaction
-        .withdrawTo(target, balance.toString())
-        .catch((error) => createErrorPromise(error.toString()));
+      return this.buildWithdrawTransaction(target, balance);
     });
   }
 
