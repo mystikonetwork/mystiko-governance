@@ -185,7 +185,6 @@ export class Client {
     }
 
     const { decimals } = this.config;
-    const { vXZkInstance } = this;
     return this.queryVXZKBalance(account).then((balance) => {
       if (amount !== undefined) {
         const amountBN = toDecimals(amount, decimals);
