@@ -2,7 +2,7 @@ name: monitor
 
 on:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: "0 */12 * * *"
   workflow_dispatch:
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
           echo "GOVERNOR_MONITOR_EXIT_CODE=$exit_code" >> $GITHUB_ENV
         working-directory: packages/monitor
 
-      # Notify for proposal creation (exit code -1)
+      # Notify for proposal creation (exit code 1)
       - name: Telegram Warning Notification
         uses: appleboy/telegram-action@master
         if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '1' }}
@@ -48,7 +48,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-      # Notify for monitor failure (exit code 1)
+      # Notify for monitor failure (exit code 2)
       - name: Telegram Failure Notification
         uses: appleboy/telegram-action@master
         if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '2' }}
@@ -58,3 +58,12 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
+      # Notify for monitor failure (exit code 0)
+      - name: Telegram Failure Notification
+        uses: appleboy/telegram-action@master
+        if: ${{ env.GOVERNOR_MONITOR_EXIT_CODE == '0' }}
+        with:
+          message: ✅ No Governor Proposal Created in the last 12 hours
+          format: markdown
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
